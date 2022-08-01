@@ -1,6 +1,6 @@
 import React from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
-import {EmailPasswordFiel} from '../../Components/emailPasswordField';
+import {EmailPasswordField} from '../../Components/EmailPasswordField';
 import styles from './style';
 
 const Login = ({navigation}) => {
@@ -9,9 +9,9 @@ const Login = ({navigation}) => {
       <Text style={{color: 'white'}}>LOGIN</Text>
       <Text style={{color: 'white'}}>Entre na sua conta para continuar.</Text>
       <View style={styles.input}>
-        <EmailPasswordFiel isPassword={false} inputName={'e-mail'} />
+        <EmailPasswordField isPassword={false} inputName={'e-mail'} />
       </View>
-      <EmailPasswordFiel isPassword={true} inputName={'senha'} />
+      <EmailPasswordField isPassword={true} inputName={'senha'} />
       <TouchableOpacity
         style={styles.buttonEnter}
         onPress={() => navigation.navigate('Home')}>
