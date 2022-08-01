@@ -2,7 +2,7 @@ import React from 'react';
 import {Text, TextInput, View} from 'react-native';
 import styles from './style';
 
-export const EmailPasswordFiel = ({isPassword, inputName}) => {
+export const EmailPasswordField = ({isPassword, inputName}) => {
   return (
     <View style={styles.boxInput}>
       <TextInput
