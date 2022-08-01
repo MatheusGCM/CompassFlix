@@ -13,7 +13,6 @@ const Routes = () => {
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Home" component={Tabs} />
-      <Stack.Screen name="MoviePage" component={MoviePage} />
     </Stack.Navigator>
   );
 };
