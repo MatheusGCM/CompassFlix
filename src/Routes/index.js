@@ -12,10 +12,8 @@ const Stack = createNativeStackNavigator();
 const Routes = () => {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
-      <Stack.Screen name="Home" component={Tabs} />
       <Stack.Screen name="Login" component={Login} />
-
-      <Stack.Screen name="MoviePage" component={MoviePage} />
+      <Stack.Screen name="Home" component={Tabs} />
     </Stack.Navigator>
   );
 };
