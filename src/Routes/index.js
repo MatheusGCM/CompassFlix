@@ -5,14 +5,16 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Login from '../Pages/Login';
 import Home from '../Pages/Home';
 import MoviePage from '../Pages/MoviePage';
+import {Image, Platform} from 'react-native';
 
 const Stack = createNativeStackNavigator();
 
 const Routes = () => {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
-      <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Home" component={Tabs} />
+      <Stack.Screen name="Login" component={Login} />
+
       <Stack.Screen name="MoviePage" component={MoviePage} />
     </Stack.Navigator>
   );
@@ -35,8 +37,25 @@ const Tab = createBottomTabNavigator();
 
 const Tabs = () => {
   return (
-    <Tab.Navigator>
-      <Tab.Screen name="homeScreen" component={HomeStackScreen} />
+    <Tab.Navigator
+      screenOptions={{
+        headerShown: false,
+        tabBarShowLabel: false,
+        tabBarStyle: {
+          height: 54,
+          backgroundColor: '#454545',
+          paddingVertical: Platform.OS === 'ios' ? 20 : 0,
+        },
+      }}>
+      <Tab.Screen
+        options={{
+          tabBarIcon: ({color}) => (
+            <Image source={require('../assets/tabIcon.png')} />
+          ),
+        }}
+        name="homeScreen"
+        component={HomeStackScreen}
+      />
     </Tab.Navigator>
   );
 };
