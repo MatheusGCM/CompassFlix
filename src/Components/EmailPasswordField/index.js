@@ -1,9 +1,15 @@
 import React from 'react';
-import {Text, TextInput, View} from 'react-native';
+import {TextInput, View} from 'react-native';
 import styles from './style';
 import IconLock from 'react-native-vector-icons/EvilIcons';
 
-export const EmailPasswordField = ({isPassword, inputName, iconName}) => {
+export const EmailPasswordField = ({
+  value,
+  setValue,
+  isPassword,
+  inputName,
+  iconName,
+}) => {
   return (
     <View style={styles.boxInput}>
       <IconLock
@@ -13,6 +19,8 @@ export const EmailPasswordField = ({isPassword, inputName, iconName}) => {
         style={{paddingTop: 8, paddingLeft: 10}}
       />
       <TextInput
+        value={value}
+        onChangeText={v => setValue(v)}
         style={styles.input}
         placeholder={inputName}
         secureTextEntry={isPassword}
