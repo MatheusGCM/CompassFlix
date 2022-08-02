@@ -6,16 +6,26 @@ import styles from './style';
 const Login = ({navigation}) => {
   return (
     <View style={styles.page}>
-      <Text style={{color: 'white'}}>LOGIN</Text>
-      <Text style={{color: 'white'}}>Entre na sua conta para continuar.</Text>
+      <Text style={styles.loginText}>Login</Text>
+      <Text style={styles.descriptionText}>
+        Entre na sua conta para continuar.
+      </Text>
       <View style={styles.input}>
-        <EmailPasswordField isPassword={false} inputName={'e-mail'} />
+        <EmailPasswordField
+          isPassword={false}
+          inputName={'e-mail'}
+          iconName={'user'}
+        />
       </View>
-      <EmailPasswordField isPassword={true} inputName={'senha'} />
+      <EmailPasswordField
+        isPassword={true}
+        inputName={'senha'}
+        iconName={'lock'}
+      />
       <TouchableOpacity
         style={styles.buttonEnter}
         onPress={() => navigation.navigate('Home')}>
-        <Text>Entrar</Text>
+        <Text style={styles.buttonText}>Entrar</Text>
       </TouchableOpacity>
     </View>
   );

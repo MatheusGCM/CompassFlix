@@ -19,6 +19,19 @@ const styles = StyleSheet.create({
     marginTop: 28,
     padding: 14,
   },
+  loginText: {
+    color: 'white',
+    fontFamily: 'OpenSans-Bold',
+    fontSize: 24,
+  },
+  descriptionText: {
+    color: 'white',
+    fontFamily: 'OpenSans-Regular',
+  },
+  buttonText: {
+    fontFamily: 'OpenSans-Bold',
+    color: '#1F1D36',
+  },
 });
 
 export default styles;
