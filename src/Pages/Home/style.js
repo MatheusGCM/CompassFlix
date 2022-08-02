@@ -8,27 +8,29 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'column',
     margin: 16,
+    padding: 10,
   },
   header_title: {
     fontSize: 18,
     color: '#fff',
-    fontWeight: '700',
+    fontFamily: 'OpenSans-Bold',
     marginEnd: 4,
   },
   header_label: {
     fontSize: 18,
     color: '#E9A6A6',
-    fontWeight: '700',
+    fontFamily: 'OpenSans-Bold'
   },
   header_text: {
     fontSize: 18,
     color: '#fff',
-    fontWeight: '700',
+    fontFamily: 'OpenSans-Bold',
   },
   header_description: {
     fontSize: 13,
     color: '#fff',
     fontWeight: '400',
+    fontFamily: 'OpenSans-Regular',
   },
   container_header: {
     marginBottom: 20,
@@ -36,9 +38,10 @@ const styles = StyleSheet.create({
     margin: 16,
   },
   title: {
-    fontSize: 18,
+    fontSize: 16,
     color: '#fff',
     fontWeight: '600',
+    fontFamily: 'OpenSans-Regular'
   },
   row: {
     flexDirection: 'row',
