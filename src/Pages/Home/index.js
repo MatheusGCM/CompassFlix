@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {View, Text, FlatList} from 'react-native';
 import Movies from '../../Components/Movies';
 import styles from './style';

@@ -8,14 +8,14 @@ const styles = StyleSheet.create({
   },
   banner: {
     flex: 1,
-    top: -150,
+    top: '-25%',
     justifyContent: 'flex-end',
     alignContent: 'center',
     width: '100%',
     height: '100%',
   },
   pageContent: {
-    top: 102,
+    top: '10%',
   },
   logoContent: {
     top: -140,
