@@ -19,6 +19,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: '#fff',
     marginLeft: 4,
+    fontFamily: 'OpenSans-Regular'
   },
 });
 

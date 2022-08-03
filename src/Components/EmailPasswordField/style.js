@@ -10,6 +10,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   input: {
+    color: '#ffffff80',
+    width: 200,
     paddingLeft: 11,
     fontSize: 9,
   },
