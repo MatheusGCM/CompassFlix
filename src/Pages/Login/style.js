@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   pageContent: {
-    top: 102,
+    top: '10%',
   },
   logoContent: {
     top: -140,
