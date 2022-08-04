@@ -10,6 +10,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   input: {
+    fontFamily: 'OpenSans-SemiBold',
     color: '#ffffff80',
     width: 200,
     paddingLeft: 11,

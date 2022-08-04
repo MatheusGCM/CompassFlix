@@ -1,7 +1,7 @@
 import React from 'react';
 import {TextInput, View} from 'react-native';
 import styles from './style';
-import IconLock from 'react-native-vector-icons/EvilIcons';
+import Icon from 'react-native-vector-icons/EvilIcons';
 
 export const EmailPasswordField = ({
   value,
@@ -12,7 +12,7 @@ export const EmailPasswordField = ({
 }) => {
   return (
     <View style={styles.boxInput}>
-      <IconLock
+      <Icon
         size={25}
         name={iconName}
         color={'#ffffff80'}
