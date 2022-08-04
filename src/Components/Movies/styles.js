@@ -5,10 +5,10 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   image: {
-    width: 85,
-    height: 135,
+    width: 76,
+    height: 95,
     borderRadius: 10,
-    marginEnd: 8,
+    marginEnd: 16,
   },
   containerRow: {
     flexDirection: 'row',

@@ -16,6 +16,7 @@ const Home = ({navigation, route}) => {
 
   const [user, setUser] = useState();
   const [dataMovies, setDataMovies] = useState([]);
+
   useEffect(() => {
     const getResponseAccount = async () => {
       const response = await getAccount(id);
@@ -56,17 +57,15 @@ const Home = ({navigation, route}) => {
         data={dataMovies}
         keyExtractor={item => String(item.id)}
         renderItem={({item}) => (
-          <TouchableOpacity
+          <Movies
+            text={`${item.vote_average}/10`}
+            poster_path={item.poster_path}
             onPress={() =>
               navigation.navigate('MoviePage', {
                 id: item.id,
               })
-            }>
-            <Movies
-              text={`${item.vote_average}/10`}
-              poster_path={item.poster_path}
-            />
-          </TouchableOpacity>
+            }
+          />
         )}
       />
     </View>
