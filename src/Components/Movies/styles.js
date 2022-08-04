@@ -5,8 +5,8 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   image: {
-    width: 90,
-    height: 140,
+    width: 85,
+    height: 135,
     borderRadius: 10,
     marginEnd: 8,
   },
@@ -14,6 +14,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginLeft: 5,
+    marginBottom: 28,
   },
   text: {
     fontSize: 10,
