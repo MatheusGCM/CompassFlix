@@ -31,7 +31,7 @@ const Login = ({navigation}) => {
       .catch(err => alert('Erro no servidor'));
   }, []);
 
-  const entrar = async () => {
+  const Login = async () => {
     await api
       .post(
         '/authentication/token/validate_with_login?api_key=2782ff9318f8a759e57ab3e07291a495',
@@ -99,7 +99,7 @@ const Login = ({navigation}) => {
                 <TouchableOpacity
                   style={styles.buttonEnter}
                   onPress={() => {
-                    entrar();
+                    Login();
                   }}>
                   <Text style={styles.buttonText}>Entrar</Text>
                 </TouchableOpacity>
