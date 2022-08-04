@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import {Image, Text, View} from 'react-native';
+import {Image, Text, TouchableOpacity, View} from 'react-native';
 import styles from './style';
 import {getMoviesDetails} from '../../service/api';
+import Icon from 'react-native-vector-icons/AntDesign';
 
 const MoviePage = ({route}) => {
   const [movieDetails, setMovieDetails] = useState([]);
@@ -13,6 +14,7 @@ const MoviePage = ({route}) => {
     };
     getResponseMovieDetails();
   }, [route.params.id]);
+
   return (
     <View style={{flex: 1, backgroundColor: '#000'}}>
       <Image
@@ -30,6 +32,19 @@ const MoviePage = ({route}) => {
           }}
         />
         <Text>{movieDetails.title}</Text>
+        <Text>{new Date(movieDetails.release_date).getFullYear()}</Text>
+        <Text>{movieDetails.runtime} min</Text>
+        <Text>
+        Direção por: 
+        </Text>
+        <Text>{movieDetails.vote_average}/10</Text> 
+        <TouchableOpacity>
+          <Icon name="heart" size={22} />
+        </TouchableOpacity>
+        <Text>{movieDetails.popularity} K</Text>
+        <Text>{movieDetails.tagline}</Text>
+        <Text> {movieDetails.overview}</Text>
+        <Text>Elenco</Text>
       </View>
     </View>
   );
