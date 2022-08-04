@@ -11,7 +11,7 @@ import {
   View,
 } from 'react-native';
 import {EmailPasswordField} from '../../Components/EmailPasswordField';
-import {api} from '../../service/api';
+import api from '../../service/api';
 import styles from './style';
 
 const Login = ({navigation}) => {
