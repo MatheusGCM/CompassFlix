@@ -1,9 +1,24 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {View, Text, FlatList} from 'react-native';
 import Movies from '../../Components/Movies';
+import api from '../../service/api';
 import styles from './style';
 
+
 const Home = () => {
+
+//const [PopularList, setPopularList] = useState([]);
+const init = async () => {
+  const response = await api.get('/movie/popular?api_key=7121760c6db06f81adb5eed49efc0446&language=pt-BR&page=1'
+  );
+
+  console.log(response.data.results) //Lista de filmes retornando no console
+};
+
+useEffect(() => {
+  init();
+}, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
