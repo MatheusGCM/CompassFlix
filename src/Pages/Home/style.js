@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
   header_label: {
     fontSize: 18,
     color: '#E9A6A6',
-    fontFamily: 'OpenSans-Bold'
+    fontFamily: 'OpenSans-Bold',
   },
   header_text: {
     fontSize: 18,
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#fff',
     fontWeight: '600',
-    fontFamily: 'OpenSans-Regular'
+    fontFamily: 'OpenSans-Regular',
   },
   row: {
     flexDirection: 'row',

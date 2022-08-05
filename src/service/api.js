@@ -41,9 +41,9 @@ export const getAccount = async session_id => {
       console.warn('Deu pauu na busca do usuario ');
     });
 };
-export const getMovies = async () => {
+export const getMovies = async page => {
   return api
-    .get(`/movie/popular?api_key=${api_key}&language=pt-BR&page=1`)
+    .get(`/movie/popular?api_key=${api_key}&language=pt-BR&page=${page}`)
     .catch(error => {
       console.warn('Deu pauu na busca dos filmes');
     });

@@ -10,12 +10,26 @@ import Movies from '../../Components/Movies';
 import styles from './style';
 import {getAccount, getMovies} from '../../service/api';
 import {Context} from '../../context';
+import Loading from '../../Components/Loading';
 
 const Home = ({navigation, route}) => {
   const {id} = useContext(Context);
 
+  const [page, setPage] = useState(1);
   const [user, setUser] = useState();
+  const [loading, setLoading] = useState(false);
   const [dataMovies, setDataMovies] = useState([]);
+  const getResponseMovies = async () => {
+    if (loading) {
+      return;
+    }
+    setLoading(true);
+
+    const response = await getMovies(page);
+    setDataMovies([...dataMovies, ...response.data.results]);
+    setPage(page + 1);
+    setLoading(false);
+  };
   useEffect(() => {
     const getResponseAccount = async () => {
       const response = await getAccount(id);
@@ -25,12 +39,8 @@ const Home = ({navigation, route}) => {
   }, [id]);
 
   useEffect(() => {
-    const getResponseMovies = async () => {
-      const response = await getMovies();
-      setDataMovies(response.data.results);
-    };
     getResponseMovies();
-  }, [dataMovies]);
+  }, []);
 
   return user && dataMovies ? (
     <View style={styles.container}>
@@ -55,6 +65,9 @@ const Home = ({navigation, route}) => {
         }}
         data={dataMovies}
         keyExtractor={item => String(item.id)}
+        onEndReached={getResponseMovies}
+        onEndReachedThreshold={0.1}
+        ListFooterComponent={<Loading load={loading} />}
         renderItem={({item}) => (
           <TouchableOpacity
             onPress={() =>
