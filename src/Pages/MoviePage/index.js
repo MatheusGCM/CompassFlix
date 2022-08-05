@@ -26,18 +26,17 @@ const MoviePage = ({route}) => {
 
       <View style={{flex: 3.5}}>
         <Image
-          style={{width: 116, height: 166}}
+        style={styles.posterMovie}
           source={{
             uri: `http://image.tmdb.org/t/p/original/${movieDetails.poster_path}`,
           }}
         />
-        <Text>{movieDetails.title}</Text>
-        <Text>{new Date(movieDetails.release_date).getFullYear()}</Text>
-        <Text>{movieDetails.runtime} min</Text>
+        <Text style={styles.titleMovie}>{movieDetails.title} <Text style={styles.yearMovie}>{new Date(movieDetails.release_date).getFullYear()}</Text> <Text style={styles.timeMovie}>{movieDetails.runtime}min</Text>
+          </Text>
         <Text>
         Direção por: 
         </Text>
-        <Text>{movieDetails.vote_average}/10</Text> 
+        <Text>{movieDetails.vote_average?.toFixed(1)}/10</Text> 
         <TouchableOpacity>
           <Icon name="heart" size={22} />
         </TouchableOpacity>

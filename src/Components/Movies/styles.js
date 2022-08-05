@@ -5,15 +5,16 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   image: {
-    width: 90,
-    height: 140,
+    width: 76,
+    height: 95,
     borderRadius: 10,
-    marginEnd: 8,
+    marginEnd: 16,
   },
   containerRow: {
     flexDirection: 'row',
     alignItems: 'center',
     marginLeft: 5,
+    marginBottom: 28,
   },
   text: {
     fontSize: 10,

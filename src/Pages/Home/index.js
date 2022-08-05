@@ -69,17 +69,15 @@ const Home = ({navigation, route}) => {
         onEndReachedThreshold={0.1}
         ListFooterComponent={<Loading load={loading} />}
         renderItem={({item}) => (
-          <TouchableOpacity
+          <Movies
+            text={`${item.vote_average}/10`}
+            poster_path={item.poster_path}
             onPress={() =>
               navigation.navigate('MoviePage', {
                 id: item.id,
               })
-            }>
-            <Movies
-              text={`${item.vote_average}/10`}
-              poster_path={item.poster_path}
-            />
-          </TouchableOpacity>
+            }
+          />
         )}
       />
     </View>

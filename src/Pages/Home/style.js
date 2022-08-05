@@ -9,6 +9,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     margin: 16,
     padding: 10,
+    marginTop: 40,
   },
   header_title: {
     fontSize: 18,
@@ -33,9 +34,8 @@ const styles = StyleSheet.create({
     fontFamily: 'OpenSans-Regular',
   },
   container_header: {
-    marginBottom: 20,
-    marginVertical: 10,
-    margin: 16,
+    marginBottom: 30,
+    marginLeft: 23,
   },
   title: {
     fontSize: 16,
