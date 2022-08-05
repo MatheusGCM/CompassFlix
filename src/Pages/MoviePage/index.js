@@ -40,7 +40,7 @@ const MoviePage = ({route}) => {
         <TouchableOpacity>
           <Icon name="heart" size={22} />
         </TouchableOpacity>
-        <Text>{movieDetails.popularity} K</Text>
+        <Text>{movieDetails.popularity >= 1000 ? `${(movieDetails.popularity/1000)?.toFixed(0)}K` : movieDetails.popularity}</Text>
         <Text>{movieDetails.tagline}</Text>
         <Text> {movieDetails.overview}</Text>
         <Text>Elenco</Text>
