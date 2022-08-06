@@ -70,7 +70,7 @@ const Login = ({navigation}) => {
                   value={email}
                   setValue={setEmail}
                   isPassword={false}
-                  inputName={'e-mail'}
+                  inputName={'usuário'}
                   iconName={'user'}
                 />
 
