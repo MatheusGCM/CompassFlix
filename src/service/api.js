@@ -57,4 +57,12 @@ export const getMoviesDetails = async id => {
     });
 };
 
+export const GetMovieCredits = async MOVIE_ID => {
+  return api
+    .get(`/movie/${MOVIE_ID}/credits?api_key=${api_key}&language=pt-BR`)
+    .catch(error => {
+      console.warn('error na api');
+    });
+};
+
 export default api;
