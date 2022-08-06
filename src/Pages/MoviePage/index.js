@@ -15,8 +15,10 @@ import Feather from 'react-native-vector-icons/Feather';
 const MoviePage = ({route, navigation}) => {
   const [movieDetails, setMovieDetails] = useState([]);
   const [movieCredits, setMovieCredits] = useState({});
+  const [heartStatus, setHeartStatus] = useState(false);
 
-  console.log('movieCredits', movieCredits.cast);
+  // console.log('movieCredits', movieCredits.cast);
+  console.log(heartStatus);
 
   useEffect(() => {
     const getResponseMovieDetails = async () => {
@@ -56,7 +58,6 @@ const MoviePage = ({route, navigation}) => {
         <View
           style={{
             flexDirection: 'row',
-            alignItems: 'center',
             margin: 16,
           }}>
           <Image
@@ -79,32 +80,58 @@ const MoviePage = ({route, navigation}) => {
                   style={{
                     flexDirection: 'row',
                     alignItems: 'center',
+                    marginLeft: 16,
                   }}>
                   <Text
                     style={{
                       color: '#fff',
+                      fontSize: 10,
                     }}>
-                    Direção por:
+                    Direção por
                   </Text>
                   <Text
                     style={{
                       color: '#fff',
+                      fontSize: 10,
+                      fontWeight: 'bold',
+                      marginLeft: 2,
                     }}>
                     {Directing}
                   </Text>
                 </View>
               )}
-              <TouchableOpacity>
-                <Icon name="heart" color="#fff" size={22} />
-              </TouchableOpacity>
-              <Text
+              <View
                 style={{
-                  color: '#fff',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  paddingLeft: 16,
+                  paddingTop: 18,
                 }}>
-                {movieDetails.popularity >= 1000
-                  ? `${(movieDetails.popularity / 1000)?.toFixed(0)}K`
-                  : movieDetails.popularity}
-              </Text>
+                <Text style={{color: 'pink', fontSize: 30, marginRight: 30}}>
+                  {movieDetails.vote_average?.toFixed(1)} / 10
+                </Text>
+                <View style={{alignItems: 'center'}}>
+                  <TouchableOpacity
+                    onPress={() =>
+                      heartStatus ? setHeartStatus(false) : setHeartStatus(true)
+                    }>
+                    <Icon
+                      name="heart"
+                      color={heartStatus ? 'red' : 'white'}
+                      size={22}
+                    />
+                  </TouchableOpacity>
+                  <Text
+                    style={{
+                      color: '#fff',
+                      fontSize: 10,
+                    }}>
+                    {movieDetails.popularity >= 1000
+                      ? `${(movieDetails.popularity / 1000)?.toFixed(0)}K`
+                      : movieDetails.popularity}
+                  </Text>
+                </View>
+              </View>
             </View>
           </View>
         </View>

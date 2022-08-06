@@ -6,13 +6,13 @@ const styles = StyleSheet.create({
     width: 116,
     position: 'relative',
     top: -60,
+    borderRadius: 5,
   },
   titleMovie: {
     color: '#FFFFFF',
     fontSize: 20,
     fontFamily: 'OpenSans-Bold',
     marginLeft: 16,
-    marginTop: 15,
     maxWidth: '90%',
   },
   yearMovie: {
