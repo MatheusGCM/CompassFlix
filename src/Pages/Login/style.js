@@ -55,6 +55,7 @@ const styles = StyleSheet.create({
     fontFamily: 'OpenSans-Bold',
     color: '#1F1D36',
   },
+  loading: {flex: 1, alignItems: 'center', justifyContent: 'center', top: 128},
 });
 
 export default styles;

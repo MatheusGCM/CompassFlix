@@ -42,9 +42,9 @@ export const getAccount = async session_id => {
       console.warn('Deu pauu na busca do usuario ');
     });
 };
-export const getMovies = async () => {
+export const getMovies = async page => {
   return api
-    .get(`/movie/popular?api_key=${api_key}&language=pt-BR&page=1`)
+    .get(`/movie/popular?api_key=${api_key}&language=pt-BR&page=${page}`)
     .catch(error => {
       console.warn('Deu pauu na busca dos filmes');
     });
@@ -58,11 +58,11 @@ export const getMoviesDetails = async id => {
     });
 };
 
-export const getMoviesCredits = async id => {
+export const getMovieCredits = async id => {
   return api
     .get(`/movie/${id}/credits?api_key=${api_key}&language=pt-BR`)
     .catch(error => {
-      console.warn('Deu pauu na busca dos detalhes do filme');
+      console.warn('error na api');
     });
 };
 

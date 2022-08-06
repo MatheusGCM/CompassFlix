@@ -1,21 +1,30 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {
-  View,
-  Text,
-  FlatList,
-  ActivityIndicator,
-  TouchableOpacity,
-} from 'react-native';
+import {View, Text, FlatList} from 'react-native';
 import Movies from '../../Components/Movies';
 import styles from './style';
 import {getAccount, getMovies} from '../../service/api';
 import {Context} from '../../context';
+import Loading from '../../Components/Loading';
+import Load from '../../Components/Load';
 
 const Home = ({navigation}) => {
   const {id} = useContext(Context);
 
+  const [page, setPage] = useState(1);
   const [user, setUser] = useState();
+  const [loading, setLoading] = useState(false);
   const [dataMovies, setDataMovies] = useState([]);
+  const getResponseMovies = async () => {
+    if (loading) {
+      return;
+    }
+    setLoading(true);
+
+    const response = await getMovies(page);
+    setDataMovies([...dataMovies, ...response.data.results]);
+    setPage(page + 1);
+    setLoading(false);
+  };
   useEffect(() => {
     const getResponseAccount = async () => {
       const response = await getAccount(id);
@@ -25,12 +34,8 @@ const Home = ({navigation}) => {
   }, [id]);
 
   useEffect(() => {
-    const getResponseMovies = async () => {
-      const response = await getMovies();
-      setDataMovies(response.data.results);
-    };
     getResponseMovies();
-  }, [dataMovies]);
+  }, []);
 
   return user && dataMovies ? (
     <View style={styles.container}>
@@ -55,32 +60,24 @@ const Home = ({navigation}) => {
         }}
         data={dataMovies}
         keyExtractor={item => String(item.id)}
+        onEndReached={getResponseMovies}
+        onEndReachedThreshold={0.1}
+        ListFooterComponent={<Loading load={loading} />}
         renderItem={({item}) => (
-          <TouchableOpacity
+          <Movies
+            text={`${item.vote_average}/10`}
+            poster_path={item.poster_path}
             onPress={() =>
               navigation.navigate('MoviePage', {
                 id: item.id,
               })
-            }>
-            <Movies
-              text={`${item.vote_average}/10`}
-              poster_path={item.poster_path}
-            />
-          </TouchableOpacity>
+            }
+          />
         )}
       />
     </View>
   ) : (
-    <ActivityIndicator
-      size={50}
-      color="#EC2626"
-      style={{
-        flex: 1,
-        backgroundColor: '#000',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    />
+    <Load />
   );
 };
 

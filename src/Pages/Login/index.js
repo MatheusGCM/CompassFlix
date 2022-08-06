@@ -87,14 +87,10 @@ const Login = ({navigation}) => {
               </TouchableOpacity>
             </View>
           ) : (
-            <ActivityIndicator
-              size={50}
-              color="#EC2626"
-              style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            />
+            <View style={styles.loading}>
+              <Image source={require('../../assets/logo.png')} />
+              <ActivityIndicator size={50} color="#EC2626" />
+            </View>
           )}
         </ImageBackground>
       </KeyboardAvoidingView>
