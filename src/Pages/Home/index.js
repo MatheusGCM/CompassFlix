@@ -11,22 +11,10 @@ const Home = ({navigation}) => {
   const {id} = useContext(Context);
 
   const [page, setPage] = useState(1);
-  const [page, setPage] = useState(1);
   const [user, setUser] = useState();
-  const [loading, setLoading] = useState(false);
+
   const [loading, setLoading] = useState(false);
   const [dataMovies, setDataMovies] = useState([]);
-  const getResponseMovies = async () => {
-    if (loading) {
-      return;
-    }
-    setLoading(true);
-
-    const response = await getMovies(page);
-    setDataMovies([...dataMovies, ...response.data.results]);
-    setPage(page + 1);
-    setLoading(false);
-  };
   const getResponseMovies = async () => {
     if (loading) {
       return;
@@ -73,9 +61,6 @@ const Home = ({navigation}) => {
         }}
         data={dataMovies}
         keyExtractor={item => String(item.id)}
-        onEndReached={getResponseMovies}
-        onEndReachedThreshold={0.1}
-        ListFooterComponent={<Loading load={loading} />}
         onEndReached={getResponseMovies}
         onEndReachedThreshold={0.1}
         ListFooterComponent={<Loading load={loading} />}
