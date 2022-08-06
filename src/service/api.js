@@ -1,4 +1,5 @@
 import axios from 'axios';
+import {Alert} from 'react-native';
 
 const api_key = '53324f99056d3d75ddf758aad3ec3855';
 const api = axios.create({
@@ -26,11 +27,11 @@ export const validateToken = async (email, password, token) => {
           request_token: response.data.request_token,
         })
         .catch(error => {
-          console.log('Deu pau no then');
+          Alert.alert('Atenção!!', 'Email ou senha inválidos');
         }),
     )
     .catch(error => {
-      console.log('Deu pauuu');
+      Alert.alert('Atenção!!', 'Email ou senha inválidos');
     });
 };
 
@@ -52,6 +53,14 @@ export const getMovies = async () => {
 export const getMoviesDetails = async id => {
   return api
     .get(`/movie/${id}?api_key=${api_key}&language=pt-BR`)
+    .catch(error => {
+      console.warn('Deu pauu na busca dos detalhes do filme');
+    });
+};
+
+export const getMoviesCredits = async id => {
+  return api
+    .get(`/movie/${id}/credits?api_key=${api_key}&language=pt-BR`)
     .catch(error => {
       console.warn('Deu pauu na busca dos detalhes do filme');
     });

@@ -37,7 +37,7 @@ const Login = ({navigation}) => {
       if (response) {
         const session_id = response.data.session_id;
         setId(session_id);
-        navigation.replace('Home', session_id);
+        navigation.replace('Home');
       }
     } else {
       Alert.alert('Atenção!!', 'Email ou senha inválidos');
@@ -87,7 +87,14 @@ const Login = ({navigation}) => {
               </TouchableOpacity>
             </View>
           ) : (
-            <ActivityIndicator size={50} color="red" />
+            <ActivityIndicator
+              size={50}
+              color="#EC2626"
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            />
           )}
         </ImageBackground>
       </KeyboardAvoidingView>

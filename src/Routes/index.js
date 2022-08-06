@@ -42,7 +42,6 @@ const Tabs = () => {
         tabBarStyle: {
           height: 54,
           backgroundColor: '#454545',
-          paddingVertical: Platform.OS === 'ios' ? 20 : 0,
         },
       }}>
       <Tab.Screen

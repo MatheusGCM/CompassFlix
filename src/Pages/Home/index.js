@@ -11,7 +11,7 @@ import styles from './style';
 import {getAccount, getMovies} from '../../service/api';
 import {Context} from '../../context';
 
-const Home = ({navigation, route}) => {
+const Home = ({navigation}) => {
   const {id} = useContext(Context);
 
   const [user, setUser] = useState();
@@ -71,7 +71,16 @@ const Home = ({navigation, route}) => {
       />
     </View>
   ) : (
-    <ActivityIndicator size={50} color="red" />
+    <ActivityIndicator
+      size={50}
+      color="#EC2626"
+      style={{
+        flex: 1,
+        backgroundColor: '#000',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    />
   );
 };
 
