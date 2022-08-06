@@ -65,7 +65,7 @@ const MoviePage = ({route, navigation}) => {
               uri: `http://image.tmdb.org/t/p/original/${movieDetails.poster_path}`,
             }}
           />
-          <View style={{width: '80%'}}>
+          <View style={{width: '75%'}}>
             <Text style={styles.titleMovie}>
               {movieDetails.title}{' '}
               <Text style={styles.yearMovie}>
