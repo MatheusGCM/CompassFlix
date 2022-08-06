@@ -13,7 +13,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import Cast from '../../Components/Cast';
 import Load from '../../Components/Load';
 
-const MoviePage = ({route, navigation}) => {
+const MoviePage = ({route, navigation, navigation}) => {
   const [movieDetails, setMovieDetails] = useState([]);
   const [movieCredits, setMovieCredits] = useState({});
   const [heartStatus, setHeartStatus] = useState(false);
