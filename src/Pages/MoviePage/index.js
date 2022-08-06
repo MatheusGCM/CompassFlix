@@ -79,7 +79,7 @@ const MoviePage = ({route, navigation}) => {
               <Text style={styles.voteAverageMovie}>
                 {movieDetails.vote_average?.toFixed(1)} / 10
               </Text>
-              <View style={styles.boxPopularity}>
+              <View style={styles.boxPopularityMovie}>
                 <TouchableOpacity
                   activeOpacity={1}
                   onPress={() =>

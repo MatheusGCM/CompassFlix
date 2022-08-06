@@ -89,7 +89,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   popularityMovie: {
-    alignSelf: 'center',
     color: '#fff',
     fontSize: 12,
     fontWeight: '400',
