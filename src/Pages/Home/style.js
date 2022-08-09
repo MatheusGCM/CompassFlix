@@ -7,8 +7,8 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: 'column',
-    margin: 16,
-    padding: 10,
+    marginLeft: 14,
+    marginBottom: 21,
     marginTop: 40,
   },
   header_title: {
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
   },
   container_header: {
     marginBottom: 30,
-    marginLeft: 23,
+    marginLeft: 14,
   },
   title: {
     fontSize: 16,
@@ -45,7 +45,6 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: 'row',
-    alignItems: 'center',
   },
 });
 

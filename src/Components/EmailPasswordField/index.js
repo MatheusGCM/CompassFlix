@@ -25,6 +25,7 @@ export const EmailPasswordField = ({
         placeholder={inputName}
         secureTextEntry={isPassword}
         placeholderTextColor={'#ffffff80'}
+        autoCapitalize="none"
       />
     </View>
   );

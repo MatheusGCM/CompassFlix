@@ -15,6 +15,7 @@ import {EmailPasswordField} from '../../Components/EmailPasswordField';
 import styles from './style';
 import {getToken, validateToken} from '../../service/api';
 import {Context} from '../../context';
+import * as Animatable from 'react-native-animatable';
 
 const Login = ({navigation}) => {
   const {setId} = useContext(Context);
@@ -37,6 +38,7 @@ const Login = ({navigation}) => {
       if (response) {
         const session_id = response.data.session_id;
         setId(session_id);
+        Keyboard.dismiss();
         navigation.replace('Home');
       }
     } else {
@@ -55,36 +57,44 @@ const Login = ({navigation}) => {
           source={require('../../assets/bannerLogin.png')}>
           {token ? (
             <View style={styles.pageContent}>
-              <Image
-                style={styles.logoContent}
-                source={require('../../assets/logo.png')}
-              />
-              <View style={styles.boxContent}>
-                <Text style={styles.loginText}>Login</Text>
-                <Text style={styles.descriptionText}>
-                  Entre na sua conta para continuar.
-                </Text>
-              </View>
-              <View style={styles.input}>
-                <EmailPasswordField
-                  value={email}
-                  setValue={setEmail}
-                  isPassword={false}
-                  inputName={'usuário'}
-                  iconName={'user'}
-                />
+              <Animatable.View animation="fadeInUp">
+                <Animatable.View animation="fadeInUp">
+                  <Image
+                    style={styles.logoContent}
+                    source={require('../../assets/logo.png')}
+                  />
+                </Animatable.View>
+                <View style={styles.boxContent}>
+                  <Text style={styles.loginText}>Login</Text>
+                  <Text style={styles.descriptionText}>
+                    Entre na sua conta para continuar.
+                  </Text>
+                </View>
+                <View style={styles.input}>
+                  <Animatable.View animation="fadeInLeft" duration={1500}>
+                    <EmailPasswordField
+                      value={email}
+                      setValue={setEmail}
+                      isPassword={false}
+                      inputName={'usuário'}
+                      iconName={'user'}
+                    />
+                  </Animatable.View>
 
-                <EmailPasswordField
-                  value={password}
-                  setValue={setPassword}
-                  isPassword={true}
-                  inputName={'senha'}
-                  iconName={'lock'}
-                />
-              </View>
-              <TouchableOpacity style={styles.buttonEnter} onPress={login}>
-                <Text style={styles.buttonText}>Entrar</Text>
-              </TouchableOpacity>
+                  <Animatable.View animation="fadeInRight" duration={1500}>
+                    <EmailPasswordField
+                      value={password}
+                      setValue={setPassword}
+                      isPassword={true}
+                      inputName={'senha'}
+                      iconName={'lock'}
+                    />
+                  </Animatable.View>
+                </View>
+                <TouchableOpacity style={styles.buttonEnter} onPress={login}>
+                  <Text style={styles.buttonText}>Entrar</Text>
+                </TouchableOpacity>
+              </Animatable.View>
             </View>
           ) : (
             <View style={styles.loading}>

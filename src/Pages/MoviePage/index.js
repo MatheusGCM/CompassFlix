@@ -12,6 +12,7 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
 import Cast from '../../Components/Cast';
 import Load from '../../Components/Load';
+import * as Animatable from 'react-native-animatable';
 
 const MoviePage = ({route, navigation}) => {
   const [movieDetails, setMovieDetails] = useState([]);
@@ -85,11 +86,16 @@ const MoviePage = ({route, navigation}) => {
                   onPress={() =>
                     heartStatus ? setHeartStatus(false) : setHeartStatus(true)
                   }>
-                  <Icon
-                    name="heart"
-                    color={heartStatus ? '#EC2626' : 'white'}
-                    size={22}
-                  />
+                  <Animatable.View
+                    animation="pulse"
+                    easing="ease-out"
+                    iterationCount="infinite">
+                    <Icon
+                      name="heart"
+                      color={heartStatus ? '#EC2626' : 'white'}
+                      size={22}
+                    />
+                  </Animatable.View>
                 </TouchableOpacity>
                 <Text style={styles.popularityMovie}>
                   {movieDetails.popularity >= 1000
