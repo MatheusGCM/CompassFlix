@@ -22,8 +22,9 @@ const styles = StyleSheet.create({
     marginStart: 15,
   },
   contentHeader: {
+    flex: 1,
     flexDirection: 'row',
-    height: '30%',
+    marginBottom: 15,
   },
   posterMovie: {
     width: 116,
@@ -37,28 +38,25 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     alignItems: 'baseline',
-    marginBottom: 20,
+    marginBottom: 24,
   },
   titleMovie: {
     color: '#fff',
     fontSize: 20,
-    fontWeight: '700',
-    lineHeight: 27,
     marginEnd: 5,
     fontFamily: 'OpenSans-Bold',
   },
   yearMovie: {
     color: '#fff',
     fontSize: 12,
-    fontWeight: '400',
     marginEnd: 24,
     fontFamily: 'OpenSans-Regular',
   },
   timeMovie: {
     color: '#fff',
-    fontSize: 11,
-    fontWeight: '400',
+    fontSize: 10,
     marginEnd: 24,
+    fontFamily: 'OpenSans-Regular',
   },
   boxDirectorMovie: {
     flexDirection: 'row',
@@ -67,11 +65,11 @@ const styles = StyleSheet.create({
   directorMovie: {
     color: '#fff',
     fontSize: 11,
+    marginEnd: 4,
     director: {
       color: '#fff',
       fontSize: 11,
-      fontWeight: '700',
-      marginLeft: 2,
+      fontFamily: 'OpenSans-Bold',
     },
   },
   contentHeaderBottom: {
@@ -81,8 +79,8 @@ const styles = StyleSheet.create({
     color: '#E9A6A6',
     fontSize: 30,
     marginRight: 30,
-    fontWeight: '400',
     lineHeight: 40,
+    fontFamily: 'OpenSans-Regular',
   },
   boxPopularityMovie: {
     justifyContent: 'center',
@@ -91,27 +89,27 @@ const styles = StyleSheet.create({
   popularityMovie: {
     color: '#fff',
     fontSize: 12,
-    fontWeight: '400',
     lineHeight: 13,
     marginTop: 2,
+    fontFamily: 'OpenSans-Regular',
   },
   contentOverview: {
     marginEnd: 20,
-    marginBottom: 25,
+    marginBottom: 22,
   },
   taglineMovie: {
     color: '#fff',
     fontSize: 14,
-    fontWeight: '400',
     lineHeight: 16,
     marginBottom: 10,
+    fontFamily: 'OpenSans-Regular',
   },
   overviewMovie: {
     color: '#fff',
     fontSize: 14,
-    fontWeight: '400',
     lineHeight: 16,
     textAlign: 'justify',
+    fontFamily: 'OpenSans-Regular',
   },
   boxElenco: {
     width: 46,
@@ -124,8 +122,8 @@ const styles = StyleSheet.create({
   txtBoxElenco: {
     color: '#fff',
     fontSize: 10,
-    fontWeight: '600',
     lineHeight: 13,
+    fontFamily: 'OpenSans-SemiBold',
   },
   line: {
     backgroundColor: '#9C4A8B',
