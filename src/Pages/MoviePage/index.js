@@ -100,7 +100,7 @@ const MoviePage = ({route, navigation}) => {
                 <Text style={styles.popularityMovie}>
                   {movieDetails.popularity >= 1000
                     ? `${(movieDetails.popularity / 1000)?.toFixed(0)}K`
-                    : movieDetails.popularity}
+                    : movieDetails.popularity?.toFixed()}
                 </Text>
               </View>
             </View>
