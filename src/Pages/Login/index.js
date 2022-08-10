@@ -91,7 +91,10 @@ const Login = ({navigation}) => {
                     />
                   </Animatable.View>
                 </View>
-                <TouchableOpacity style={styles.buttonEnter} onPress={login}>
+                <TouchableOpacity
+                  activeOpacity={0.7}
+                  style={styles.buttonEnter}
+                  onPress={login}>
                   <Text style={styles.buttonText}>Entrar</Text>
                 </TouchableOpacity>
               </Animatable.View>
