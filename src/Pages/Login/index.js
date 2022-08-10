@@ -1,6 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   ActivityIndicator,
+  Alert,
   Image,
   ImageBackground,
   Keyboard,
@@ -11,50 +12,40 @@ import {
   View,
 } from 'react-native';
 import {EmailPasswordField} from '../../Components/EmailPasswordField';
-import api from '../../service/api';
 import styles from './style';
+import {getToken, validateToken} from '../../service/api';
+import {Context} from '../../context';
+import * as Animatable from 'react-native-animatable';
 
 const Login = ({navigation}) => {
-  const [sessionId, setSessionId] = useState();
-  const [isLoadingPage, setIsLoadingPage] = useState(true);
-  const [isLoadingCredencials, setIsLoadingCredentials] = useState(true);
-  const [key, setKey] = useState();
+  const {setId} = useContext(Context);
+
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+  const [token, setToken] = useState();
+
   useEffect(() => {
-    api
-      .get('/authentication/token/new?api_key=2782ff9318f8a759e57ab3e07291a495')
-      .then(({data}) => {
-        setKey(data.request_token);
-        setIsLoadingPage(false);
-      })
-      .catch(err => alert('Erro no servidor'));
+    const getResponseToken = async () => {
+      const response = await getToken();
+      setToken(response.data.request_token);
+    };
+    getResponseToken();
   }, []);
 
-  const Login = async () => {
-    await api
-      .post(
-        '/authentication/token/validate_with_login?api_key=2782ff9318f8a759e57ab3e07291a495',
-        {
-          username: email,
-          password: password,
-          request_token: key,
-        },
-      )
-      .then(response => console.log())
-      .catch(err => alert('Usuario ou senha invalidos'));
-    await api
-      .post(
-        '/authentication/session/new?api_key=2782ff9318f8a759e57ab3e07291a495',
-        {
-          request_token: key,
-        },
-      )
-      .then(response => {
-        setSessionId(response.data.session_id), navigation.replace('Home'); // para deslogar é necessario reiniciar o app no metro
-      })
-      .catch(err => alert('Usuario ou senha invalidos'));
+  const login = async () => {
+    if (email && password !== '') {
+      const response = await validateToken(email, password, token);
+      if (response) {
+        const session_id = response.data.session_id;
+        setId(session_id);
+        Keyboard.dismiss();
+        navigation.replace('Home');
+      }
+    } else {
+      Alert.alert('Atenção!!', 'Email ou senha inválidos');
+    }
   };
+
   return (
     <TouchableWithoutFeedback
       onPress={() => Keyboard.dismiss()}
@@ -64,15 +55,15 @@ const Login = ({navigation}) => {
           resizeMode="contain"
           style={styles.banner}
           source={require('../../assets/bannerLogin.png')}>
-          <View style={styles.pageContent}>
-            <Image
-              style={styles.logoContent}
-              source={require('../../assets/logo.png')}
-            />
-            {isLoadingPage ? (
-              <ActivityIndicator color="#fff" size="large" />
-            ) : (
-              <View>
+          {token ? (
+            <View style={styles.pageContent}>
+              <Animatable.View animation="fadeInUp">
+                <Animatable.View animation="fadeInUp">
+                  <Image
+                    style={styles.logoContent}
+                    source={require('../../assets/logo.png')}
+                  />
+                </Animatable.View>
                 <View style={styles.boxContent}>
                   <Text style={styles.loginText}>Login</Text>
                   <Text style={styles.descriptionText}>
@@ -80,32 +71,37 @@ const Login = ({navigation}) => {
                   </Text>
                 </View>
                 <View style={styles.input}>
-                  <EmailPasswordField
-                    value={email}
-                    setValue={setEmail}
-                    isPassword={false}
-                    inputName={'e-mail'}
-                    iconName={'user'}
-                  />
+                  <Animatable.View animation="fadeInLeft" duration={1500}>
+                    <EmailPasswordField
+                      value={email}
+                      setValue={setEmail}
+                      isPassword={false}
+                      inputName={'usuário'}
+                      iconName={'user'}
+                    />
+                  </Animatable.View>
 
-                  <EmailPasswordField
-                    value={password}
-                    setValue={setPassword}
-                    isPassword={true}
-                    inputName={'senha'}
-                    iconName={'lock'}
-                  />
+                  <Animatable.View animation="fadeInRight" duration={1500}>
+                    <EmailPasswordField
+                      value={password}
+                      setValue={setPassword}
+                      isPassword={true}
+                      inputName={'senha'}
+                      iconName={'lock'}
+                    />
+                  </Animatable.View>
                 </View>
-                <TouchableOpacity
-                  style={styles.buttonEnter}
-                  onPress={() => {
-                    Login();
-                  }}>
+                <TouchableOpacity style={styles.buttonEnter} onPress={login}>
                   <Text style={styles.buttonText}>Entrar</Text>
                 </TouchableOpacity>
-              </View>
-            )}
-          </View>
+              </Animatable.View>
+            </View>
+          ) : (
+            <View style={styles.loading}>
+              <Image source={require('../../assets/logo.png')} />
+              <ActivityIndicator size={50} color="#EC2626" />
+            </View>
+          )}
         </ImageBackground>
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>

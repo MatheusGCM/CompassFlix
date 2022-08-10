@@ -1,29 +1,49 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {View, Text, FlatList} from 'react-native';
 import Movies from '../../Components/Movies';
-import api from '../../service/api';
 import styles from './style';
+import {getAccount, getMovies} from '../../service/api';
+import {Context} from '../../context';
+import Loading from '../../Components/Loading';
+import Load from '../../Components/Load';
 
-const Home = () => {
-  //const [PopularList, setPopularList] = useState([]);
-  const init = async () => {
-    const response = await api.get(
-      '/movie/popular?api_key=7121760c6db06f81adb5eed49efc0446&language=pt-BR&page=1',
-    );
+const Home = ({navigation}) => {
+  const {id} = useContext(Context);
 
-    console.log(response.data.results); //Lista de filmes retornando no console
+  const [page, setPage] = useState(1);
+  const [user, setUser] = useState();
+
+  const [loading, setLoading] = useState(false);
+  const [dataMovies, setDataMovies] = useState([]);
+  const getResponseMovies = async () => {
+    if (loading) {
+      return;
+    }
+    setLoading(true);
+
+    const response = await getMovies(page);
+    setDataMovies([...dataMovies, ...response.data.results]);
+    setPage(page + 1);
+    setLoading(false);
   };
+  useEffect(() => {
+    const getResponseAccount = async () => {
+      const response = await getAccount(id);
+      setUser(response.data);
+    };
+    getResponseAccount();
+  }, [id]);
 
   useEffect(() => {
-    init();
+    getResponseMovies();
   }, []);
 
-  return (
+  return user && dataMovies ? (
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.row}>
           <Text style={styles.header_title}>Olá,</Text>
-          <Text style={styles.header_label}>John</Text>
+          <Text style={styles.header_label}>{user.name}</Text>
           <Text style={styles.header_text}>!</Text>
         </View>
         <Text style={styles.header_description}>
@@ -39,13 +59,26 @@ const Home = () => {
           justifyContent: 'center',
           alignItems: 'center',
         }}
-        data={[1, 2, 3, 4]}
+        data={dataMovies}
         keyExtractor={item => String(item.id)}
+        onEndReached={getResponseMovies}
+        onEndReachedThreshold={0.1}
+        ListFooterComponent={<Loading load={loading} />}
         renderItem={({item}) => (
-          <Movies text="8.3/10" source={require('../../assets/image.png')} />
+          <Movies
+            text={`${item.vote_average}/10`}
+            poster_path={item.poster_path}
+            onPress={() =>
+              navigation.navigate('MoviePage', {
+                id: item.id,
+              })
+            }
+          />
         )}
       />
     </View>
+  ) : (
+    <Load />
   );
 };
 
