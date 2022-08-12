@@ -1,11 +1,18 @@
-import React from 'react';
+import React, {memo} from 'react';
 import {View, Text, Image, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useNavigation} from '@react-navigation/native';
 import styles from './styles';
-const Movies = ({text, poster_path, onPress}) => {
+const Movies = memo(({text, poster_path, id}) => {
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={onPress}>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate('MoviePage', {
+            id: id,
+          })
+        }>
         <Image
           style={styles.image}
           source={{uri: `http://image.tmdb.org/t/p/w185/${poster_path}`}}
@@ -17,6 +24,6 @@ const Movies = ({text, poster_path, onPress}) => {
       </View>
     </View>
   );
-};
+});
 
 export default Movies;

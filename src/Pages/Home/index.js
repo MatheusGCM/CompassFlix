@@ -68,11 +68,7 @@ const Home = ({navigation}) => {
           <Movies
             text={`${item.vote_average}/10`}
             poster_path={item.poster_path}
-            onPress={() =>
-              navigation.navigate('MoviePage', {
-                id: item.id,
-              })
-            }
+            id={item.id}
           />
         )}
       />
