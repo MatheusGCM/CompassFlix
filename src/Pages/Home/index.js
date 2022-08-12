@@ -36,6 +36,7 @@ const Home = ({navigation}) => {
 
   useEffect(() => {
     getResponseMovies();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return user && dataMovies ? (
