@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image, Text, View} from 'react-native';
+import {Image, ScrollView, Text, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import styles from './style';
 

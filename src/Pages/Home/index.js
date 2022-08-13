@@ -7,7 +7,7 @@ import {Context} from '../../context';
 import Loading from '../../Components/Loading';
 import Load from '../../Components/Load';
 
-const Home = ({navigation}) => {
+const Home = () => {
   const {id} = useContext(Context);
 
   const [page, setPage] = useState(1);
@@ -36,7 +36,6 @@ const Home = ({navigation}) => {
 
   useEffect(() => {
     getResponseMovies();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return user && dataMovies ? (
@@ -56,10 +55,7 @@ const Home = ({navigation}) => {
       </View>
       <FlatList
         numColumns={4}
-        contentContainerStyle={{
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
+        contentContainerStyle={styles.contentContainerStyle}
         data={dataMovies}
         keyExtractor={item => String(item.id)}
         onEndReached={getResponseMovies}

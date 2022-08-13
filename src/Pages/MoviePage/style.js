@@ -8,6 +8,9 @@ const styles = StyleSheet.create({
   flex1: {
     flex: 1,
   },
+  flex2_5: {
+    flex: 2.5,
+  },
   buttonLeft: {
     width: 30,
     height: 30,
@@ -22,9 +25,12 @@ const styles = StyleSheet.create({
     marginStart: 15,
   },
   contentHeader: {
-    flex: 1,
+    // flex: 1,
+    height: '30%',
     flexDirection: 'row',
-    marginBottom: 15,
+    marginBottom: 5,
+    // borderColor: 'red',
+    // borderWidth: 2,
   },
   posterMovie: {
     width: 116,
@@ -38,7 +44,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     alignItems: 'baseline',
-    marginBottom: 24,
+    marginBottom: 10,
   },
   titleMovie: {
     color: '#fff',
@@ -94,8 +100,11 @@ const styles = StyleSheet.create({
     fontFamily: 'OpenSans-Regular',
   },
   contentOverview: {
+    flex: 1,
     marginEnd: 20,
-    marginBottom: 22,
+    marginBottom: 15,
+    // borderColor: 'red',
+    // borderWidth: 2,
   },
   taglineMovie: {
     color: '#fff',
@@ -131,7 +140,7 @@ const styles = StyleSheet.create({
     height: 1,
     marginStart: 12,
     marginTop: 5,
-    marginBottom: 15,
+    marginBottom: 10,
   },
 });
 
