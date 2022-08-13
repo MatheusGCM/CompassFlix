@@ -46,6 +46,10 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
   },
+  contentContainerStyle: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
 
 export default styles;
