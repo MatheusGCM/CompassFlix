@@ -90,7 +90,6 @@ const MoviePage = ({route, navigation}) => {
                     </View>
                   )}
                 </View>
-
                 <View style={styles.contentHeaderBottom}>
                   <Text style={styles.voteAverageMovie}>
                     {movieDetails.vote_average?.toFixed(1)} / 10

@@ -22,13 +22,13 @@ const styles = StyleSheet.create({
   },
   txtName: {
     fontSize: 15,
-    fontWeight: '700',
     lineHeight: 20,
     color: '#fff',
+    fontFamily: 'OpenSans-Bold',
   },
   txtCharacter: {
     fontSize: 10,
-    fontWeight: '400',
+    fontFamily: 'OpenSans-Regular',
     lineHeight: 10,
     color: '#fff',
   },
