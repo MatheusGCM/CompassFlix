@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
   },
   input: {
     fontFamily: 'OpenSans-SemiBold',
-    color: '#ffffff80',
+    color: '#ffffffb3',
     width: 200,
     paddingLeft: 11,
     fontSize: 12,
