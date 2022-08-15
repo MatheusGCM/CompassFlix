@@ -52,6 +52,10 @@ const MoviePage = ({route, navigation}) => {
           style={styles.buttonLeft}>
           <Feather color="#000000" name="arrow-left" size={22} />
         </TouchableOpacity>
+        <TouchableOpacity 
+        style={styles.buttonRight}>
+          <Feather color="#000000" name="star" size={22} />
+        </TouchableOpacity>
       </ImageBackground>
 
       <View style={styles.content}>
@@ -62,6 +66,11 @@ const MoviePage = ({route, navigation}) => {
               uri: `http://image.tmdb.org/t/p/original/${movieDetails.poster_path}`,
             }}
           />
+          <TouchableOpacity 
+          //criar modal
+          style={styles.rate}> 
+            <Text style={styles.rate.text}>Avalie Agora</Text>
+          </TouchableOpacity>
           <View style={styles.flex1}>
             <View style={styles.contentHeaderTop}>
               <Text style={styles.titleMovie}>{movieDetails.title}</Text>

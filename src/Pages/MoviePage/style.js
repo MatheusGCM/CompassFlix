@@ -20,6 +20,37 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+
+  buttonRight: {
+    width: 30,
+    height: 30,
+    backgroundColor: '#fff',
+    borderRadius: 20,
+    margin: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    marginHorizontal: 360
+  },
+  rate: {
+    backgroundColor: '#E9A6A6',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 116,
+    height: 22,
+    borderBottomLeftRadius: 6,
+    borderBottomRightRadius: 6,
+    marginTop: 130,
+    position: 'absolute',
+    
+    text: {
+      fontSize: 10,
+      color: '#000000',
+      textTransform: 'uppercase',
+      fontFamily: 'OpenSans-Bold'
+    },
+  },
+
   content: {
     flex: 3.5,
     marginStart: 15,
