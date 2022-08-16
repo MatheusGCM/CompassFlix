@@ -3,13 +3,13 @@ import {View, Text, Image, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useNavigation} from '@react-navigation/native';
 import styles from './styles';
-const Movies = memo(({text, poster_path, id}) => {
+const Movies = memo(({text, poster_path, id, stack}) => {
   const navigation = useNavigation();
   return (
     <View style={styles.container}>
       <TouchableOpacity
         onPress={() =>
-          navigation.navigate('MoviePage', {
+          navigation.navigate(stack, {
             id: id,
           })
         }>

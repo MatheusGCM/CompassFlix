@@ -5,7 +5,12 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Login from '../Pages/Login';
 import Home from '../Pages/Home';
 import MoviePage from '../Pages/MoviePage';
-import {Image, Platform} from 'react-native';
+import HomeSerie from '../Pages/HomeSerie';
+import SeriePage from '../Pages/SeriePage';
+import Profile from '../Pages/Profile';
+import Favorites from '../Pages/Profile/Favorites';
+import Rating from '../Pages/Profile/Rating';
+import {Image} from 'react-native';
 
 const Stack = createNativeStackNavigator();
 
@@ -13,7 +18,7 @@ const Routes = () => {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="Login" component={Login} />
-      <Stack.Screen name="Home" component={Tabs} />
+      <Stack.Screen name="Tabs" component={Tabs} />
     </Stack.Navigator>
   );
 };
@@ -22,11 +27,29 @@ export default Routes;
 
 const HomeStack = createNativeStackNavigator();
 
-function HomeStackScreen() {
+function MovieStackScreen() {
   return (
     <HomeStack.Navigator screenOptions={{headerShown: false}}>
-      <HomeStack.Screen name="Home" component={Home} />
+      <HomeStack.Screen name="HomeMovie" component={Home} />
       <HomeStack.Screen name="MoviePage" component={MoviePage} />
+    </HomeStack.Navigator>
+  );
+}
+function SerieStackScreen() {
+  return (
+    <HomeStack.Navigator screenOptions={{headerShown: false}}>
+      <HomeStack.Screen name="HomeSerie" component={HomeSerie} />
+      <HomeStack.Screen name="SeriePage" component={SeriePage} />
+    </HomeStack.Navigator>
+  );
+}
+
+function ProfileStackScreen() {
+  return (
+    <HomeStack.Navigator screenOptions={{headerShown: false}}>
+      <HomeStack.Screen name="Profile" component={Profile} />
+      <HomeStack.Screen name="Favorites" component={Favorites} />
+      <HomeStack.Screen name="Rating" component={Rating} />
     </HomeStack.Navigator>
   );
 }
@@ -36,6 +59,7 @@ const Tab = createBottomTabNavigator();
 const Tabs = () => {
   return (
     <Tab.Navigator
+      initialRouteName="movieScreen"
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: false,
@@ -46,12 +70,39 @@ const Tabs = () => {
       }}>
       <Tab.Screen
         options={{
-          tabBarIcon: ({color}) => (
-            <Image source={require('../assets/tabIcon.png')} />
-          ),
+          tabBarIcon: ({focused}) =>
+            focused ? (
+              <Image source={require('../assets/seriesFocused.png')} />
+            ) : (
+              <Image source={require('../assets/series.png')} />
+            ),
         }}
-        name="homeScreen"
-        component={HomeStackScreen}
+        name="seriesScreen"
+        component={SerieStackScreen}
+      />
+      <Tab.Screen
+        options={{
+          tabBarIcon: ({focused}) =>
+            focused ? (
+              <Image source={require('../assets/movieFocused.png')} />
+            ) : (
+              <Image source={require('../assets/movie.png')} />
+            ),
+        }}
+        name="movieScreen"
+        component={MovieStackScreen}
+      />
+      <Tab.Screen
+        options={{
+          tabBarIcon: ({focused}) =>
+            focused ? (
+              <Image source={require('../assets/perfilFocused.png')} />
+            ) : (
+              <Image source={require('../assets/perfil.png')} />
+            ),
+        }}
+        name="profileScreen"
+        component={ProfileStackScreen}
       />
     </Tab.Navigator>
   );

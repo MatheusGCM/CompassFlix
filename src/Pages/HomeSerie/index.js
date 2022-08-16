@@ -7,7 +7,7 @@ import {Context} from '../../context';
 import Loading from '../../Components/Loading';
 import Load from '../../Components/Load';
 
-const Home = () => {
+const HomeSerie = () => {
   const {id} = useContext(Context);
 
   const [page, setPage] = useState(1);
@@ -66,7 +66,7 @@ const Home = () => {
             text={`${item.vote_average}/10`}
             poster_path={item.poster_path}
             id={item.id}
-            stack="MoviePage"
+            stack="SeriePage"
           />
         )}
       />
@@ -76,4 +76,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default HomeSerie;

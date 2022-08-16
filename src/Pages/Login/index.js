@@ -39,7 +39,7 @@ const Login = ({navigation}) => {
         const session_id = response.data.session_id;
         setId(session_id);
         Keyboard.dismiss();
-        navigation.replace('Home');
+        navigation.replace('Tabs');
       }
     } else {
       Alert.alert('Atenção!!', 'Email ou senha inválidos');
