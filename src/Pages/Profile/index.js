@@ -9,7 +9,13 @@ import {
 } from 'react-native';
 import styles from './style';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {getAccount, getFavoriteMovie} from '../../service/api';
+import {
+  getAccount,
+  getFavoriteMovie,
+  getFavoriteSeries,
+  getRatedMovie,
+  getRatedSeries,
+} from '../../service/api';
 import {Context} from '../../context';
 import Load from '../../Components/Load';
 import FavoriteMovies from '../../Components/FavoriteMovies';
@@ -18,9 +24,11 @@ import Movies from '../../Components/Movies';
 const Profile = ({navigation}) => {
   const {id} = useContext(Context);
   const [movieFocused, setMovieFocused] = useState(true);
-  const [seriesFocused, setSeriesFocused] = useState(false);
   const [user, setUser] = useState({});
   const [favMovie, setFavMovie] = useState({});
+  const [favSeries, setFavSeries] = useState({});
+  const [ratedMovie, setRatedMovie] = useState({});
+  const [ratedSeries, setRatedSeries] = useState({});
 
   useEffect(() => {
     const getResponseAccount = async () => {
@@ -31,11 +39,26 @@ const Profile = ({navigation}) => {
   }, [id]);
 
   useEffect(() => {
+    const getResponseFavoriteSeries = async () => {
+      const response = await getFavoriteSeries(id, user.id);
+      setFavSeries(response.data);
+    };
     const getResponseFavoriteMovies = async () => {
       const response = await getFavoriteMovie(id, user.id);
       setFavMovie(response.data);
     };
+    const getResponseRatedMovies = async () => {
+      const response = await getRatedMovie(id, user.id);
+      setRatedMovie(response.data);
+    };
+    const getResponseRatedSeries = async () => {
+      const response = await getRatedSeries(id, user.id);
+      setRatedSeries(response.data);
+    };
+    getResponseRatedMovies();
+    getResponseRatedSeries();
     getResponseFavoriteMovies();
+    getResponseFavoriteSeries();
   }, [id, user.id]);
 
   return user && favMovie ? (
@@ -83,7 +106,7 @@ const Profile = ({navigation}) => {
             <TouchableWithoutFeedback
               style={styles.buttonMidia}
               onPress={() => {
-                setMovieFocused(true), setSeriesFocused(false);
+                setMovieFocused(true);
               }}>
               {movieFocused ? (
                 <Image source={require('../../assets/movieColored.png')} />
@@ -95,9 +118,9 @@ const Profile = ({navigation}) => {
           <View style={styles.borderMidia}>
             <TouchableWithoutFeedback
               onPress={() => {
-                setMovieFocused(false), setSeriesFocused(true);
+                setMovieFocused(false);
               }}>
-              {seriesFocused ? (
+              {!movieFocused ? (
                 <Image source={require('../../assets/seriesColored.png')} />
               ) : (
                 <Image source={require('../../assets/seriesNotFocused.png')} />
@@ -109,9 +132,11 @@ const Profile = ({navigation}) => {
       <View style={styles.boxMidia}>
         {movieFocused ? (
           <>
-            <Text style={{color: 'white'}}>Filmes favoritos de John</Text>
+            <Text style={{color: 'white'}}>
+              Filmes favoritos de {user.name}
+            </Text>
             <TouchableWithoutFeedback
-              onPress={() => navigation.navigate('FavoriteFilms')}>
+              onPress={() => navigation.navigate('Favorites')}>
               <Text
                 style={{
                   fontFamily: 'OpenSans-SemiBold',
@@ -124,9 +149,11 @@ const Profile = ({navigation}) => {
           </>
         ) : (
           <>
-            <Text style={{color: 'white'}}>Series favoritos de John</Text>
+            <Text style={{color: 'white'}}>
+              Series favoritos de {user.name}
+            </Text>
             <TouchableWithoutFeedback
-              onPress={() => navigation.navigate('FavoriteSeries')}>
+              onPress={() => navigation.navigate('Favorites')}>
               <Text
                 style={{
                   fontFamily: 'OpenSans-SemiBold',
@@ -141,7 +168,11 @@ const Profile = ({navigation}) => {
       </View>
       <View style={{height: 96}}>
         <FlatList
-          data={favMovie?.results?.slice(0, 4)}
+          data={
+            movieFocused
+              ? favMovie?.results?.slice(0, 4)
+              : favSeries?.results?.slice(0, 4)
+          }
           horizontal={true}
           keyExtractor={item => String(item.id)}
           renderItem={({item}) => (
@@ -165,10 +196,10 @@ const Profile = ({navigation}) => {
         {movieFocused ? (
           <>
             <Text style={{color: 'white'}}>
-              Avaliações de filmes recentes de John
+              Avaliações de filmes recentes de {user.name}
             </Text>
             <TouchableWithoutFeedback
-              onPress={() => navigation.navigate('RatingFilms')}>
+              onPress={() => navigation.navigate('Rating')}>
               <Text
                 style={{
                   fontFamily: 'OpenSans-SemiBold',
@@ -182,10 +213,10 @@ const Profile = ({navigation}) => {
         ) : (
           <>
             <Text style={{color: 'white'}}>
-              Avaliações de series recentes de John
+              Avaliações de series recentes de {user.name}
             </Text>
             <TouchableWithoutFeedback
-              onPress={() => navigation.navigate('RatingSeries')}>
+              onPress={() => navigation.navigate('Rating')}>
               <Text
                 style={{
                   fontFamily: 'OpenSans-SemiBold',
@@ -199,12 +230,16 @@ const Profile = ({navigation}) => {
         )}
       </View>
       <FlatList
-        data={favMovie?.results?.slice(0, 4)}
+        data={
+          movieFocused
+            ? ratedMovie?.results?.slice(0, 4)
+            : ratedSeries?.results?.slice(0, 4)
+        }
         keyExtractor={item => String(item.id)}
         horizontal={true}
         renderItem={({item}) => (
           <Movies
-            text={`${item.vote_average.toFixed(0)}/10`}
+            text={`${item.rating?.toFixed(1)}/10`}
             poster_path={item.poster_path}
             id={item.id}
             stack="MoviePage"

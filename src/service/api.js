@@ -72,4 +72,22 @@ export const getFavoriteMovie = async (session_id, id) => {
   );
 };
 
+export const getFavoriteSeries = async (session_id, id) => {
+  return api.get(
+    `/account/${id}/favorite/tv?api_key=${api_key}&session_id=${session_id}`,
+  );
+};
+
+export const getRatedMovie = async (session_id, id) => {
+  return api.get(
+    `/account/${id}/rated/movies?api_key=${api_key}&session_id=${session_id}`,
+  );
+};
+
+export const getRatedSeries = async (session_id, id) => {
+  return api.get(
+    `/account/${id}/rated/tv?api_key=${api_key}&session_id=${session_id}`,
+  );
+};
+
 export default api;
