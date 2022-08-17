@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     position: 'absolute',
-    marginHorizontal: 360
+    marginHorizontal: 360,
   },
   rate: {
     backgroundColor: '#E9A6A6',
@@ -42,12 +42,12 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 6,
     marginTop: 130,
     position: 'absolute',
-    
+
     text: {
       fontSize: 10,
       color: '#000000',
       textTransform: 'uppercase',
-      fontFamily: 'OpenSans-Bold'
+      fontFamily: 'OpenSans-Bold',
     },
   },
 
