@@ -66,4 +66,10 @@ export const getMovieCredits = async id => {
     });
 };
 
+export const getFavoriteMovie = async (session_id, id) => {
+  return api.get(
+    `/account/${id}/favorite/movies?api_key=${api_key}&session_id=${session_id}`,
+  );
+};
+
 export default api;

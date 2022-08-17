@@ -1,5 +1,6 @@
-import React, {useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
+  FlatList,
   Image,
   Text,
   TouchableOpacity,
@@ -8,13 +9,37 @@ import {
 } from 'react-native';
 import styles from './style';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {getAccount, getFavoriteMovie} from '../../service/api';
+import {Context} from '../../context';
+import Load from '../../Components/Load';
+import FavoriteMovies from '../../Components/FavoriteMovies';
+import Movies from '../../Components/Movies';
 
 const Profile = ({navigation}) => {
+  const {id} = useContext(Context);
   const [movieFocused, setMovieFocused] = useState(true);
   const [seriesFocused, setSeriesFocused] = useState(false);
+  const [user, setUser] = useState({});
+  const [favMovie, setFavMovie] = useState({});
 
-  return (
-    <View style={{backgroundColor: 'black', flex: 1, alignItems: 'center'}}>
+  useEffect(() => {
+    const getResponseAccount = async () => {
+      const response = await getAccount(id);
+      setUser(response.data);
+    };
+    getResponseAccount();
+  }, [id]);
+
+  useEffect(() => {
+    const getResponseFavoriteMovies = async () => {
+      const response = await getFavoriteMovie(id, user.id);
+      setFavMovie(response.data);
+    };
+    getResponseFavoriteMovies();
+  }, [id, user.id]);
+
+  return user && favMovie ? (
+    <View style={styles.page}>
       <View style={styles.exitButton}>
         <Icon
           name="exit-outline"
@@ -32,13 +57,13 @@ const Profile = ({navigation}) => {
         }}>
         <Image
           source={{
-            uri: 'https://d5y9g7a5.rocketcdn.me/wp-content/uploads/2019/09/sherlock-holmes-quem-e-esse-detetive-com-tanto-poder-enigmatico-1024x512.jpeg',
+            uri: `http://image.tmdb.org/t/p/original/${user?.avatar?.tmdb?.avatar_path}`,
           }}
           style={{width: 78, height: 78, borderRadius: 100}}
         />
         <Text
           style={{fontFamily: 'OpenSans-Bold', fontSize: 18, color: 'white'}}>
-          John
+          {user.name}
         </Text>
         <View style={{alignItems: 'center', marginTop: 46}}>
           <Text
@@ -47,7 +72,7 @@ const Profile = ({navigation}) => {
               fontSize: 24,
               fontFamily: 'OpenSans-Bold',
             }}>
-            30
+            {favMovie.total_results}
           </Text>
           <Text style={{fontFamily: 'OpenSans-Regular', color: 'white'}}>
             Avaliações
@@ -81,20 +106,12 @@ const Profile = ({navigation}) => {
           </View>
         </View>
       </View>
-      <View
-        style={{
-          flexDirection: 'row',
-          width: '100%',
-          justifyContent: 'space-between',
-          paddingHorizontal: 20,
-          paddingTop: 16,
-          paddingBottom: 20,
-        }}>
+      <View style={styles.boxMidia}>
         {movieFocused ? (
           <>
             <Text style={{color: 'white'}}>Filmes favoritos de John</Text>
             <TouchableWithoutFeedback
-              onPress={() => navigation.navigate('Rating')}>
+              onPress={() => navigation.navigate('FavoriteFilms')}>
               <Text
                 style={{
                   fontFamily: 'OpenSans-SemiBold',
@@ -109,7 +126,7 @@ const Profile = ({navigation}) => {
           <>
             <Text style={{color: 'white'}}>Series favoritos de John</Text>
             <TouchableWithoutFeedback
-              onPress={() => navigation.navigate('Favorites')}>
+              onPress={() => navigation.navigate('FavoriteSeries')}>
               <Text
                 style={{
                   fontFamily: 'OpenSans-SemiBold',
@@ -122,14 +139,81 @@ const Profile = ({navigation}) => {
           </>
         )}
       </View>
+      <View style={{height: 96}}>
+        <FlatList
+          data={favMovie?.results?.slice(0, 4)}
+          horizontal={true}
+          keyExtractor={item => String(item.id)}
+          renderItem={({item}) => (
+            <FavoriteMovies
+              poster_path={item.poster_path}
+              id={item.id}
+              stack="MoviePage"
+            />
+          )}
+        />
+      </View>
       <View
         style={{
           width: '100%',
-          backgroundColor: 'white',
-          height: 1,
+          backgroundColor: 'gray',
+          height: 0.1,
+          marginTop: 20,
         }}
       />
+      <View style={styles.boxMidia}>
+        {movieFocused ? (
+          <>
+            <Text style={{color: 'white'}}>
+              Avaliações de filmes recentes de John
+            </Text>
+            <TouchableWithoutFeedback
+              onPress={() => navigation.navigate('RatingFilms')}>
+              <Text
+                style={{
+                  fontFamily: 'OpenSans-SemiBold',
+                  fontSize: 12,
+                  color: '#E9A6A6',
+                }}>
+                Ver tudo
+              </Text>
+            </TouchableWithoutFeedback>
+          </>
+        ) : (
+          <>
+            <Text style={{color: 'white'}}>
+              Avaliações de series recentes de John
+            </Text>
+            <TouchableWithoutFeedback
+              onPress={() => navigation.navigate('RatingSeries')}>
+              <Text
+                style={{
+                  fontFamily: 'OpenSans-SemiBold',
+                  fontSize: 12,
+                  color: '#E9A6A6',
+                }}>
+                Ver tudo
+              </Text>
+            </TouchableWithoutFeedback>
+          </>
+        )}
+      </View>
+      <FlatList
+        data={favMovie?.results?.slice(0, 4)}
+        keyExtractor={item => String(item.id)}
+        horizontal={true}
+        renderItem={({item}) => (
+          <Movies
+            text={`${item.vote_average.toFixed(0)}/10`}
+            poster_path={item.poster_path}
+            id={item.id}
+            stack="MoviePage"
+          />
+        )}
+      />
     </View>
+  ) : (
+    <Load />
   );
 };
 
