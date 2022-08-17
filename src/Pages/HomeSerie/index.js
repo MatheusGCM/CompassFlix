@@ -1,8 +1,8 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {View, Text, FlatList} from 'react-native';
-import Movies from '../../Components/Movies';
+import {View, Text, FlatList, Image} from 'react-native';
+import Series from '../../Components/Series';
 import styles from './style';
-import {getAccount, getMovies} from '../../service/api';
+import {getAccount, getSeries} from '../../service/api';
 import {Context} from '../../context';
 import Loading from '../../Components/Loading';
 import Load from '../../Components/Load';
@@ -14,15 +14,15 @@ const HomeSerie = () => {
   const [user, setUser] = useState();
 
   const [loading, setLoading] = useState(false);
-  const [dataMovies, setDataMovies] = useState([]);
-  const getResponseMovies = async () => {
+  const [dataSeries, setDataSeries] = useState([]);
+  const getResponseSeries = async () => {
     if (loading) {
       return;
     }
     setLoading(true);
 
-    const response = await getMovies(page);
-    setDataMovies([...dataMovies, ...response.data.results]);
+    const response = await getSeries(page);
+    setDataSeries([...dataSeries, ...response.data.results]);
     setPage(page + 1);
     setLoading(false);
   };
@@ -35,10 +35,10 @@ const HomeSerie = () => {
   }, [id]);
 
   useEffect(() => {
-    getResponseMovies();
+    getResponseSeries();
   }, []);
 
-  return user && dataMovies ? (
+  return user && dataSeries ? (
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.row}>
@@ -47,22 +47,22 @@ const HomeSerie = () => {
           <Text style={styles.header_text}>!</Text>
         </View>
         <Text style={styles.header_description}>
-          Reveja ou acompanhe os filmes que você assistiu...
+          Reveja ou acompanhe as séries que você assistiu...
         </Text>
       </View>
       <View style={styles.container_header}>
-        <Text style={styles.title}>Filmes populares este mês</Text>
+        <Text style={styles.title}>Séries populares este mês</Text>
       </View>
       <FlatList
         numColumns={4}
         contentContainerStyle={styles.contentContainerStyle}
-        data={dataMovies}
+        data={dataSeries}
         keyExtractor={item => String(item.id)}
-        onEndReached={getResponseMovies}
+        onEndReached={getResponseSeries}
         onEndReachedThreshold={0.1}
         ListFooterComponent={<Loading load={loading} />}
         renderItem={({item}) => (
-          <Movies
+          <Series
             text={`${item.vote_average}/10`}
             poster_path={item.poster_path}
             id={item.id}
