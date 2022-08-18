@@ -40,7 +40,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     height: 94,
-    marginBottom: 36,
   },
   loginText: {
     color: 'white',

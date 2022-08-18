@@ -9,6 +9,7 @@ export const EmailPasswordField = ({
   isPassword,
   inputName,
   iconName,
+  errorHolder,
 }) => {
   return (
     <View style={styles.boxInput}>
@@ -24,7 +25,7 @@ export const EmailPasswordField = ({
         style={styles.input}
         placeholder={inputName}
         secureTextEntry={isPassword}
-        placeholderTextColor={'#ffffffb3'}
+        placeholderTextColor={!errorHolder ? '#ffffffb3' : 'red'}
         autoCapitalize="none"
       />
     </View>

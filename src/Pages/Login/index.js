@@ -23,6 +23,7 @@ const Login = ({navigation}) => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [token, setToken] = useState();
+  const [errorHolder, setErrorHolder] = useState(false);
 
   useEffect(() => {
     const getResponseToken = async () => {
@@ -32,6 +33,10 @@ const Login = ({navigation}) => {
     getResponseToken();
   }, []);
 
+  const onSubmit = () => {
+    setEmail('');
+    setPassword('');
+  };
   const login = async () => {
     if (email && password !== '') {
       const response = await validateToken(email, password, token);
@@ -39,13 +44,23 @@ const Login = ({navigation}) => {
         const session_id = response.data.session_id;
         setId(session_id);
         Keyboard.dismiss();
+        setErrorHolder(false);
+        onSubmit();
         navigation.replace('Tabs');
+      } else {
+        onSubmit();
+        setErrorHolder(true);
       }
     } else {
-      Alert.alert('Atenção!!', 'Email ou senha inválidos');
+      onSubmit();
+      setErrorHolder(true);
     }
   };
-
+  useEffect(() => {
+    if (email !== '') {
+      setErrorHolder(false);
+    }
+  }, [email]);
   return (
     <TouchableWithoutFeedback
       onPress={() => Keyboard.dismiss()}
@@ -78,6 +93,7 @@ const Login = ({navigation}) => {
                       isPassword={false}
                       inputName={'usuário'}
                       iconName={'user'}
+                      errorHolder={errorHolder}
                     />
                   </Animatable.View>
 
@@ -88,9 +104,29 @@ const Login = ({navigation}) => {
                       isPassword={true}
                       inputName={'senha'}
                       iconName={'lock'}
+                      errorHolder={errorHolder}
                     />
                   </Animatable.View>
                 </View>
+                {errorHolder ? (
+                  <View
+                    style={{
+                      height: 48,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <Text
+                      style={{
+                        color: 'red',
+                        fontFamily: 'OpenSans-Regular',
+                        fontSize: 12,
+                      }}>
+                      Usuário ou senha inválidos!
+                    </Text>
+                  </View>
+                ) : (
+                  <View style={{height: 48}} />
+                )}
                 <TouchableOpacity
                   activeOpacity={0.7}
                   style={styles.buttonEnter}
