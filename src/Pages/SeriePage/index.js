@@ -6,46 +6,35 @@ import {
   View,
   ImageBackground,
   ScrollView,
-  FlatList,
 } from 'react-native';
 import styles from './style';
-import {getMoviesDetails, getMovieCredits} from '../../service/api';
+import {getSeriesDetails} from '../../service/api';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
-import Cast from '../../Components/Cast';
 import Load from '../../Components/Load';
 import * as Animatable from 'react-native-animatable';
 
 const SeriePage = ({route, navigation}) => {
-  const [movieDetails, setMovieDetails] = useState([]);
-  const [movieCredits, setMovieCredits] = useState({});
+  const [seriesDetails, setSeriesDetails] = useState([]);
 
   useEffect(() => {
-    const getResponseMovieDetails = async () => {
-      const [responseMoviesDetails, responseMovieCredits] = await Promise.all([
-        getMoviesDetails(route.params.id),
-        getMovieCredits(route.params.id),
+    const getResponseSeriesDetails = async () => {
+      const [responseSeriesDetails] = await Promise.all([
+        getSeriesDetails(route.params.id),
       ]);
-      if (responseMoviesDetails.status === 200) {
-        setMovieDetails(responseMoviesDetails.data);
-      }
-      if (responseMovieCredits.status === 200) {
-        setMovieCredits(responseMovieCredits.data);
+      if (responseSeriesDetails.status === 200) {
+        setSeriesDetails(responseSeriesDetails.data);
       }
     };
-    getResponseMovieDetails();
+    getResponseSeriesDetails();
   }, [route.params.id]);
 
-  const Directing = movieCredits.crew?.find(
-    element => element.job === 'Director',
-  )?.name;
-
-  return movieDetails.backdrop_path && movieDetails.poster_path ? (
+  return seriesDetails.backdrop_path && seriesDetails.poster_path ? (
     <View style={styles.container}>
       <ImageBackground
         style={styles.flex1}
         source={{
-          uri: `http://image.tmdb.org/t/p/original/${movieDetails.backdrop_path}`,
+          uri: `http://image.tmdb.org/t/p/original/${seriesDetails.backdrop_path}`,
         }}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
@@ -62,7 +51,7 @@ const SeriePage = ({route, navigation}) => {
           <Image
             style={styles.posterMovie}
             source={{
-              uri: `http://image.tmdb.org/t/p/original/${movieDetails.poster_path}`,
+              uri: `http://image.tmdb.org/t/p/original/${seriesDetails.poster_path}`,
             }}
           />
           <TouchableOpacity
@@ -72,22 +61,23 @@ const SeriePage = ({route, navigation}) => {
           </TouchableOpacity>
           <View style={styles.flex1}>
             <View style={styles.contentHeaderTop}>
-              <Text style={styles.titleMovie}>{movieDetails.title}</Text>
+              <Text style={styles.titleMovie}>{seriesDetails.name}</Text>
               <Text style={styles.yearMovie}>
-                {new Date(movieDetails.release_date).getFullYear()}
+                {new Date(seriesDetails.first_air_date).getFullYear()}
               </Text>
-              <Text style={styles.timeMovie}>{movieDetails.runtime} min</Text>
-              {Directing && (
                 <View style={styles.boxDirectorMovie}>
-                  <Text style={styles.directorMovie}>Direção por</Text>
-                  <Text style={styles.directorMovie.director}>{Directing}</Text>
+                  <Text style={styles.directorMovie}>Criado por</Text>
+                  <Text style={styles.directorMovie.director}>
+                    {seriesDetails?.created_by[0]?.name 
+                    ? seriesDetails?.created_by[0]?.name: 'Desconhecido' }
+                     </Text>
                 </View>
-              )}
+              
             </View>
 
             <View style={styles.contentHeaderBottom}>
               <Text style={styles.voteAverageMovie}>
-                {movieDetails.vote_average?.toFixed(1)} / 10
+                {seriesDetails.vote_average?.toFixed(1)} / 10
               </Text>
               <View style={styles.boxPopularityMovie}>
                 <Animatable.View
@@ -98,9 +88,9 @@ const SeriePage = ({route, navigation}) => {
                 </Animatable.View>
 
                 <Text style={styles.popularityMovie}>
-                  {movieDetails.popularity >= 1000
-                    ? `${(movieDetails.popularity / 1000)?.toFixed(0)}K`
-                    : movieDetails.popularity?.toFixed()}
+                  {seriesDetails.popularity >= 1000
+                    ? `${(seriesDetails.popularity / 1000)?.toFixed(0)}K`
+                    : seriesDetails.popularity?.toFixed()}
                 </Text>
               </View>
             </View>
@@ -108,26 +98,14 @@ const SeriePage = ({route, navigation}) => {
         </View>
         <ScrollView style={styles.contentOverview}>
           <Text style={styles.taglineMovie}>
-            {movieDetails.tagline ? movieDetails.tagline : 'Sinopse:'}
+            {seriesDetails.tagline ? seriesDetails.tagline : 'Sinopse:'}
           </Text>
           <Text style={styles.overviewMovie}>
-            {movieDetails.overview ? movieDetails.overview : 'Sem descrição...'}
+            {seriesDetails.overview ? seriesDetails.overview : 'Sem descrição...'}
           </Text>
         </ScrollView>
         <View style={styles.flex2_5}>
-          <FlatList
-            data={movieCredits.cast}
-            keyExtractor={item => String(item.id)}
-            renderItem={({item, i}) => <Cast key={i} {...item} />}
-            ListHeaderComponent={() => (
-              <>
-                <View style={styles.boxElenco}>
-                  <Text style={styles.txtBoxElenco}>Elenco</Text>
-                </View>
-                <View style={styles.line} />
-              </>
-            )}
-          />
+    
         </View>
       </View>
     </View>
