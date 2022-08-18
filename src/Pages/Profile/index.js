@@ -68,7 +68,7 @@ const Profile = ({navigation}) => {
           name="exit-outline"
           size={18}
           color="black"
-          style={{paddingRight: 6, paddingLeft: 10}}
+          style={styles.iconPadding}
         />
         <TouchableOpacity>
           <Text style={{color: 'black'}}>Sair</Text>
@@ -82,21 +82,11 @@ const Profile = ({navigation}) => {
           source={{
             uri: `http://image.tmdb.org/t/p/original/${user?.avatar?.tmdb?.avatar_path}`,
           }}
-          style={{width: 78, height: 78, borderRadius: 100}}
+          style={styles.profile}
         />
-        <Text
-          style={{fontFamily: 'OpenSans-Bold', fontSize: 18, color: 'white'}}>
-          {user.name}
-        </Text>
+        <Text style={styles.userName}>{user.name}</Text>
         <View style={{alignItems: 'center', marginTop: 46}}>
-          <Text
-            style={{
-              color: '#9C4A8B',
-              fontSize: 24,
-              fontFamily: 'OpenSans-Bold',
-            }}>
-            {favMovie.total_results}
-          </Text>
+          <Text style={styles.numberVotes}>{favMovie.total_results}</Text>
           <Text style={{fontFamily: 'OpenSans-Regular', color: 'white'}}>
             Avaliações
           </Text>
@@ -132,36 +122,18 @@ const Profile = ({navigation}) => {
       <View style={styles.boxMidia}>
         {movieFocused ? (
           <>
-            <Text style={{color: 'white'}}>
-              Filmes favoritos de {user.name}
-            </Text>
+            <Text style={styles.textInfo}>Filmes favoritos de {user.name}</Text>
             <TouchableWithoutFeedback
               onPress={() => navigation.navigate('Favorites')}>
-              <Text
-                style={{
-                  fontFamily: 'OpenSans-SemiBold',
-                  fontSize: 12,
-                  color: '#E9A6A6',
-                }}>
-                Ver tudo
-              </Text>
+              <Text style={styles.buttonShowAll}>Ver tudo</Text>
             </TouchableWithoutFeedback>
           </>
         ) : (
           <>
-            <Text style={{color: 'white'}}>
-              Series favoritos de {user.name}
-            </Text>
+            <Text style={styles.textInfo}>Series favoritas de {user.name}</Text>
             <TouchableWithoutFeedback
               onPress={() => navigation.navigate('Favorites')}>
-              <Text
-                style={{
-                  fontFamily: 'OpenSans-SemiBold',
-                  fontSize: 12,
-                  color: '#E9A6A6',
-                }}>
-                Ver tudo
-              </Text>
+              <Text style={styles.buttonShowAll}>Ver tudo</Text>
             </TouchableWithoutFeedback>
           </>
         )}
@@ -184,47 +156,26 @@ const Profile = ({navigation}) => {
           )}
         />
       </View>
-      <View
-        style={{
-          width: '100%',
-          backgroundColor: 'gray',
-          height: 0.1,
-          marginTop: 20,
-        }}
-      />
+      <View style={styles.line} />
       <View style={styles.boxMidia}>
         {movieFocused ? (
           <>
-            <Text style={{color: 'white'}}>
+            <Text style={styles.textInfo}>
               Avaliações de filmes recentes de {user.name}
             </Text>
             <TouchableWithoutFeedback
               onPress={() => navigation.navigate('Rating')}>
-              <Text
-                style={{
-                  fontFamily: 'OpenSans-SemiBold',
-                  fontSize: 12,
-                  color: '#E9A6A6',
-                }}>
-                Ver tudo
-              </Text>
+              <Text style={styles.buttonShowAll}>Ver tudo</Text>
             </TouchableWithoutFeedback>
           </>
         ) : (
           <>
-            <Text style={{color: 'white'}}>
+            <Text style={styles.textInfo}>
               Avaliações de series recentes de {user.name}
             </Text>
             <TouchableWithoutFeedback
               onPress={() => navigation.navigate('Rating')}>
-              <Text
-                style={{
-                  fontFamily: 'OpenSans-SemiBold',
-                  fontSize: 12,
-                  color: '#E9A6A6',
-                }}>
-                Ver tudo
-              </Text>
+              <Text style={styles.buttonShowAll}>Ver tudo</Text>
             </TouchableWithoutFeedback>
           </>
         )}
