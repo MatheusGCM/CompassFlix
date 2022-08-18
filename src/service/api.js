@@ -67,27 +67,41 @@ export const getMovieCredits = async id => {
 };
 
 export const getFavoriteMovie = async (session_id, id) => {
-  return api.get(
-    `/account/${id}/favorite/movies?api_key=${api_key}&session_id=${session_id}`,
-  );
+  return api
+    .get(
+      `/account/${id}/favorite/movies?api_key=${api_key}&session_id=${session_id}`,
+    )
+    .catch(error => {
+      console.warn('error na api');
+    });
 };
 
 export const getFavoriteSeries = async (session_id, id) => {
-  return api.get(
-    `/account/${id}/favorite/tv?api_key=${api_key}&session_id=${session_id}`,
-  );
+  return api
+    .get(
+      `/account/${id}/favorite/tv?api_key=${api_key}&session_id=${session_id}`,
+    )
+    .catch(error => {
+      console.warn('error na api');
+    });
 };
 
 export const getRatedMovie = async (session_id, id) => {
-  return api.get(
-    `/account/${id}/rated/movies?api_key=${api_key}&session_id=${session_id}`,
-  );
+  return api
+    .get(
+      `/account/${id}/rated/movies?api_key=${api_key}&session_id=${session_id}`,
+    )
+    .catch(error => {
+      console.warn('error na api');
+    });
 };
 
 export const getRatedSeries = async (session_id, id) => {
-  return api.get(
-    `/account/${id}/rated/tv?api_key=${api_key}&session_id=${session_id}`,
-  );
+  return api
+    .get(`/account/${id}/rated/tv?api_key=${api_key}&session_id=${session_id}`)
+    .catch(error => {
+      console.warn('error na api');
+    });
 };
 
 export default api;
