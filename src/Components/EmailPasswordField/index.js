@@ -16,7 +16,7 @@ export const EmailPasswordField = ({
       <Icon
         size={25}
         name={iconName}
-        color={'#ffffff80'}
+        color={!errorHolder ? '#ffffff80' : 'red'}
         style={{paddingTop: 8, paddingLeft: 10}}
       />
       <TextInput
@@ -27,6 +27,7 @@ export const EmailPasswordField = ({
         secureTextEntry={isPassword}
         placeholderTextColor={!errorHolder ? '#ffffffb3' : 'red'}
         autoCapitalize="none"
+        onFocus={() => setValue(errorHolder)}
       />
     </View>
   );

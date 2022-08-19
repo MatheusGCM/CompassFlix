@@ -50,10 +50,12 @@ const Login = ({navigation}) => {
       } else {
         onSubmit();
         setErrorHolder(true);
+        Keyboard.dismiss();
       }
     } else {
       onSubmit();
       setErrorHolder(true);
+      Keyboard.dismiss();
     }
   };
   useEffect(() => {
