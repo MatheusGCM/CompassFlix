@@ -1,5 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {
+  ActivityIndicator,
   FlatList,
   Image,
   Text,
@@ -27,6 +28,7 @@ const Profile = ({navigation}) => {
   const [favSeries, setFavSeries] = useState({});
   const [ratedMovie, setRatedMovie] = useState({});
   const [ratedSeries, setRatedSeries] = useState({});
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const getResponseFavoriteSeries = async () => {
@@ -49,6 +51,7 @@ const Profile = ({navigation}) => {
     getResponseRatedSeries();
     getResponseFavoriteMovies();
     getResponseFavoriteSeries();
+    setLoading(false);
   }, [id, user.id]);
 
   return ratedMovie.total_results ? (
@@ -89,19 +92,24 @@ const Profile = ({navigation}) => {
           style={{fontFamily: 'OpenSans-Bold', fontSize: 18, color: 'white'}}>
           {user.name}
         </Text>
-        <View style={{alignItems: 'center', marginTop: 46}}>
-          <Text
-            style={{
-              color: '#9C4A8B',
-              fontSize: 24,
-              fontFamily: 'OpenSans-Bold',
-            }}>
-            {ratedMovie?.total_results + ratedSeries?.total_results}
-          </Text>
-          <Text style={{fontFamily: 'OpenSans-Regular', color: 'white'}}>
-            Avaliações
-          </Text>
-        </View>
+        {loading ? (
+          <ActivityIndicator size="large" color="#E9A6A6" />
+        ) : (
+          <View style={{alignItems: 'center', marginTop: 46}}>
+            <Text
+              style={{
+                color: '#9C4A8B',
+                fontSize: 24,
+                fontFamily: 'OpenSans-Bold',
+              }}>
+              {ratedMovie?.total_results + ratedSeries?.total_results}
+            </Text>
+            <Text style={{fontFamily: 'OpenSans-Regular', color: 'white'}}>
+              Avaliações
+            </Text>
+          </View>
+        )}
+
         <View style={{flexDirection: 'row', paddingTop: 22}}>
           <View style={styles.borderMidia}>
             <TouchableWithoutFeedback
@@ -173,30 +181,34 @@ const Profile = ({navigation}) => {
           </>
         )}
       </View>
-      <View style={{height: 96}}>
-        <FlatList
-          data={
-            movieFocused
-              ? favMovie?.results?.slice(0, 4)
-              : favSeries?.results?.slice(0, 4)
-          }
-          horizontal={true}
-          keyExtractor={item => String(item.id)}
-          renderItem={({item}) => (
-            <Image
-              style={{
-                width: 67,
-                height: 89,
-                borderRadius: 7,
-                marginEnd: 12,
-              }}
-              source={{
-                uri: `http://image.tmdb.org/t/p/w185/${item.poster_path}`,
-              }}
-            />
-          )}
-        />
-      </View>
+      {loading ? (
+        <ActivityIndicator size="large" color="#E9A6A6" />
+      ) : (
+        <View style={{height: 96}}>
+          <FlatList
+            data={
+              movieFocused
+                ? favMovie?.results?.slice(0, 4)
+                : favSeries?.results?.slice(0, 4)
+            }
+            horizontal={true}
+            keyExtractor={item => String(item.id)}
+            renderItem={({item}) => (
+              <Image
+                style={{
+                  width: 67,
+                  height: 89,
+                  borderRadius: 7,
+                  marginEnd: 12,
+                }}
+                source={{
+                  uri: `http://image.tmdb.org/t/p/w185/${item.poster_path}`,
+                }}
+              />
+            )}
+          />
+        </View>
+      )}
       <View style={styles.line} />
       <View style={styles.boxMidia}>
         {movieFocused ? (
@@ -243,35 +255,39 @@ const Profile = ({navigation}) => {
           </>
         )}
       </View>
-      <FlatList
-        data={
-          movieFocused
-            ? ratedMovie?.results?.slice(0, 5)
-            : ratedSeries?.results?.slice(0, 5)
-        }
-        keyExtractor={item => String(item.id)}
-        horizontal={true}
-        renderItem={({item}) => (
-          <View>
-            <Image
-              style={{width: 58, height: 82, borderRadius: 7, marginEnd: 12}}
-              source={{
-                uri: `http://image.tmdb.org/t/p/w185/${item.poster_path}`,
-              }}
-            />
-            <View style={{flexDirection: 'row'}}>
-              <Icon name="star" color="#EC2626" size={10} />
-              <Text
-                style={{
-                  fontSize: 8,
-                  color: '#fff',
-                  marginLeft: 4.5,
-                  fontFamily: 'OpenSans-SemiBold',
-                }}>{`${item.rating?.toFixed(1)}/10`}</Text>
+      {loading ? (
+        <ActivityIndicator size="large" color="#E9A6A6" />
+      ) : (
+        <FlatList
+          data={
+            movieFocused
+              ? ratedMovie?.results?.slice(0, 5)
+              : ratedSeries?.results?.slice(0, 5)
+          }
+          keyExtractor={item => String(item.id)}
+          horizontal={true}
+          renderItem={({item}) => (
+            <View>
+              <Image
+                style={{width: 58, height: 82, borderRadius: 7, marginEnd: 12}}
+                source={{
+                  uri: `http://image.tmdb.org/t/p/w185/${item.poster_path}`,
+                }}
+              />
+              <View style={{flexDirection: 'row'}}>
+                <Icon name="star" color="#EC2626" size={10} />
+                <Text
+                  style={{
+                    fontSize: 8,
+                    color: '#fff',
+                    marginLeft: 4.5,
+                    fontFamily: 'OpenSans-SemiBold',
+                  }}>{`${item.rating?.toFixed(1)}/10`}</Text>
+              </View>
             </View>
-          </View>
-        )}
-      />
+          )}
+        />
+      )}
     </View>
   ) : (
     <Load />
