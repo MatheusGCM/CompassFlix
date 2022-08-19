@@ -93,9 +93,10 @@ const Login = ({navigation}) => {
                       value={email}
                       setValue={setEmail}
                       isPassword={false}
-                      inputName={'usuário'}
+                      inputName={'nome de usuário'}
                       iconName={'user'}
                       errorHolder={errorHolder}
+                      setIsFocused={setErrorHolder}
                     />
                   </Animatable.View>
 
@@ -107,6 +108,7 @@ const Login = ({navigation}) => {
                       inputName={'senha'}
                       iconName={'lock'}
                       errorHolder={errorHolder}
+                      setIsFocused={setErrorHolder}
                     />
                   </Animatable.View>
                 </View>
@@ -119,7 +121,7 @@ const Login = ({navigation}) => {
                     }}>
                     <Text
                       style={{
-                        color: 'red',
+                        color: '#EC2626',
                         fontFamily: 'OpenSans-Regular',
                         fontSize: 12,
                       }}>
