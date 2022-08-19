@@ -58,7 +58,7 @@ const Profile = ({navigation}) => {
           name="exit-outline"
           size={18}
           color="black"
-          style={{paddingRight: 6, paddingLeft: 10}}
+          style={styles.iconPadding}
         />
         <TouchableOpacity>
           <Text style={{color: 'black'}}>Sair</Text>
@@ -133,9 +133,7 @@ const Profile = ({navigation}) => {
       <View style={styles.boxMidia}>
         {movieFocused ? (
           <>
-            <Text style={{color: 'white'}}>
-              Filmes favoritos de {user.name}
-            </Text>
+            <Text style={styles.textInfo}>Filmes favoritos de {user.name}</Text>
             <TouchableWithoutFeedback
               onPress={() =>
                 navigation.navigate('Favorites', {
@@ -199,18 +197,11 @@ const Profile = ({navigation}) => {
           )}
         />
       </View>
-      <View
-        style={{
-          width: '100%',
-          backgroundColor: 'gray',
-          height: 0.1,
-          marginTop: 20,
-        }}
-      />
+      <View style={styles.line} />
       <View style={styles.boxMidia}>
         {movieFocused ? (
           <>
-            <Text style={{color: 'white'}}>
+            <Text style={styles.textInfo}>
               Avaliações de filmes recentes de {user.name}
             </Text>
             <TouchableWithoutFeedback

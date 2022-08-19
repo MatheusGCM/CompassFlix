@@ -40,6 +40,41 @@ const styles = StyleSheet.create({
     paddingTop: 16,
     paddingBottom: 20,
   },
+  buttonShowAll: {
+    fontFamily: 'OpenSans-SemiBold',
+    fontSize: 12,
+    color: '#E9A6A6',
+  },
+  numberVotes: {
+    color: '#9C4A8B',
+    fontSize: 24,
+    fontFamily: 'OpenSans-Bold',
+  },
+  profile: {
+    width: 78,
+    height: 78,
+    borderRadius: 100,
+  },
+  textInfo: {
+    fontFamily: 'OpenSans-Medium',
+    fontSize: 12,
+    color: 'white',
+  },
+  line: {
+    width: '100%',
+    backgroundColor: '#ffffff30',
+    height: 0.1,
+    marginTop: 20,
+  },
+  iconPadding: {
+    paddingRight: 6,
+    paddingLeft: 10,
+  },
+  userName: {
+    fontFamily: 'OpenSans-Bold',
+    fontSize: 18,
+    color: 'white',
+  },
 });
 
 export default styles;
