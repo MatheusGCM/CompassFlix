@@ -10,7 +10,6 @@ import {
 import styles from './style';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {
-  getAccount,
   getFavoriteMovie,
   getFavoriteSeries,
   getRatedMovie,
@@ -22,21 +21,12 @@ import FavoriteMovies from '../../Components/FavoriteMovies';
 import Movies from '../../Components/Movies';
 
 const Profile = ({navigation}) => {
-  const {id} = useContext(Context);
+  const {id, user} = useContext(Context);
   const [movieFocused, setMovieFocused] = useState(true);
-  const [user, setUser] = useState({});
   const [favMovie, setFavMovie] = useState({});
   const [favSeries, setFavSeries] = useState({});
   const [ratedMovie, setRatedMovie] = useState({});
   const [ratedSeries, setRatedSeries] = useState({});
-
-  useEffect(() => {
-    const getResponseAccount = async () => {
-      const response = await getAccount(id);
-      setUser(response.data);
-    };
-    getResponseAccount();
-  }, [id]);
 
   useEffect(() => {
     const getResponseFavoriteSeries = async () => {
@@ -61,7 +51,7 @@ const Profile = ({navigation}) => {
     getResponseFavoriteSeries();
   }, [id, user.id]);
 
-  return user && favMovie ? (
+  return ratedMovie.total_results ? (
     <View style={styles.page}>
       <View style={styles.exitButton}>
         <Icon
@@ -78,12 +68,23 @@ const Profile = ({navigation}) => {
         style={{
           alignItems: 'center',
         }}>
-        <Image
-          source={{
-            uri: `http://image.tmdb.org/t/p/original/${user?.avatar?.tmdb?.avatar_path}`,
-          }}
-          style={{width: 78, height: 78, borderRadius: 100}}
-        />
+        {user.avatar?.tmdb.avatar_path ? (
+          <Image
+            source={{
+              uri: `http://image.tmdb.org/t/p/original/${user.avatar?.tmdb.avatar_path}`,
+            }}
+            style={{width: 78, height: 78, borderRadius: 100}}
+          />
+        ) : (
+          <View>
+            <Icon
+              name="person-circle"
+              color="rgba(255,255,255,0.4)"
+              size={78}
+            />
+          </View>
+        )}
+
         <Text
           style={{fontFamily: 'OpenSans-Bold', fontSize: 18, color: 'white'}}>
           {user.name}
@@ -95,7 +96,7 @@ const Profile = ({navigation}) => {
               fontSize: 24,
               fontFamily: 'OpenSans-Bold',
             }}>
-            {favMovie.total_results}
+            {ratedMovie?.total_results + ratedSeries?.total_results}
           </Text>
           <Text style={{fontFamily: 'OpenSans-Regular', color: 'white'}}>
             Avaliações
@@ -136,7 +137,11 @@ const Profile = ({navigation}) => {
               Filmes favoritos de {user.name}
             </Text>
             <TouchableWithoutFeedback
-              onPress={() => navigation.navigate('Favorites')}>
+              onPress={() =>
+                navigation.navigate('Favorites', {
+                  movieFocused: movieFocused,
+                })
+              }>
               <Text
                 style={{
                   fontFamily: 'OpenSans-SemiBold',
@@ -150,10 +155,14 @@ const Profile = ({navigation}) => {
         ) : (
           <>
             <Text style={{color: 'white'}}>
-              Series favoritos de {user.name}
+              Séries favoritas de {user.name}
             </Text>
             <TouchableWithoutFeedback
-              onPress={() => navigation.navigate('Favorites')}>
+              onPress={() =>
+                navigation.navigate('Favorites', {
+                  movieFocused: movieFocused,
+                })
+              }>
               <Text
                 style={{
                   fontFamily: 'OpenSans-SemiBold',
@@ -176,10 +185,16 @@ const Profile = ({navigation}) => {
           horizontal={true}
           keyExtractor={item => String(item.id)}
           renderItem={({item}) => (
-            <FavoriteMovies
-              poster_path={item.poster_path}
-              id={item.id}
-              stack="MoviePage"
+            <Image
+              style={{
+                width: 67,
+                height: 89,
+                borderRadius: 7,
+                marginEnd: 12,
+              }}
+              source={{
+                uri: `http://image.tmdb.org/t/p/w185/${item.poster_path}`,
+              }}
             />
           )}
         />
@@ -199,7 +214,11 @@ const Profile = ({navigation}) => {
               Avaliações de filmes recentes de {user.name}
             </Text>
             <TouchableWithoutFeedback
-              onPress={() => navigation.navigate('Rating')}>
+              onPress={() =>
+                navigation.navigate('Rating', {
+                  movieFocused: movieFocused,
+                })
+              }>
               <Text
                 style={{
                   fontFamily: 'OpenSans-SemiBold',
@@ -213,10 +232,14 @@ const Profile = ({navigation}) => {
         ) : (
           <>
             <Text style={{color: 'white'}}>
-              Avaliações de series recentes de {user.name}
+              Avaliações de séries recentes de {user.name}
             </Text>
             <TouchableWithoutFeedback
-              onPress={() => navigation.navigate('Rating')}>
+              onPress={() =>
+                navigation.navigate('Rating', {
+                  movieFocused: movieFocused,
+                })
+              }>
               <Text
                 style={{
                   fontFamily: 'OpenSans-SemiBold',
@@ -232,18 +255,30 @@ const Profile = ({navigation}) => {
       <FlatList
         data={
           movieFocused
-            ? ratedMovie?.results?.slice(0, 4)
-            : ratedSeries?.results?.slice(0, 4)
+            ? ratedMovie?.results?.slice(0, 5)
+            : ratedSeries?.results?.slice(0, 5)
         }
         keyExtractor={item => String(item.id)}
         horizontal={true}
         renderItem={({item}) => (
-          <Movies
-            text={`${item.rating?.toFixed(1)}/10`}
-            poster_path={item.poster_path}
-            id={item.id}
-            stack="MoviePage"
-          />
+          <View>
+            <Image
+              style={{width: 58, height: 82, borderRadius: 7, marginEnd: 12}}
+              source={{
+                uri: `http://image.tmdb.org/t/p/w185/${item.poster_path}`,
+              }}
+            />
+            <View style={{flexDirection: 'row'}}>
+              <Icon name="star" color="#EC2626" size={10} />
+              <Text
+                style={{
+                  fontSize: 8,
+                  color: '#fff',
+                  marginLeft: 4.5,
+                  fontFamily: 'OpenSans-SemiBold',
+                }}>{`${item.rating?.toFixed(1)}/10`}</Text>
+            </View>
+          </View>
         )}
       />
     </View>
