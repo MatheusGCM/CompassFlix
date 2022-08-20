@@ -17,9 +17,6 @@ import {
   getRatedSeries,
 } from '../../service/api';
 import {Context} from '../../context';
-import Load from '../../Components/Load';
-import FavoriteMovies from '../../Components/FavoriteMovies';
-import Movies from '../../Components/Movies';
 
 const Profile = ({navigation}) => {
   const {id, user} = useContext(Context);
@@ -28,7 +25,6 @@ const Profile = ({navigation}) => {
   const [favSeries, setFavSeries] = useState({});
   const [ratedMovie, setRatedMovie] = useState({});
   const [ratedSeries, setRatedSeries] = useState({});
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const getResponseFavoriteSeries = async () => {
@@ -51,10 +47,9 @@ const Profile = ({navigation}) => {
     getResponseRatedSeries();
     getResponseFavoriteMovies();
     getResponseFavoriteSeries();
-    setLoading(false);
   }, [id, user.id]);
 
-  return ratedMovie.total_results ? (
+  return (
     <View style={styles.page}>
       <View style={styles.exitButton}>
         <Icon
@@ -92,23 +87,25 @@ const Profile = ({navigation}) => {
           style={{fontFamily: 'OpenSans-Bold', fontSize: 18, color: 'white'}}>
           {user.name}
         </Text>
-        {loading ? (
-          <ActivityIndicator size="large" color="#E9A6A6" />
-        ) : (
-          <View style={{alignItems: 'center', marginTop: 46}}>
-            <Text
-              style={{
-                color: '#9C4A8B',
-                fontSize: 24,
-                fontFamily: 'OpenSans-Bold',
-              }}>
-              {ratedMovie?.total_results + ratedSeries?.total_results}
-            </Text>
-            <Text style={{fontFamily: 'OpenSans-Regular', color: 'white'}}>
-              Avaliações
-            </Text>
-          </View>
-        )}
+        <View style={{alignItems: 'center', marginTop: 46, height: 54}}>
+          {ratedMovie?.total_results + ratedSeries?.total_results ? (
+            <>
+              <Text
+                style={{
+                  color: '#9C4A8B',
+                  fontSize: 24,
+                  fontFamily: 'OpenSans-Bold',
+                }}>
+                {ratedMovie?.total_results + ratedSeries?.total_results}
+              </Text>
+              <Text style={{fontFamily: 'OpenSans-Regular', color: 'white'}}>
+                Avaliações
+              </Text>
+            </>
+          ) : (
+            <ActivityIndicator size="large" color="#E9A6A6" />
+          )}
+        </View>
 
         <View style={{flexDirection: 'row', paddingTop: 22}}>
           <View style={styles.borderMidia}>
@@ -181,10 +178,8 @@ const Profile = ({navigation}) => {
           </>
         )}
       </View>
-      {loading ? (
-        <ActivityIndicator size="large" color="#E9A6A6" />
-      ) : (
-        <View style={{height: 96}}>
+      <View style={{height: 89, justifyContent: 'center'}}>
+        {favMovie?.results || favSeries?.results ? (
           <FlatList
             data={
               movieFocused
@@ -207,8 +202,10 @@ const Profile = ({navigation}) => {
               />
             )}
           />
-        </View>
-      )}
+        ) : (
+          <ActivityIndicator size="large" color="#E9A6A6" />
+        )}
+      </View>
       <View style={styles.line} />
       <View style={styles.boxMidia}>
         {movieFocused ? (
@@ -255,9 +252,7 @@ const Profile = ({navigation}) => {
           </>
         )}
       </View>
-      {loading ? (
-        <ActivityIndicator size="large" color="#E9A6A6" />
-      ) : (
+      {ratedMovie?.results || ratedSeries?.results ? (
         <FlatList
           data={
             movieFocused
@@ -287,10 +282,16 @@ const Profile = ({navigation}) => {
             </View>
           )}
         />
+      ) : (
+        <View
+          style={{
+            height: 82,
+            justifyContent: 'center',
+          }}>
+          <ActivityIndicator size="large" color="#E9A6A6" />
+        </View>
       )}
     </View>
-  ) : (
-    <Load />
   );
 };
 
