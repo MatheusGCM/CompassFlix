@@ -13,9 +13,13 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
 import Load from '../../Components/Load';
 import * as Animatable from 'react-native-animatable';
+import Season from '../../Components/Season';
 
 const SeriePage = ({route, navigation}) => {
   const [seriesDetails, setSeriesDetails] = useState([]);
+  const [visible, setVisible] = useState(false);
+  const [seasonNumber, setSeasonNumber] = useState();
+  const [seasonSelected, setSeasonSelected] = useState();
 
   useEffect(() => {
     const getResponseSeriesDetails = async () => {
@@ -65,14 +69,14 @@ const SeriePage = ({route, navigation}) => {
               <Text style={styles.yearMovie}>
                 {new Date(seriesDetails.first_air_date).getFullYear()}
               </Text>
-                <View style={styles.boxDirectorMovie}>
-                  <Text style={styles.directorMovie}>Criado por</Text>
-                  <Text style={styles.directorMovie.director}>
-                    {seriesDetails?.created_by[0]?.name 
-                    ? seriesDetails?.created_by[0]?.name: 'Desconhecido' }
-                     </Text>
-                </View>
-              
+              <View style={styles.boxDirectorMovie}>
+                <Text style={styles.directorMovie}>Criado por</Text>
+                <Text style={styles.directorMovie.director}>
+                  {seriesDetails?.created_by[0]?.name
+                    ? seriesDetails?.created_by[0]?.name
+                    : 'Desconhecido'}
+                </Text>
+              </View>
             </View>
 
             <View style={styles.contentHeaderBottom}>
@@ -101,11 +105,29 @@ const SeriePage = ({route, navigation}) => {
             {seriesDetails.tagline ? seriesDetails.tagline : 'Sinopse:'}
           </Text>
           <Text style={styles.overviewMovie}>
-            {seriesDetails.overview ? seriesDetails.overview : 'Sem descrição...'}
+            {seriesDetails.overview
+              ? seriesDetails.overview
+              : 'Sem descrição...'}
           </Text>
         </ScrollView>
         <View style={styles.flex2_5}>
-    
+          <ScrollView>
+            {seriesDetails.seasons.map((item, index) => (
+              <Season
+                key={String(item.id)}
+                id={route.params.id}
+                visible={visible}
+                index={index}
+                seasonNumber={seasonNumber}
+                seasonSelected={seasonSelected}
+                onPress={() => {
+                  setVisible(!visible);
+                  setSeasonNumber(item.season_number);
+                  setSeasonSelected(index + 1);
+                }}
+              />
+            ))}
+          </ScrollView>
         </View>
       </View>
     </View>
