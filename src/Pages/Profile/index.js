@@ -14,7 +14,6 @@ import {Context} from '../../context';
 import Load from '../../Components/Load';
 import FavoriteMovies from '../../Components/FavoriteMovies';
 import Movies from '../../Components/Movies';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Profile = ({navigation}) => {
   const {id} = useContext(Context);
@@ -25,8 +24,7 @@ const Profile = ({navigation}) => {
 
   useEffect(() => {
     const getResponseAccount = async () => {
-      const storedUser = await AsyncStorage.getItem('sessionIdUser');
-      const response = await getAccount(id ? id : storedUser);
+      const response = await getAccount(id);
       setUser(response.data);
     };
     getResponseAccount();
@@ -34,8 +32,7 @@ const Profile = ({navigation}) => {
 
   useEffect(() => {
     const getResponseFavoriteMovies = async () => {
-      const storedUser = await AsyncStorage.getItem('sessionIdUser');
-      const response = await getFavoriteMovie(id ? id : storedUser, user.id);
+      const response = await getFavoriteMovie(id, user.id);
       setFavMovie(response.data);
     };
     getResponseFavoriteMovies();
