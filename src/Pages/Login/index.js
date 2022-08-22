@@ -24,6 +24,7 @@ const Login = ({navigation}) => {
   const [password, setPassword] = useState();
   const [token, setToken] = useState();
   const [errorHolder, setErrorHolder] = useState(false);
+  const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
     const getResponseToken = async () => {
@@ -38,6 +39,7 @@ const Login = ({navigation}) => {
     setPassword('');
   };
   const login = async () => {
+    setEnabled(true);
     if (email && password !== '') {
       const response = await validateToken(email, password, token);
       if (response) {
@@ -47,15 +49,18 @@ const Login = ({navigation}) => {
         setErrorHolder(false);
         onSubmit();
         navigation.replace('Tabs');
+        setEnabled(false);
       } else {
         onSubmit();
         setErrorHolder(true);
         Keyboard.dismiss();
+        setEnabled(false);
       }
     } else {
       onSubmit();
       setErrorHolder(true);
       Keyboard.dismiss();
+      setEnabled(false);
     }
   };
   useEffect(() => {
@@ -134,7 +139,8 @@ const Login = ({navigation}) => {
                 <TouchableOpacity
                   activeOpacity={0.7}
                   style={styles.buttonEnter}
-                  onPress={login}>
+                  onPress={login}
+                  disabled={enabled}>
                   <Text style={styles.buttonText}>Entrar</Text>
                 </TouchableOpacity>
               </Animatable.View>
