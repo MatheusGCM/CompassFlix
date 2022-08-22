@@ -6,12 +6,13 @@ import {getAccount, getSeries} from '../../service/api';
 import {Context} from '../../context';
 import Loading from '../../Components/Loading';
 import Load from '../../Components/Load';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const HomeSerie = () => {
   const {id} = useContext(Context);
 
   const [page, setPage] = useState(1);
-  const [user, setUser] = useState();
+  const [userData, setUserData] = useState();
 
   const [loading, setLoading] = useState(false);
   const [dataSeries, setDataSeries] = useState([]);
@@ -28,8 +29,9 @@ const HomeSerie = () => {
   };
   useEffect(() => {
     const getResponseAccount = async () => {
-      const response = await getAccount(id);
-      setUser(response.data);
+      const storedUser = await AsyncStorage.getItem('sessionIdUser');
+      const response = await getAccount(id ? id : storedUser);
+      setUserData(response.data);
     };
     getResponseAccount();
   }, [id]);
@@ -38,12 +40,12 @@ const HomeSerie = () => {
     getResponseSeries();
   }, []);
 
-  return user && dataSeries ? (
+  return userData && dataSeries ? (
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.row}>
           <Text style={styles.header_title}>Olá,</Text>
-          <Text style={styles.header_label}>{user.name}</Text>
+          <Text style={styles.header_label}>{userData.name}</Text>
           <Text style={styles.header_text}>!</Text>
         </View>
         <Text style={styles.header_description}>
