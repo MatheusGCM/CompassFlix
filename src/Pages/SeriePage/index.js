@@ -6,39 +6,46 @@ import {
   View,
   ImageBackground,
   ScrollView,
+  FlatList,
 } from 'react-native';
 import styles from './style';
-import {getSeriesDetails} from '../../service/api';
+import {getMoviesDetails, getMovieCredits} from '../../service/api';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
+import Cast from '../../Components/Cast';
 import Load from '../../Components/Load';
 import * as Animatable from 'react-native-animatable';
-import Season from '../../Components/Season';
 
 const SeriePage = ({route, navigation}) => {
-  const [seriesDetails, setSeriesDetails] = useState([]);
-  const [visible, setVisible] = useState(false);
-  const [seasonNumber, setSeasonNumber] = useState();
-  const [seasonSelected, setSeasonSelected] = useState();
+  const [movieDetails, setMovieDetails] = useState([]);
+  const [movieCredits, setMovieCredits] = useState({});
 
   useEffect(() => {
-    const getResponseSeriesDetails = async () => {
-      const [responseSeriesDetails] = await Promise.all([
-        getSeriesDetails(route.params.id),
+    const getResponseMovieDetails = async () => {
+      const [responseMoviesDetails, responseMovieCredits] = await Promise.all([
+        getMoviesDetails(route.params.id),
+        getMovieCredits(route.params.id),
       ]);
-      if (responseSeriesDetails.status === 200) {
-        setSeriesDetails(responseSeriesDetails.data);
+      if (responseMoviesDetails.status === 200) {
+        setMovieDetails(responseMoviesDetails.data);
+      }
+      if (responseMovieCredits.status === 200) {
+        setMovieCredits(responseMovieCredits.data);
       }
     };
-    getResponseSeriesDetails();
+    getResponseMovieDetails();
   }, [route.params.id]);
 
-  return seriesDetails.backdrop_path && seriesDetails.poster_path ? (
+  const Directing = movieCredits.crew?.find(
+    element => element.job === 'Director',
+  )?.name;
+
+  return movieDetails.backdrop_path && movieDetails.poster_path ? (
     <View style={styles.container}>
       <ImageBackground
         style={styles.flex1}
         source={{
-          uri: `http://image.tmdb.org/t/p/original/${seriesDetails.backdrop_path}`,
+          uri: `http://image.tmdb.org/t/p/original/${movieDetails.backdrop_path}`,
         }}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
@@ -55,7 +62,7 @@ const SeriePage = ({route, navigation}) => {
           <Image
             style={styles.posterMovie}
             source={{
-              uri: `http://image.tmdb.org/t/p/original/${seriesDetails.poster_path}`,
+              uri: `http://image.tmdb.org/t/p/original/${movieDetails.poster_path}`,
             }}
           />
           <TouchableOpacity
@@ -65,23 +72,22 @@ const SeriePage = ({route, navigation}) => {
           </TouchableOpacity>
           <View style={styles.flex1}>
             <View style={styles.contentHeaderTop}>
-              <Text style={styles.titleMovie}>{seriesDetails.name}</Text>
+              <Text style={styles.titleMovie}>{movieDetails.title}</Text>
               <Text style={styles.yearMovie}>
-                {new Date(seriesDetails.first_air_date).getFullYear()}
+                {new Date(movieDetails.release_date).getFullYear()}
               </Text>
-              <View style={styles.boxDirectorMovie}>
-                <Text style={styles.directorMovie}>Criado por</Text>
-                <Text style={styles.directorMovie.director}>
-                  {seriesDetails?.created_by[0]?.name
-                    ? seriesDetails?.created_by[0]?.name
-                    : 'Desconhecido'}
-                </Text>
-              </View>
+              <Text style={styles.timeMovie}>{movieDetails.runtime} min</Text>
+              {Directing && (
+                <View style={styles.boxDirectorMovie}>
+                  <Text style={styles.directorMovie}>Direção por</Text>
+                  <Text style={styles.directorMovie.director}>{Directing}</Text>
+                </View>
+              )}
             </View>
 
             <View style={styles.contentHeaderBottom}>
               <Text style={styles.voteAverageMovie}>
-                {seriesDetails.vote_average?.toFixed(1)} / 10
+                {movieDetails.vote_average?.toFixed(1)} / 10
               </Text>
               <View style={styles.boxPopularityMovie}>
                 <Animatable.View
@@ -92,9 +98,9 @@ const SeriePage = ({route, navigation}) => {
                 </Animatable.View>
 
                 <Text style={styles.popularityMovie}>
-                  {seriesDetails.popularity >= 1000
-                    ? `${(seriesDetails.popularity / 1000)?.toFixed(0)}K`
-                    : seriesDetails.popularity?.toFixed()}
+                  {movieDetails.popularity >= 1000
+                    ? `${(movieDetails.popularity / 1000)?.toFixed(0)}K`
+                    : movieDetails.popularity?.toFixed()}
                 </Text>
               </View>
             </View>
@@ -102,32 +108,26 @@ const SeriePage = ({route, navigation}) => {
         </View>
         <ScrollView style={styles.contentOverview}>
           <Text style={styles.taglineMovie}>
-            {seriesDetails.tagline ? seriesDetails.tagline : 'Sinopse:'}
+            {movieDetails.tagline ? movieDetails.tagline : 'Sinopse:'}
           </Text>
           <Text style={styles.overviewMovie}>
-            {seriesDetails.overview
-              ? seriesDetails.overview
-              : 'Sem descrição...'}
+            {movieDetails.overview ? movieDetails.overview : 'Sem descrição...'}
           </Text>
         </ScrollView>
         <View style={styles.flex2_5}>
-          <ScrollView>
-            {seriesDetails.seasons.map((item, index) => (
-              <Season
-                key={String(item.id)}
-                id={route.params.id}
-                visible={visible}
-                index={index}
-                seasonNumber={seasonNumber}
-                seasonSelected={seasonSelected}
-                onPress={() => {
-                  setVisible(!visible);
-                  setSeasonNumber(item.season_number);
-                  setSeasonSelected(index + 1);
-                }}
-              />
-            ))}
-          </ScrollView>
+          <FlatList
+            data={movieCredits.cast}
+            keyExtractor={item => String(item.id)}
+            renderItem={({item, i}) => <Cast key={i} {...item} />}
+            ListHeaderComponent={() => (
+              <>
+                <View style={styles.boxElenco}>
+                  <Text style={styles.txtBoxElenco}>Elenco</Text>
+                </View>
+                <View style={styles.line} />
+              </>
+            )}
+          />
         </View>
       </View>
     </View>
