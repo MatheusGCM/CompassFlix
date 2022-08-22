@@ -8,10 +8,9 @@ import Loading from '../../Components/Loading';
 import Load from '../../Components/Load';
 
 const Home = () => {
-  const {id} = useContext(Context);
+  const {id, user, setUser} = useContext(Context);
 
   const [page, setPage] = useState(1);
-  const [user, setUser] = useState();
 
   const [loading, setLoading] = useState(false);
   const [dataMovies, setDataMovies] = useState([]);
@@ -32,7 +31,7 @@ const Home = () => {
       setUser(response.data);
     };
     getResponseAccount();
-  }, [id]);
+  }, [id, setUser]);
 
   useEffect(() => {
     getResponseMovies();

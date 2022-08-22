@@ -8,7 +8,7 @@ const App = () => {
   return (
     <Provider>
       <NavigationContainer>
-        <StatusBar backgroundColor="#000" barStyle="light-content" />
+        <StatusBar backgroundColor="#fff" barStyle="dark-content" />
         <Routes />
       </NavigationContainer>
     </Provider>
