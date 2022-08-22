@@ -22,6 +22,8 @@ const Season = ({
         setSeriesDetailsSeason(response.data.episodes);
       };
       getResponseSeriesDetailsSeason();
+    } else {
+      setSeriesDetailsSeason(null);
     }
   }, [id, seasonNumber, visible]);
 
