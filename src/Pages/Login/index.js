@@ -23,6 +23,8 @@ const Login = ({navigation}) => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [token, setToken] = useState();
+  const [errorHolder, setErrorHolder] = useState(false);
+  const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
     const getResponseToken = async () => {
@@ -32,20 +34,40 @@ const Login = ({navigation}) => {
     getResponseToken();
   }, []);
 
+  const onSubmit = () => {
+    setEmail('');
+    setPassword('');
+  };
   const login = async () => {
+    setEnabled(true);
     if (email && password !== '') {
       const response = await validateToken(email, password, token);
       if (response) {
         const session_id = response.data.session_id;
         setId(session_id);
         Keyboard.dismiss();
+        setErrorHolder(false);
+        onSubmit();
         navigation.replace('Tabs');
+        setEnabled(false);
+      } else {
+        onSubmit();
+        setErrorHolder(true);
+        Keyboard.dismiss();
+        setEnabled(false);
       }
     } else {
-      Alert.alert('Atenção!!', 'Email ou senha inválidos');
+      onSubmit();
+      setErrorHolder(true);
+      Keyboard.dismiss();
+      setEnabled(false);
     }
   };
-
+  useEffect(() => {
+    if (email !== '') {
+      setErrorHolder(false);
+    }
+  }, [email]);
   return (
     <TouchableWithoutFeedback
       onPress={() => Keyboard.dismiss()}
@@ -76,8 +98,10 @@ const Login = ({navigation}) => {
                       value={email}
                       setValue={setEmail}
                       isPassword={false}
-                      inputName={'usuário'}
+                      inputName={'nome de usuário'}
                       iconName={'user'}
+                      errorHolder={errorHolder}
+                      setIsFocused={setErrorHolder}
                     />
                   </Animatable.View>
 
@@ -88,13 +112,35 @@ const Login = ({navigation}) => {
                       isPassword={true}
                       inputName={'senha'}
                       iconName={'lock'}
+                      errorHolder={errorHolder}
+                      setIsFocused={setErrorHolder}
                     />
                   </Animatable.View>
                 </View>
+                {errorHolder ? (
+                  <View
+                    style={{
+                      height: 48,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <Text
+                      style={{
+                        color: '#EC2626',
+                        fontFamily: 'OpenSans-Regular',
+                        fontSize: 12,
+                      }}>
+                      Usuário ou senha inválidos!
+                    </Text>
+                  </View>
+                ) : (
+                  <View style={{height: 48}} />
+                )}
                 <TouchableOpacity
                   activeOpacity={0.7}
                   style={styles.buttonEnter}
-                  onPress={login}>
+                  onPress={login}
+                  disabled={enabled}>
                   <Text style={styles.buttonText}>Entrar</Text>
                 </TouchableOpacity>
               </Animatable.View>

@@ -27,11 +27,11 @@ export const validateToken = async (email, password, token) => {
           request_token: response.data.request_token,
         })
         .catch(error => {
-          Alert.alert('Atenção!!', 'Email ou senha inválidos');
+          console.warn('Erro no servidor');
         }),
     )
     .catch(error => {
-      Alert.alert('Atenção!!', 'Email ou senha inválidos');
+      console.log(error);
     });
 };
 

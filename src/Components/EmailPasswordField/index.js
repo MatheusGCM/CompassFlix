@@ -9,13 +9,15 @@ export const EmailPasswordField = ({
   isPassword,
   inputName,
   iconName,
+  errorHolder,
+  setIsFocused,
 }) => {
   return (
     <View style={styles.boxInput}>
       <Icon
         size={25}
         name={iconName}
-        color={'#ffffff80'}
+        color={!errorHolder ? '#ffffff80' : '#EC2626A6'}
         style={{paddingTop: 8, paddingLeft: 10}}
       />
       <TextInput
@@ -24,8 +26,9 @@ export const EmailPasswordField = ({
         style={styles.input}
         placeholder={inputName}
         secureTextEntry={isPassword}
-        placeholderTextColor={'#ffffffb3'}
+        placeholderTextColor={!errorHolder ? '#ffffffb3' : '#EC2626A6'}
         autoCapitalize="none"
+        onFocus={() => setIsFocused(false)}
       />
     </View>
   );
