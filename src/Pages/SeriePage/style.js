@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     height: 22,
     borderBottomLeftRadius: 6,
     borderBottomRightRadius: 6,
-    marginTop: 130,
+    marginTop: 120,
     position: 'absolute',
     text: {
       fontSize: 10,

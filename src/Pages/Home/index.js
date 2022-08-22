@@ -6,7 +6,6 @@ import {getAccount, getMovies} from '../../service/api';
 import {Context} from '../../context';
 import Loading from '../../Components/Loading';
 import Load from '../../Components/Load';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Home = () => {
   const {id} = useContext(Context);
@@ -29,8 +28,7 @@ const Home = () => {
   };
   useEffect(() => {
     const getResponseAccount = async () => {
-      const storedUser = await AsyncStorage.getItem('sessionIdUser');
-      const response = await getAccount(id ? id : storedUser);
+      const response = await getAccount(id);
       setUser(response.data);
     };
     getResponseAccount();

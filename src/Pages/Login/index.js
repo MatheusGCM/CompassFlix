@@ -17,10 +17,9 @@ import {getToken, validateToken} from '../../service/api';
 import {Context} from '../../context';
 import * as Animatable from 'react-native-animatable';
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
 const Login = ({navigation}) => {
   const {setId} = useContext(Context);
+
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [token, setToken] = useState();
@@ -38,11 +37,9 @@ const Login = ({navigation}) => {
       const response = await validateToken(email, password, token);
       if (response) {
         const session_id = response.data.session_id;
-        console.log('response', response.data);
-        await AsyncStorage.setItem('sessionIdUser', response.data.session_id);
         setId(session_id);
         Keyboard.dismiss();
-        navigation.navigate('Tabs');
+        navigation.replace('Tabs');
       }
     } else {
       Alert.alert('Atenção!!', 'Email ou senha inválidos');
