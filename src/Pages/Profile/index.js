@@ -51,17 +51,15 @@ const Profile = ({navigation}) => {
 
   return (
     <View style={styles.page}>
-      <View style={styles.exitButton}>
+      <TouchableOpacity style={styles.exitButton}>
         <Icon
           name="exit-outline"
           size={18}
           color="black"
           style={styles.iconPadding}
         />
-        <TouchableOpacity>
-          <Text style={{color: 'black'}}>Sair</Text>
-        </TouchableOpacity>
-      </View>
+        <Text style={{color: 'black'}}>Sair</Text>
+      </TouchableOpacity>
       <View
         style={{
           alignItems: 'center',
