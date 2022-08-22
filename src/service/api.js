@@ -104,4 +104,28 @@ export const getRatedSeries = async (session_id, id) => {
     });
 };
 
+// Requisições das series
+
+export const getSeries = async page => {
+  return api
+    .get(`/tv/popular?api_key=${api_key}&language=pt-BR&page=${page}`)
+    .catch(error => {
+      console.warn('Erro ao buscar séries');
+    });
+};
+
+export const getSeriesDetails = async id => {
+  return api.get(`/tv/${id}?api_key=${api_key}&language=pt-BR`).catch(error => {
+    console.warn('Erro ao buscar detalhes das séries');
+  });
+};
+
+export const getSeriesDetailsSeason = async (id, season) => {
+  return api
+    .get(`/tv/${id}/season/${season}?api_key=${api_key}&language=pt-BR`)
+    .catch(error => {
+      console.warn('Erro ao buscar detalhes das séries');
+    });
+};
+
 export default api;
