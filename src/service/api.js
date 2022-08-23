@@ -128,4 +128,5 @@ export const getSeriesDetailsSeason = async (id, season) => {
     });
 };
 
+
 export default api;

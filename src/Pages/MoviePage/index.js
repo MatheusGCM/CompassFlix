@@ -15,10 +15,15 @@ import Feather from 'react-native-vector-icons/Feather';
 import Cast from '../../Components/Cast';
 import Load from '../../Components/Load';
 import * as Animatable from 'react-native-animatable';
+import EvaluateModal from './EvaluateModal';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
 
 const MoviePage = ({route, navigation}) => {
   const [movieDetails, setMovieDetails] = useState([]);
   const [movieCredits, setMovieCredits] = useState({});
+  const [rated, setRated] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [rating, setRating] = useState(0);
 
   useEffect(() => {
     const getResponseMovieDetails = async () => {
@@ -66,11 +71,43 @@ const MoviePage = ({route, navigation}) => {
               uri: `http://image.tmdb.org/t/p/original/${movieDetails.poster_path}`,
             }}
           />
-          <TouchableOpacity 
-          //criar modal
-          style={styles.rate}> 
-            <Text style={styles.rate.text}>Avalie Agora</Text>
-          </TouchableOpacity>
+           {
+              rated
+                ? (
+                  <TouchableOpacity
+                    style={styles.rated}
+                    onPress={() => {
+                      setModalVisible(true)
+                    }}
+                  >
+                    <Text style={styles.rated.text}>Sua nota: {rating}/10</Text>
+
+                    <View style={styles.icon}>
+                      <EvilIcons
+                        name='pencil'
+                        size={10}
+                      />
+                    </View>
+                  </TouchableOpacity>
+                )
+                : (
+                  <TouchableOpacity
+                    style={styles.rate}
+                    onPress={() => {
+                      setModalVisible(true)
+                    }}
+                  >
+                    <Text style={styles.rate.text}>Avalie agora</Text>
+                  </TouchableOpacity>
+                )
+            }
+
+          <EvaluateModal
+            visible={modalVisible}
+            setModalVisible={setModalVisible}
+            setCurrentRating={setRating}
+            setRated={setRated}
+          />
           <View style={styles.flex1}>
             <View style={styles.contentHeaderTop}>
               <Text style={styles.titleMovie}>{movieDetails.title}</Text>

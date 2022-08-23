@@ -14,12 +14,18 @@ import Feather from 'react-native-vector-icons/Feather';
 import Load from '../../Components/Load';
 import * as Animatable from 'react-native-animatable';
 import Season from '../../Components/Season';
+import EvaluateModal from './EvaluateModal';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
 
 const SeriePage = ({route, navigation}) => {
   const [seriesDetails, setSeriesDetails] = useState([]);
   const [visible, setVisible] = useState(false);
   const [seasonNumber, setSeasonNumber] = useState();
   const [seasonSelected, setSeasonSelected] = useState();
+  const [rated, setRated] = useState(false);
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const [rating, setRating] = useState(0);
 
   useEffect(() => {
     const getResponseSeriesDetails = async () => {
@@ -58,11 +64,43 @@ const SeriePage = ({route, navigation}) => {
               uri: `http://image.tmdb.org/t/p/original/${seriesDetails.poster_path}`,
             }}
           />
-          <TouchableOpacity
-            //criar modal
-            style={styles.rate}>
-            <Text style={styles.rate.text}>Avalie Agora</Text>
-          </TouchableOpacity>
+           {
+              rated
+                ? (
+                  <TouchableOpacity
+                    style={styles.rated}
+                    onPress={() => {
+                      setModalVisible(true)
+                    }}
+                  >
+                    <Text style={styles.rated.text}>Sua nota: {rating}/10</Text>
+
+                    <View style={styles.icon}>
+                      <EvilIcons
+                        name='pencil'
+                        size={10}
+                      />
+                    </View>
+                  </TouchableOpacity>
+                )
+                : (
+                  <TouchableOpacity
+                    style={styles.rate}
+                    onPress={() => {
+                      setModalVisible(true)
+                    }}
+                  >
+                    <Text style={styles.rate.text}>Avalie agora</Text>
+                  </TouchableOpacity>
+                )
+            }
+
+          <EvaluateModal
+            visible={modalVisible}
+            setModalVisible={setModalVisible}
+            setCurrentRating={setRating}
+            setRated={setRated}
+          />
           <View style={styles.flex1}>
             <View style={styles.contentHeaderTop}>
               <Text style={styles.titleMovie}>{seriesDetails.name}</Text>
