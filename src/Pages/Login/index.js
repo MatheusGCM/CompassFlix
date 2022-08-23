@@ -16,6 +16,7 @@ import styles from './style';
 import {getToken, validateToken} from '../../service/api';
 import {Context} from '../../context';
 import * as Animatable from 'react-native-animatable';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = ({navigation}) => {
   const {setId} = useContext(Context);
@@ -32,12 +33,14 @@ const Login = ({navigation}) => {
       setToken(response.data.request_token);
     };
     getResponseToken();
+    checkLogin();
   }, []);
 
   const onSubmit = () => {
     setEmail('');
     setPassword('');
   };
+
   const login = async () => {
     setEnabled(true);
     if (email && password !== '') {
@@ -45,6 +48,7 @@ const Login = ({navigation}) => {
       if (response) {
         const session_id = response.data.session_id;
         setId(session_id);
+        await AsyncStorage.setItem('SessionId', session_id);
         Keyboard.dismiss();
         setErrorHolder(false);
         onSubmit();
@@ -61,6 +65,13 @@ const Login = ({navigation}) => {
       setErrorHolder(true);
       Keyboard.dismiss();
       setEnabled(false);
+    }
+  };
+  const checkLogin = async () => {
+    const userStorage = await AsyncStorage.getItem('SessionId');
+    if (userStorage) {
+      navigation.navigate('Tabs');
+      setId(userStorage);
     }
   };
   useEffect(() => {
