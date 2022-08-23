@@ -17,6 +17,7 @@ import {
   getRatedSeries,
 } from '../../service/api';
 import {Context} from '../../context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Profile = ({navigation}) => {
   const {id, user} = useContext(Context);
@@ -49,9 +50,14 @@ const Profile = ({navigation}) => {
     getResponseFavoriteSeries();
   }, [id, user.id]);
 
+  const Logout = async () => {
+    await AsyncStorage.clear();
+    navigation.replace('Login');
+  };
+
   return (
     <View style={styles.page}>
-      <TouchableOpacity style={styles.exitButton}>
+      <TouchableOpacity style={styles.exitButton} onPress={() => Logout()}>
         <Icon
           name="exit-outline"
           size={18}
