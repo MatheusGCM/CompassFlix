@@ -3,6 +3,7 @@ import {
   ActivityIndicator,
   FlatList,
   Image,
+  Modal,
   Text,
   TouchableOpacity,
   TouchableWithoutFeedback,
@@ -18,10 +19,12 @@ import {
 } from '../../service/api';
 import {Context} from '../../context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ModalExit from '../../Components/ModalExit';
 
 const Profile = ({navigation}) => {
   const {id, user} = useContext(Context);
   const [movieFocused, setMovieFocused] = useState(true);
+  const [modalExit, setModalExit] = useState(false);
   const [favMovie, setFavMovie] = useState({});
   const [favSeries, setFavSeries] = useState({});
   const [ratedMovie, setRatedMovie] = useState({});
@@ -57,17 +60,29 @@ const Profile = ({navigation}) => {
 
   return (
     <View style={styles.page}>
-      <TouchableOpacity style={styles.exitButton} onPress={() => Logout()}>
-        <Icon
-          name="exit-outline"
-          size={18}
-          color="black"
-          style={styles.iconPadding}
-        />
-        <Text style={{color: 'black'}}>Sair</Text>
+      <TouchableOpacity
+        activeOpacity={0.7}
+        style={styles.exitButton}
+        onPress={() => setModalExit(!modalExit)}>
+        <Icon name="exit-outline" size={15} color="#000" />
+        <Text
+          style={{
+            color: '#000',
+            fontFamily: 'OpenSans-Bold',
+            fontSize: 10,
+            lineHeight: 12,
+          }}>
+          Sair
+        </Text>
       </TouchableOpacity>
+      <ModalExit
+        modalExit={modalExit}
+        onPress={() => setModalExit(!modalExit)}
+        logout={Logout}
+      />
       <View
         style={{
+          marginTop: 13,
           alignItems: 'center',
         }}>
         {user.avatar?.tmdb.avatar_path ? (
@@ -87,10 +102,7 @@ const Profile = ({navigation}) => {
           </View>
         )}
 
-        <Text
-          style={{fontFamily: 'OpenSans-Bold', fontSize: 18, color: 'white'}}>
-          {user.name}
-        </Text>
+        <Text style={styles.userName}>{user.name}</Text>
         <View style={{alignItems: 'center', marginTop: 46, height: 54}}>
           {ratedMovie?.total_results + ratedSeries?.total_results ? (
             <>
@@ -99,10 +111,17 @@ const Profile = ({navigation}) => {
                   color: '#9C4A8B',
                   fontSize: 24,
                   fontFamily: 'OpenSans-Bold',
+                  lineHeight: 32,
                 }}>
                 {ratedMovie?.total_results + ratedSeries?.total_results}
               </Text>
-              <Text style={{fontFamily: 'OpenSans-Regular', color: 'white'}}>
+              <Text
+                style={{
+                  fontFamily: 'OpenSans-Regular',
+                  color: 'white',
+                  fontSize: 11,
+                  lineHeight: 15,
+                }}>
                 Avaliações
               </Text>
             </>
@@ -114,26 +133,37 @@ const Profile = ({navigation}) => {
         <View style={{flexDirection: 'row', paddingTop: 22}}>
           <View style={styles.borderMidia}>
             <TouchableWithoutFeedback
-              style={styles.buttonMidia}
               onPress={() => {
                 setMovieFocused(true);
               }}>
               {movieFocused ? (
-                <Image source={require('../../assets/movieColored.png')} />
+                <Image
+                  style={styles.imgMidia}
+                  source={require('../../assets/movieColored.png')}
+                />
               ) : (
-                <Image source={require('../../assets/movieNotFocused.png')} />
+                <Image
+                  style={styles.imgMidia}
+                  source={require('../../assets/movieNotFocused.png')}
+                />
               )}
             </TouchableWithoutFeedback>
           </View>
-          <View style={styles.borderMidia}>
+          <View style={[styles.borderMidia, {borderEndWidth: 0}]}>
             <TouchableWithoutFeedback
               onPress={() => {
                 setMovieFocused(false);
               }}>
               {!movieFocused ? (
-                <Image source={require('../../assets/seriesColored.png')} />
+                <Image
+                  style={styles.imgMidia}
+                  source={require('../../assets/seriesColored.png')}
+                />
               ) : (
-                <Image source={require('../../assets/seriesNotFocused.png')} />
+                <Image
+                  style={styles.imgMidia}
+                  source={require('../../assets/seriesNotFocused.png')}
+                />
               )}
             </TouchableWithoutFeedback>
           </View>
@@ -152,7 +182,8 @@ const Profile = ({navigation}) => {
               <Text
                 style={{
                   fontFamily: 'OpenSans-SemiBold',
-                  fontSize: 12,
+                  fontSize: 10,
+                  lineHeight: 12.26,
                   color: '#E9A6A6',
                 }}>
                 Ver tudo
@@ -161,9 +192,7 @@ const Profile = ({navigation}) => {
           </>
         ) : (
           <>
-            <Text style={{color: 'white'}}>
-              Séries favoritas de {user.name}
-            </Text>
+            <Text style={styles.textInfo}>Séries favoritas de {user.name}</Text>
             <TouchableWithoutFeedback
               onPress={() =>
                 navigation.navigate('Favorites', {
@@ -173,7 +202,8 @@ const Profile = ({navigation}) => {
               <Text
                 style={{
                   fontFamily: 'OpenSans-SemiBold',
-                  fontSize: 12,
+                  fontSize: 10,
+                  lineHeight: 12.26,
                   color: '#E9A6A6',
                 }}>
                 Ver tudo
@@ -226,7 +256,8 @@ const Profile = ({navigation}) => {
               <Text
                 style={{
                   fontFamily: 'OpenSans-SemiBold',
-                  fontSize: 12,
+                  fontSize: 10,
+                  lineHeight: 12.26,
                   color: '#E9A6A6',
                 }}>
                 Ver tudo
@@ -235,7 +266,7 @@ const Profile = ({navigation}) => {
           </>
         ) : (
           <>
-            <Text style={{color: 'white'}}>
+            <Text style={styles.textInfo}>
               Avaliações de séries recentes de {user.name}
             </Text>
             <TouchableWithoutFeedback
@@ -247,7 +278,8 @@ const Profile = ({navigation}) => {
               <Text
                 style={{
                   fontFamily: 'OpenSans-SemiBold',
-                  fontSize: 12,
+                  fontSize: 10,
+                  lineHeight: 12.26,
                   color: '#E9A6A6',
                 }}>
                 Ver tudo

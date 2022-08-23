@@ -2,17 +2,16 @@ import React, {useContext, useEffect, useState} from 'react';
 import {View, Text, FlatList, Image} from 'react-native';
 import Series from '../../Components/Series';
 import styles from './style';
-import {getAccount, getSeries} from '../../service/api';
+import {getSeries} from '../../service/api';
 import {Context} from '../../context';
 import Loading from '../../Components/Loading';
 import Load from '../../Components/Load';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const HomeSerie = () => {
-  const {id} = useContext(Context);
+  const {user} = useContext(Context);
 
   const [page, setPage] = useState(1);
-  const [user, setUser] = useState();
 
   const [loading, setLoading] = useState(false);
   const [dataSeries, setDataSeries] = useState([]);
@@ -27,13 +26,6 @@ const HomeSerie = () => {
     setPage(page + 1);
     setLoading(false);
   };
-  useEffect(() => {
-    const getResponseAccount = async () => {
-      const response = await getAccount(id);
-      setUser(response.data);
-    };
-    getResponseAccount();
-  }, [id]);
 
   useEffect(() => {
     getResponseSeries();
