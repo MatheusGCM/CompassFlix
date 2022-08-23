@@ -1,11 +1,12 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {View, Text, FlatList} from 'react-native';
+import {View, Text, FlatList, Image} from 'react-native';
 import Movies from '../../Components/Movies';
 import styles from './style';
 import {getAccount, getMovies} from '../../service/api';
 import {Context} from '../../context';
 import Loading from '../../Components/Loading';
 import Load from '../../Components/Load';
+import Icon from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Home = () => {
@@ -42,6 +43,24 @@ const Home = () => {
   return user && dataMovies ? (
     <View style={styles.container}>
       <View style={styles.header}>
+        <View style={styles.header_avatar}>
+          {user.avatar?.tmdb.avatar_path ? (
+            <Image
+              source={{
+                uri: `http://image.tmdb.org/t/p/original/${user.avatar?.tmdb.avatar_path}`,
+              }}
+              style={{width: 44, height: 44, borderRadius: 100}}
+            />
+          ) : (
+            <View>
+              <Icon
+                name="person-circle"
+                color="rgba(255,255,255,0.4)"
+                size={44}
+              />
+            </View>
+          )}
+        </View>
         <View style={styles.row}>
           <Text style={styles.header_title}>Olá,</Text>
           <Text style={styles.header_label}>{user.name}</Text>

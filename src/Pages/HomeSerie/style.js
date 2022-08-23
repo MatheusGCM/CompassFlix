@@ -9,7 +9,12 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     marginLeft: 14,
     marginBottom: 21,
-    marginTop: 40,
+    marginTop: 16,
+  },
+  header_avatar: {
+    alignItems: 'flex-end',
+    marginEnd: 19,
+    marginBottom: 5,
   },
   header_title: {
     fontSize: 18,
