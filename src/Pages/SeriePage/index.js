@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   Image,
   Text,
@@ -8,7 +8,7 @@ import {
   ScrollView,
 } from 'react-native';
 import styles from './style';
-import {getSeriesDetails} from '../../service/api';
+import {getRatedSeries, getSeriesDetails} from '../../service/api';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
 import Load from '../../Components/Load';
@@ -16,6 +16,7 @@ import * as Animatable from 'react-native-animatable';
 import Season from '../../Components/Season';
 import EvaluateModal from './EvaluateModal';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import {Context} from '../../context';
 
 const SeriePage = ({route, navigation}) => {
   const [seriesDetails, setSeriesDetails] = useState([]);
@@ -23,6 +24,8 @@ const SeriePage = ({route, navigation}) => {
   const [seasonNumber, setSeasonNumber] = useState();
   const [seasonSelected, setSeasonSelected] = useState();
   const [rated, setRated] = useState(false);
+  const {id, user} = useContext(Context);
+  const [ratingValue, setRatingValue] = useState(0);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [rating, setRating] = useState(0);
@@ -38,6 +41,18 @@ const SeriePage = ({route, navigation}) => {
     };
     getResponseSeriesDetails();
   }, [route.params.id]);
+  useEffect(() => {
+    const getResponseRatedMovie = async () => {
+      const response = await getRatedSeries(id, user.id);
+      await response.data.results.map(item => {
+        if (item.id === seriesDetails.id) {
+          setRated(true);
+          setRatingValue(item.rating);
+        }
+      });
+    };
+    getResponseRatedMovie();
+  }, [id, user.id, seriesDetails.id]);
 
   return seriesDetails.backdrop_path && seriesDetails.poster_path ? (
     <View style={styles.container}>
@@ -64,36 +79,27 @@ const SeriePage = ({route, navigation}) => {
               uri: `http://image.tmdb.org/t/p/original/${seriesDetails.poster_path}`,
             }}
           />
-           {
-              rated
-                ? (
-                  <TouchableOpacity
-                    style={styles.rated}
-                    onPress={() => {
-                      setModalVisible(true)
-                    }}
-                  >
-                    <Text style={styles.rated.text}>Sua nota: {rating}/10</Text>
+          {rated ? (
+            <TouchableOpacity
+              style={styles.rated}
+              onPress={() => {
+                setModalVisible(true);
+              }}>
+              <Text style={styles.rated.text}>Sua nota: {ratingValue}/10</Text>
 
-                    <View style={styles.icon}>
-                      <EvilIcons
-                        name='pencil'
-                        size={10}
-                      />
-                    </View>
-                  </TouchableOpacity>
-                )
-                : (
-                  <TouchableOpacity
-                    style={styles.rate}
-                    onPress={() => {
-                      setModalVisible(true)
-                    }}
-                  >
-                    <Text style={styles.rate.text}>Avalie agora</Text>
-                  </TouchableOpacity>
-                )
-            }
+              <View style={styles.icon}>
+                <EvilIcons name="pencil" size={10} />
+              </View>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              style={styles.rate}
+              onPress={() => {
+                setModalVisible(true);
+              }}>
+              <Text style={styles.rate.text}>Avalie agora</Text>
+            </TouchableOpacity>
+          )}
 
           <EvaluateModal
             visible={modalVisible}

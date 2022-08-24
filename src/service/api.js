@@ -128,5 +128,6 @@ export const getSeriesDetailsSeason = async (id, season) => {
     });
 };
 
+export const rateMovie = async (id, session_id) => {};
 
 export default api;

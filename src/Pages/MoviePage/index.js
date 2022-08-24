@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {memo, useContext, useEffect, useMemo, useState} from 'react';
 import {
   Image,
   Text,
@@ -9,7 +9,12 @@ import {
   FlatList,
 } from 'react-native';
 import styles from './style';
-import {getMoviesDetails, getMovieCredits} from '../../service/api';
+import {
+  getMoviesDetails,
+  getMovieCredits,
+  getRatedMovie,
+  getFavoriteMovie,
+} from '../../service/api';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
 import Cast from '../../Components/Cast';
@@ -17,13 +22,18 @@ import Load from '../../Components/Load';
 import * as Animatable from 'react-native-animatable';
 import EvaluateModal from './EvaluateModal';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import {Context} from '../../context';
 
 const MoviePage = ({route, navigation}) => {
   const [movieDetails, setMovieDetails] = useState([]);
   const [movieCredits, setMovieCredits] = useState({});
   const [rated, setRated] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-  const [rating, setRating] = useState(0);
+  const [rating, setRating] = useState(false);
+  const [ratingValue, setRatingValue] = useState(0);
+  const {id, user} = useContext(Context);
+  const [loading, setLoading] = useState(false);
+  const [movieFavorites, setMovieFavorites] = useState({});
 
   useEffect(() => {
     const getResponseMovieDetails = async () => {
@@ -41,10 +51,22 @@ const MoviePage = ({route, navigation}) => {
     getResponseMovieDetails();
   }, [route.params.id]);
 
+  useEffect(() => {
+    const getResponseRatedMovie = async () => {
+      const response = await getRatedMovie(id, user.id);
+      setMovieFavorites(response.data);
+      await response.data.results.map(item => {
+        if (item.id === movieDetails.id) {
+          setRated(true);
+          setRatingValue(item.rating);
+        }
+      });
+    };
+    getResponseRatedMovie();
+  }, [id, user.id, movieDetails.id]);
   const Directing = movieCredits.crew?.find(
     element => element.job === 'Director',
   )?.name;
-
   return movieDetails.backdrop_path && movieDetails.poster_path ? (
     <View style={styles.container}>
       <ImageBackground
@@ -57,8 +79,7 @@ const MoviePage = ({route, navigation}) => {
           style={styles.buttonLeft}>
           <Feather color="#000000" name="arrow-left" size={22} />
         </TouchableOpacity>
-        <TouchableOpacity 
-        style={styles.buttonRight}>
+        <TouchableOpacity style={styles.buttonRight}>
           <Feather color="#000000" name="star" size={22} />
         </TouchableOpacity>
       </ImageBackground>
@@ -71,36 +92,27 @@ const MoviePage = ({route, navigation}) => {
               uri: `http://image.tmdb.org/t/p/original/${movieDetails.poster_path}`,
             }}
           />
-           {
-              rated
-                ? (
-                  <TouchableOpacity
-                    style={styles.rated}
-                    onPress={() => {
-                      setModalVisible(true)
-                    }}
-                  >
-                    <Text style={styles.rated.text}>Sua nota: {rating}/10</Text>
+          {rated ? (
+            <TouchableOpacity
+              style={styles.rated}
+              onPress={() => {
+                setModalVisible(true);
+              }}>
+              <Text style={styles.rated.text}>Sua nota: {ratingValue}/10</Text>
 
-                    <View style={styles.icon}>
-                      <EvilIcons
-                        name='pencil'
-                        size={10}
-                      />
-                    </View>
-                  </TouchableOpacity>
-                )
-                : (
-                  <TouchableOpacity
-                    style={styles.rate}
-                    onPress={() => {
-                      setModalVisible(true)
-                    }}
-                  >
-                    <Text style={styles.rate.text}>Avalie agora</Text>
-                  </TouchableOpacity>
-                )
-            }
+              <View style={styles.icon}>
+                <EvilIcons name="pencil" size={10} />
+              </View>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              style={styles.rate}
+              onPress={() => {
+                setModalVisible(true);
+              }}>
+              <Text style={styles.rate.text}>Avalie agora</Text>
+            </TouchableOpacity>
+          )}
 
           <EvaluateModal
             visible={modalVisible}
