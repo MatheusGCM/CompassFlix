@@ -104,6 +104,36 @@ export const getRatedSeries = async (session_id, id) => {
     });
 };
 
+export const postRatedFilm = async (
+  session_id,
+  id,
+  media_type,
+  media_id,
+  favorite,
+) => {
+  return api
+    .post(
+      `/account/${id}/favorite?api_key=${api_key}&session_id=${session_id}`,
+      {
+        media_type: media_type,
+        media_id: media_id,
+        favorite: favorite,
+      },
+    )
+    .catch(error => {
+      console.warn('error na api');
+    });
+};
+
+export const postRatingFilm = async (movie_id, session_id, value) => {
+  return api.post(
+    `/movie/${movie_id}/rating?api_key=${api_key}&session_id=${session_id}`,
+    {
+      value: value,
+    },
+  );
+};
+
 // Requisições das series
 
 export const getSeries = async page => {
@@ -127,7 +157,5 @@ export const getSeriesDetailsSeason = async (id, season) => {
       console.warn('Erro ao buscar detalhes das séries');
     });
 };
-
-export const rateMovie = async (id, session_id) => {};
 
 export default api;

@@ -4,16 +4,17 @@ import {Modal, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import styles from './style';
-import api from '../../../service/api';
+import api, { postRatingFilm } from '../../../service/api';
 import {Context} from '../../../context';
 
 const EvaluateModal = ({
   visible,
   setModalVisible,
-  id,
   setCurrentRating,
   setRated,
+  movieDetailsId,
 }) => {
+  const {id, setSucess, sucess} = useContext(Context)
   const [rating, setRating] = useState('');
   const [invalidRating, setInvalideRating] = useState(false);
 
@@ -25,32 +26,10 @@ const EvaluateModal = ({
       ? true
       : false;
   };
-
-  // const rateMovie = async () => {
-  //   const userRating = rating;
-
-  //   if (ratingIsValid(userRating)) {
-  //     setInvalideRating(false);
-
-  //     try {
-  //       //const session_id = await AsyncStorage.getItem('sessionId');
-  //       const postRate = `tv/${id}/rating?api_key=${}&session_id=${}`;
-
-  //       const data = await api.post(postRate, {
-  //         value: userRating,
-  //       });
-
-  //       setRated(true);
-  //       setCurrentRating(rating);
-  //       setModalVisible(false);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   } else {
-  //     setInvalideRating(true);
-  //   }
-  // };
-
+  const sendPostRatingValue = async (value) => {
+    await postRatingFilm(movieDetailsId, id, value);
+    setSucess(!sucess);
+  }
   return (
     <Modal transparent animationType="fade" visible={visible}>
       <View style={styles.background}>
@@ -98,7 +77,11 @@ const EvaluateModal = ({
             <TouchableOpacity
               style={styles.btnOk}
               onPress={() => {
-                // rateMovie();
+                if (ratingIsValid(rating) === false) {
+                  return setInvalideRating(rating);
+                }
+                sendPostRatingValue(rating);
+                setModalVisible('false');
               }}>
               <Text style={styles.textOk}>ok</Text>
             </TouchableOpacity>

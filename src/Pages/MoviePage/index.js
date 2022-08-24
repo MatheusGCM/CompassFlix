@@ -14,6 +14,7 @@ import {
   getMovieCredits,
   getRatedMovie,
   getFavoriteMovie,
+  postRatedFilm,
 } from '../../service/api';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
@@ -23,6 +24,7 @@ import * as Animatable from 'react-native-animatable';
 import EvaluateModal from './EvaluateModal';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import {Context} from '../../context';
+import Star from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const MoviePage = ({route, navigation}) => {
   const [movieDetails, setMovieDetails] = useState([]);
@@ -31,10 +33,13 @@ const MoviePage = ({route, navigation}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [rating, setRating] = useState(false);
   const [ratingValue, setRatingValue] = useState(0);
-  const {id, user} = useContext(Context);
-  const [loading, setLoading] = useState(false);
+  const {id, user, sucess} = useContext(Context);
+  const [favorite, setFavorite] = useState(false);
   const [movieFavorites, setMovieFavorites] = useState({});
 
+  const FavoriteFilm = async (media_type, media_id, favorite) => {
+    await postRatedFilm(id, user.id, media_type, media_id, favorite);
+  };
   useEffect(() => {
     const getResponseMovieDetails = async () => {
       const [responseMoviesDetails, responseMovieCredits] = await Promise.all([
@@ -59,11 +64,13 @@ const MoviePage = ({route, navigation}) => {
         if (item.id === movieDetails.id) {
           setRated(true);
           setRatingValue(item.rating);
+          setFavorite(true);
         }
       });
     };
     getResponseRatedMovie();
-  }, [id, user.id, movieDetails.id]);
+  }, [id, user.id, movieDetails.id, sucess]);
+  console.log(sucess);
   const Directing = movieCredits.crew?.find(
     element => element.job === 'Director',
   )?.name;
@@ -79,8 +86,17 @@ const MoviePage = ({route, navigation}) => {
           style={styles.buttonLeft}>
           <Feather color="#000000" name="arrow-left" size={22} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonRight}>
-          <Feather color="#000000" name="star" size={22} />
+        <TouchableOpacity
+          style={styles.buttonRight}
+          onPress={() => {
+            setFavorite(favorite ? false : true);
+            FavoriteFilm('movie', movieDetails.id, favorite);
+          }}>
+          <Star
+            color={favorite ? 'black' : 'red'}
+            name={favorite ? 'star-outline' : 'star'}
+            size={25}
+          />
         </TouchableOpacity>
       </ImageBackground>
 
@@ -119,6 +135,7 @@ const MoviePage = ({route, navigation}) => {
             setModalVisible={setModalVisible}
             setCurrentRating={setRating}
             setRated={setRated}
+            movieDetailsId={movieDetails.id}
           />
           <View style={styles.flex1}>
             <View style={styles.contentHeaderTop}>
