@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export const Provider = ({children}) => {
   const [id, setId] = useState();
   const [user, setUser] = useState({});
+  const [sucess, setSucess] = useState(false);
 
   const loadUserStorageData = async () => {
     const storedUser = await AsyncStorage.getItem('SessionId');
@@ -15,7 +16,7 @@ export const Provider = ({children}) => {
     loadUserStorageData();
   }, []);
   return (
-    <Context.Provider value={{id, setId, user, setUser}}>
+    <Context.Provider value={{id, setId, user, setUser, setSucess, sucess}}>
       {children}
     </Context.Provider>
   );

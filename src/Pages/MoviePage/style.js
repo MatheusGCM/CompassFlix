@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
     height: 22,
     borderBottomLeftRadius: 6,
     borderBottomRightRadius: 6,
-    marginTop: 120,
+    marginTop: 130,
     position: 'absolute',
     backgroundColor: '#8BE0EC',
     text: {
@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
     right: -4,
     padding: 1,
     borderRadius: 30,
-    backgroundColor: '#C4C4C4'
+    backgroundColor: '#C4C4C4',
   },
 });
 
