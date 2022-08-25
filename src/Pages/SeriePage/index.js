@@ -68,8 +68,10 @@ const SeriePage = ({route, navigation}) => {
         if (response.data.rated.value > 0) {
           setRatingValue(response.data.rated.value);
           setRated(true);
-        } else if (response.data.favorite) {
+        }
+        if (response.data.favorite) {
           setFavorite(response.data.favorite);
+          setRated(true);
         }
       }
     };

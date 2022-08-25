@@ -64,14 +64,14 @@ const MoviePage = ({route, navigation}) => {
         if (response.data.rated.value > 0) {
           setRatingValue(response.data.rated.value);
           setRated(true);
-        } else if (response.data.favorite) {
+        }
+        if (response.data.favorite) {
           setFavorite(response.data.favorite);
         }
       }
     };
     getResponseDetailedMovie();
   }, [id, movieDetails.id, sucess]);
-  console.log(sucess);
   const Directing = movieCredits.crew?.find(
     element => element.job === 'Director',
   )?.name;
