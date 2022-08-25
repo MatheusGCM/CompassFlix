@@ -30,7 +30,7 @@ const SeriePage = ({route, navigation}) => {
   const [seasonNumber, setSeasonNumber] = useState();
   const [seasonSelected, setSeasonSelected] = useState();
   const [rated, setRated] = useState(false);
-  const {id, user, sucess} = useContext(Context);
+  const {id, user, sucess, setSucess} = useContext(Context);
   const [ratingValue, setRatingValue] = useState(0);
   const [favorite, setFavorite] = useState(false);
   const [favoriteSerie, setFavoriteSerie] = useState({});
@@ -89,6 +89,7 @@ const SeriePage = ({route, navigation}) => {
         <TouchableOpacity
           style={styles.buttonRight}
           onPress={() => {
+            setSucess(!sucess);
             setFavorite(favorite ? false : true);
             FavoriteSerie('tv', seriesDetails.id);
           }}>

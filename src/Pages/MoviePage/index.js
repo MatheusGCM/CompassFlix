@@ -34,7 +34,7 @@ const MoviePage = ({route, navigation}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [rating, setRating] = useState(false);
   const [ratingValue, setRatingValue] = useState(0);
-  const {id, user, sucess} = useContext(Context);
+  const {id, user, sucess, setSucess} = useContext(Context);
   const [favorite, setFavorite] = useState(false);
   const [movieFavorites, setMovieFavorites] = useState({});
 
@@ -89,6 +89,7 @@ const MoviePage = ({route, navigation}) => {
         <TouchableOpacity
           style={styles.buttonRight}
           onPress={() => {
+            setSucess(!sucess);
             setFavorite(favorite ? false : true);
             FavoriteFilm('movie', movieDetails.id);
           }}>
