@@ -1,9 +1,11 @@
 import React, {useContext, useState} from 'react';
 import {Modal, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import {Context} from '../../context';
 import styles from './style';
 
 const ModalRating = ({modalVisible, onPress, rate, rating, setRating}) => {
+  const {setMockRated} = useContext(Context);
   const [invalido, setInvalido] = useState(false);
 
   return (
@@ -63,9 +65,9 @@ const ModalRating = ({modalVisible, onPress, rate, rating, setRating}) => {
             <TouchableOpacity
               style={styles.btnOk}
               onPress={() => {
-                if (rating >= 0.5 && rating <= 10) {
-                  rate();
-                  // setTeste(!teste);
+                if (rating >= 0.5 && rating <= 10 && rating % 0.5 === 0) {
+                  rate(rating);
+                  setMockRated(rating);
                   setInvalido(false);
                   setRating('');
                   onPress();

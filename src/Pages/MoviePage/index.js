@@ -1,4 +1,4 @@
-import React, {useCallback, useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   Image,
   Text,
@@ -20,31 +20,25 @@ import Feather from 'react-native-vector-icons/Feather';
 import Cast from '../../Components/Cast';
 import Load from '../../Components/Load';
 import * as Animatable from 'react-native-animatable';
-// import EvaluateModal from './EvaluateModal';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import ModalRating from '../../Components/ModalRating';
 import {Context} from '../../context';
 
 const MoviePage = ({route, navigation}) => {
-  const {id} = useContext(Context);
+  const {id, mockRated} = useContext(Context);
 
   const [movieDetails, setMovieDetails] = useState([]);
   const [movieCredits, setMovieCredits] = useState({});
+
+  const [modalVisible, setModalVisible] = useState(false);
   const [rated, setRated] = useState();
   const [rating, setRating] = useState(0);
 
-  const [modalVisible, setModalVisible] = useState(false);
-
   useEffect(() => {
     const getResponseMovieDetails = async () => {
-      const [
-        responseMoviesDetails,
-        responseMovieCredits,
-        responseAccountStates,
-      ] = await Promise.all([
+      const [responseMoviesDetails, responseMovieCredits] = await Promise.all([
         getMoviesDetails(route.params.id),
         getMovieCredits(route.params.id),
-        getAccountStates('movie', route.params.id, id),
       ]);
       if (responseMoviesDetails.status === 200) {
         setMovieDetails(responseMoviesDetails.data);
@@ -52,10 +46,23 @@ const MoviePage = ({route, navigation}) => {
       if (responseMovieCredits.status === 200) {
         setMovieCredits(responseMovieCredits.data);
       }
-      setRated(responseAccountStates.data.rated);
     };
     getResponseMovieDetails();
-  }, [rated?.value, id, route.params.id]);
+
+    if (mockRated >= 0.5) {
+      const getResponse = async () => {
+        const reponse = await getAccountStates('movie', route.params.id, id);
+        setRated(reponse.data.rated);
+      };
+      getResponse();
+    } else {
+      const getResponse = async () => {
+        const reponse = await getAccountStates('movie', route.params.id, id);
+        setRated(reponse.data.rated);
+      };
+      getResponse();
+    }
+  }, [id, route.params.id, mockRated]);
 
   const Directing = movieCredits.crew?.find(
     element => element.job === 'Director',
@@ -65,7 +72,6 @@ const MoviePage = ({route, navigation}) => {
     await rate('movie', route.params.id, id, rating);
   };
 
-  console.log(rated);
   return movieDetails.backdrop_path && movieDetails.poster_path ? (
     <View style={styles.container}>
       <ImageBackground
@@ -73,14 +79,16 @@ const MoviePage = ({route, navigation}) => {
         source={{
           uri: `http://image.tmdb.org/t/p/original/${movieDetails.backdrop_path}`,
         }}>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={styles.buttonLeft}>
-          <Feather color="#000000" name="arrow-left" size={22} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonRight}>
-          <Feather color="#000000" name="star" size={22} />
-        </TouchableOpacity>
+        <View style={styles.btnsContainer}>
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+            style={styles.buttonLeft}>
+            <Feather color="#000000" name="arrow-left" size={22} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.buttonRight}>
+            <Feather color="#000000" name="star" size={22} />
+          </TouchableOpacity>
+        </View>
       </ImageBackground>
 
       <View style={styles.content}>
@@ -93,7 +101,6 @@ const MoviePage = ({route, navigation}) => {
           />
           {rated ? (
             <TouchableOpacity
-              chableOpacity
               activeOpacity={0.5}
               style={styles.rated}
               onPress={() => {
@@ -122,8 +129,7 @@ const MoviePage = ({route, navigation}) => {
             }}
             rating={rating}
             setRating={value => setRating(value)}
-            idMovie={route.params.id}
-            rate={rateMovie}
+            rate={value => rateMovie(value)}
           />
 
           <View style={styles.flex1}>

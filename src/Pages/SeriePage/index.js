@@ -14,13 +14,12 @@ import Feather from 'react-native-vector-icons/Feather';
 import Load from '../../Components/Load';
 import * as Animatable from 'react-native-animatable';
 import Season from '../../Components/Season';
-import EvaluateModal from './EvaluateModal';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import {Context} from '../../context';
 import ModalRating from '../../Components/ModalRating';
 
 const SeriePage = ({route, navigation}) => {
-  const {id} = useContext(Context);
+  const {id, mockRated} = useContext(Context);
 
   const [seriesDetails, setSeriesDetails] = useState([]);
 
@@ -34,19 +33,29 @@ const SeriePage = ({route, navigation}) => {
 
   useEffect(() => {
     const getResponseSeriesDetails = async () => {
-      const [responseSeriesDetails, responseAccountStates] = await Promise.all([
+      const [responseSeriesDetails] = await Promise.all([
         getSeriesDetails(route.params.id),
-        getAccountStates('tv', route.params.id, id),
       ]);
       if (responseSeriesDetails.status === 200) {
         setSeriesDetails(responseSeriesDetails.data);
       }
-      if (responseAccountStates.status === 200) {
-        setRated(responseAccountStates.data.rated);
-      }
     };
     getResponseSeriesDetails();
-  }, [id, route.params.id, rated]);
+
+    if (mockRated >= 0.5) {
+      const getResponse = async () => {
+        const reponse = await getAccountStates('tv', route.params.id, id);
+        setRated(reponse.data.rated);
+      };
+      getResponse();
+    } else {
+      const getResponse = async () => {
+        const reponse = await getAccountStates('tv', route.params.id, id);
+        setRated(reponse.data.rated);
+      };
+      getResponse();
+    }
+  }, [id, route.params.id, mockRated]);
 
   const rateSeries = async () => {
     await rate('tv', route.params.id, id, rating);
@@ -59,14 +68,16 @@ const SeriePage = ({route, navigation}) => {
         source={{
           uri: `http://image.tmdb.org/t/p/original/${seriesDetails.backdrop_path}`,
         }}>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={styles.buttonLeft}>
-          <Feather color="#000000" name="arrow-left" size={22} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonRight}>
-          <Feather color="#000000" name="star" size={22} />
-        </TouchableOpacity>
+        <View style={styles.btnsContainer}>
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+            style={styles.buttonLeft}>
+            <Feather color="#000000" name="arrow-left" size={22} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.buttonRight}>
+            <Feather color="#000000" name="star" size={22} />
+          </TouchableOpacity>
+        </View>
       </ImageBackground>
 
       <View style={styles.content}>
@@ -104,12 +115,12 @@ const SeriePage = ({route, navigation}) => {
             modalVisible={modalVisible}
             onPress={() => {
               setModalVisible(!modalVisible);
-              setRating('');
             }}
             rating={rating}
             setRating={value => setRating(value)}
-            rate={rateSeries}
+            rate={value => rateSeries(value)}
           />
+
           <View style={styles.flex1}>
             <View style={styles.contentHeaderTop}>
               <Text style={styles.titleMovie}>{seriesDetails.name}</Text>
