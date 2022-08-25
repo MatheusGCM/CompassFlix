@@ -50,6 +50,23 @@ const styles = StyleSheet.create({
       fontFamily: 'OpenSans-Bold',
     },
   },
+  rated: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 116,
+    height: 22,
+    borderBottomLeftRadius: 6,
+    borderBottomRightRadius: 6,
+    marginTop: 130,
+    position: 'absolute',
+    backgroundColor: '#8BE0EC',
+    text: {
+      fontSize: 10,
+      color: '#000000',
+      textTransform: 'uppercase',
+      fontFamily: 'OpenSans-Bold',
+    },
+  },
 
   content: {
     flex: 3.5,
@@ -173,30 +190,14 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginBottom: 10,
   },
-  rated: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: 116,
-    height: 22,
-    borderBottomLeftRadius: 6,
-    borderBottomRightRadius: 6,
-    marginTop: 120,
-    position: 'absolute',
-    backgroundColor: '#8BE0EC',
-    text: {
-      fontSize: 10,
-      color: '#000000',
-      textTransform: 'uppercase',
-      fontFamily: 'OpenSans-Bold',
-    },
-  },
+
   icon: {
     position: 'absolute',
     top: -4,
     right: -4,
     padding: 1,
     borderRadius: 30,
-    backgroundColor: '#C4C4C4'
+    backgroundColor: '#C4C4C4',
   },
 });
 

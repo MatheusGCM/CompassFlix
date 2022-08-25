@@ -128,5 +128,27 @@ export const getSeriesDetailsSeason = async (id, season) => {
     });
 };
 
+export const rate = async (midia, movie_id, session_id, value) => {
+  return api
+    .post(
+      `/${midia}/${movie_id}/rating?api_key=${api_key}&session_id=${session_id}`,
+      {
+        value: value,
+      },
+    )
+    .catch(error => {
+      console.warn('Erro na avaliação');
+    });
+};
+
+export const getAccountStates = async (midia, movie_id, session_id) => {
+  return api
+    .get(
+      `/${midia}/${movie_id}/account_states?api_key=${api_key}&session_id=${session_id}`,
+    )
+    .catch(error => {
+      console.warn('Erro na avaliação');
+    });
+};
 
 export default api;
