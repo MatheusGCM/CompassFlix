@@ -60,50 +60,43 @@ const Tabs = () => {
   return (
     <Tab.Navigator
       initialRouteName="movieScreen"
-      screenOptions={{
-        headerShown: false,
-        tabBarShowLabel: false,
-        tabBarStyle: {
-          height: 54,
-          backgroundColor: '#454545',
-        },
-      }}>
-      <Tab.Screen
-        options={{
-          tabBarIcon: ({focused}) =>
-            focused ? (
+      screenOptions={({route}) => ({
+        tabBarIcon: ({focused}) => {
+          let img;
+          if (route.name === 'seriesScreen') {
+            img = focused ? (
               <Image source={require('../assets/seriesFocused.png')} />
             ) : (
               <Image source={require('../assets/series.png')} />
-            ),
-        }}
-        name="seriesScreen"
-        component={SerieStackScreen}
-      />
-      <Tab.Screen
-        options={{
-          tabBarIcon: ({focused}) =>
-            focused ? (
+            );
+          } else if (route.name === 'movieScreen') {
+            img = focused ? (
               <Image source={require('../assets/movieFocused.png')} />
             ) : (
               <Image source={require('../assets/movie.png')} />
-            ),
-        }}
-        name="movieScreen"
-        component={MovieStackScreen}
-      />
-      <Tab.Screen
-        options={{
-          tabBarIcon: ({focused}) =>
-            focused ? (
+            );
+          } else if (route.name === 'profileScreen') {
+            img = focused ? (
               <Image source={require('../assets/perfilFocused.png')} />
             ) : (
               <Image source={require('../assets/perfil.png')} />
-            ),
-        }}
-        name="profileScreen"
-        component={ProfileStackScreen}
-      />
+            );
+          }
+          return img;
+        },
+        headerShown: false,
+        tabBarShowLabel: false,
+        tabBarHideOnKeyboard: true,
+        tabBarStyle: {
+          height: 54,
+          backgroundColor: '#454545',
+          borderTopWidth: 0,
+          position: 'absolute',
+        },
+      })}>
+      <Tab.Screen name="seriesScreen" component={SerieStackScreen} />
+      <Tab.Screen name="movieScreen" component={MovieStackScreen} />
+      <Tab.Screen name="profileScreen" component={ProfileStackScreen} />
     </Tab.Navigator>
   );
 };

@@ -190,6 +190,7 @@ const SeriePage = ({route, navigation}) => {
           <ScrollView>
             {seriesDetails.seasons.map((item, index) => (
               <Season
+                {...item}
                 key={String(item.id)}
                 id={route.params.id}
                 visible={visible}
@@ -199,7 +200,7 @@ const SeriePage = ({route, navigation}) => {
                 onPress={() => {
                   setVisible(!visible);
                   setSeasonNumber(item.season_number);
-                  setSeasonSelected(index + 1);
+                  setSeasonSelected(item.season_number);
                 }}
               />
             ))}

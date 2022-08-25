@@ -50,7 +50,6 @@ const Login = ({navigation}) => {
         const session_id = response.data.session_id;
         setId(session_id);
         await AsyncStorage.setItem('SessionId', session_id);
-        Keyboard.dismiss();
         setErrorHolder(false);
         onSubmit();
         navigation.replace('Tabs');
