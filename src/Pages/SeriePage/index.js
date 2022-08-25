@@ -65,10 +65,11 @@ const SeriePage = ({route, navigation}) => {
     const getResponseDetailedSeries = async () => {
       if (seriesDetails.id) {
         const response = await getSeriesDetailsPlus(seriesDetails.id, id);
-        if (response.data.favorite) {
-          setFavorite(response.data.favorite);
+        if (response.data.rated.value > 0) {
           setRatingValue(response.data.rated.value);
           setRated(true);
+        } else if (response.data.favorite) {
+          setFavorite(response.data.favorite);
         }
       }
     };

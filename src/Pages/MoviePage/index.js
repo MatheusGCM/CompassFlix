@@ -61,10 +61,11 @@ const MoviePage = ({route, navigation}) => {
     const getResponseDetailedMovie = async () => {
       if (movieDetails.id) {
         const response = await getMovieDetailsPlus(movieDetails.id, id);
-        if (response.data.favorite) {
-          setFavorite(response.data.favorite);
+        if (response.data.rated.value > 0) {
           setRatingValue(response.data.rated.value);
           setRated(true);
+        } else if (response.data.favorite) {
+          setFavorite(response.data.favorite);
         }
       }
     };

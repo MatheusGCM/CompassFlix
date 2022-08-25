@@ -17,6 +17,7 @@ import {getToken, validateToken} from '../../service/api';
 import {Context} from '../../context';
 import * as Animatable from 'react-native-animatable';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Load from '../../Components/Load';
 
 const Login = ({navigation}) => {
   const {setId} = useContext(Context);
