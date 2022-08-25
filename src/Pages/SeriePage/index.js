@@ -8,7 +8,12 @@ import {
   ScrollView,
 } from 'react-native';
 import styles from './style';
-import {getRatedSeries, getSeriesDetails} from '../../service/api';
+import {
+  getRatedSeries,
+  getSeriesDetails,
+  getSeriesDetailsPlus,
+  postRatedFilm,
+} from '../../service/api';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
 import Load from '../../Components/Load';
@@ -17,6 +22,7 @@ import Season from '../../Components/Season';
 import EvaluateModal from './EvaluateModal';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import {Context} from '../../context';
+import Star from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const SeriePage = ({route, navigation}) => {
   const [seriesDetails, setSeriesDetails] = useState([]);
@@ -24,12 +30,17 @@ const SeriePage = ({route, navigation}) => {
   const [seasonNumber, setSeasonNumber] = useState();
   const [seasonSelected, setSeasonSelected] = useState();
   const [rated, setRated] = useState(false);
-  const {id, user} = useContext(Context);
+  const {id, user, sucess} = useContext(Context);
   const [ratingValue, setRatingValue] = useState(0);
+  const [favorite, setFavorite] = useState(false);
+  const [favoriteSerie, setFavoriteSerie] = useState({});
 
   const [modalVisible, setModalVisible] = useState(false);
   const [rating, setRating] = useState(0);
 
+  const FavoriteSerie = async (media_type, media_id) => {
+    await postRatedFilm(id, user.id, media_type, media_id, !favorite);
+  };
   useEffect(() => {
     const getResponseSeriesDetails = async () => {
       const [responseSeriesDetails] = await Promise.all([
@@ -41,19 +52,28 @@ const SeriePage = ({route, navigation}) => {
     };
     getResponseSeriesDetails();
   }, [route.params.id]);
-  useEffect(() => {
-    const getResponseRatedMovie = async () => {
-      const response = await getRatedSeries(id, user.id);
-      await response.data.results.map(item => {
-        if (item.id === seriesDetails.id) {
-          setRated(true);
-          setRatingValue(item.rating);
-        }
-      });
-    };
-    getResponseRatedMovie();
-  }, [id, user.id, seriesDetails.id]);
 
+  useEffect(() => {
+    const getResponseRatedSeries = async () => {
+      const response = await getRatedSeries(id, user.id);
+      setFavoriteSerie(response.data);
+    };
+    getResponseRatedSeries();
+  }, [id, user.id, sucess]);
+
+  useEffect(() => {
+    const getResponseDetailedSeries = async () => {
+      if (seriesDetails.id) {
+        const response = await getSeriesDetailsPlus(seriesDetails.id, id);
+        if (response.data.favorite) {
+          setFavorite(response.data.favorite);
+          setRatingValue(response.data.rated.value);
+          setRated(true);
+        }
+      }
+    };
+    getResponseDetailedSeries();
+  }, [id, seriesDetails.id, sucess]);
   return seriesDetails.backdrop_path && seriesDetails.poster_path ? (
     <View style={styles.container}>
       <ImageBackground
@@ -66,8 +86,17 @@ const SeriePage = ({route, navigation}) => {
           style={styles.buttonLeft}>
           <Feather color="#000000" name="arrow-left" size={22} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonRight}>
-          <Feather color="#000000" name="star" size={22} />
+        <TouchableOpacity
+          style={styles.buttonRight}
+          onPress={() => {
+            setFavorite(favorite ? false : true);
+            FavoriteSerie('tv', seriesDetails.id);
+          }}>
+          <Star
+            name={favorite ? 'star' : 'star-outline'}
+            color={favorite ? 'red' : 'black'}
+            size={25}
+          />
         </TouchableOpacity>
       </ImageBackground>
 
@@ -79,7 +108,7 @@ const SeriePage = ({route, navigation}) => {
               uri: `http://image.tmdb.org/t/p/original/${seriesDetails.poster_path}`,
             }}
           />
-          {rated ? (
+          {ratingValue ? (
             <TouchableOpacity
               style={styles.rated}
               onPress={() => {
@@ -106,6 +135,7 @@ const SeriePage = ({route, navigation}) => {
             setModalVisible={setModalVisible}
             setCurrentRating={setRating}
             setRated={setRated}
+            seriesDetailsId={seriesDetails.id}
           />
           <View style={styles.flex1}>
             <View style={styles.contentHeaderTop}>

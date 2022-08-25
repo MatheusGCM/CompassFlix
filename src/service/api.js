@@ -121,7 +121,7 @@ export const postRatedFilm = async (
       },
     )
     .catch(error => {
-      console.warn('error na api 10');
+      console.warn('error na api');
     });
 };
 
@@ -166,6 +166,21 @@ export const getMovieDetailsPlus = async (movie_id, id) => {
     .catch(error => {
       console.warn('erro na api');
     });
+};
+
+export const getSeriesDetailsPlus = async (serie_id, id) => {
+  return api.get(
+    `/tv/${serie_id}/account_states?api_key=${api_key}&session_id=${id}`,
+  );
+};
+
+export const postRatingSerie = async (serie_id, session_id, value) => {
+  return api.post(
+    `/tv/${serie_id}/rating?api_key=${api_key}&session_id=${session_id}`,
+    {
+      value: value,
+    },
+  );
 };
 
 export default api;

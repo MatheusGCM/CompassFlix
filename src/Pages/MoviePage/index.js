@@ -39,15 +39,7 @@ const MoviePage = ({route, navigation}) => {
   const [movieFavorites, setMovieFavorites] = useState({});
 
   const FavoriteFilm = async (media_type, media_id) => {
-    console.log(favorite);
-    const response = await postRatedFilm(
-      id,
-      user.id,
-      media_type,
-      media_id,
-      !favorite,
-    );
-    console.log(response.data);
+    await postRatedFilm(id, user.id, media_type, media_id, !favorite);
   };
   useEffect(() => {
     const getResponseMovieDetails = async () => {
@@ -66,27 +58,19 @@ const MoviePage = ({route, navigation}) => {
   }, [route.params.id]);
 
   useEffect(() => {
-    const getResponseRatedMovie = async () => {
-      const response = await getRatedMovie(id, user.id);
-      setMovieFavorites(response.data);
-    };
-    getResponseRatedMovie();
-  }, [id, user.id, sucess]);
-
-  useEffect(() => {
     const getResponseDetailedMovie = async () => {
       if (movieDetails.id) {
         const response = await getMovieDetailsPlus(movieDetails.id, id);
-        console.log(response.data.favorite);
         if (response.data.favorite) {
           setFavorite(response.data.favorite);
           setRatingValue(response.data.rated.value);
+          setRated(true);
         }
       }
     };
     getResponseDetailedMovie();
-  }, [id, movieDetails.id]);
-  console.log(favorite);
+  }, [id, movieDetails.id, sucess]);
+  console.log(sucess);
   const Directing = movieCredits.crew?.find(
     element => element.job === 'Director',
   )?.name;
