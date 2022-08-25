@@ -15,6 +15,7 @@ import {
   getRatedMovie,
   getFavoriteMovie,
   postRatedFilm,
+  getMovieDetailsPlus,
 } from '../../service/api';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
@@ -37,8 +38,16 @@ const MoviePage = ({route, navigation}) => {
   const [favorite, setFavorite] = useState(false);
   const [movieFavorites, setMovieFavorites] = useState({});
 
-  const FavoriteFilm = async (media_type, media_id, favorite) => {
-    await postRatedFilm(id, user.id, media_type, media_id, favorite);
+  const FavoriteFilm = async (media_type, media_id) => {
+    console.log(favorite);
+    const response = await postRatedFilm(
+      id,
+      user.id,
+      media_type,
+      media_id,
+      !favorite,
+    );
+    console.log(response.data);
   };
   useEffect(() => {
     const getResponseMovieDetails = async () => {
@@ -60,17 +69,24 @@ const MoviePage = ({route, navigation}) => {
     const getResponseRatedMovie = async () => {
       const response = await getRatedMovie(id, user.id);
       setMovieFavorites(response.data);
-      await response.data.results.map(item => {
-        if (item.id === movieDetails.id) {
-          setRated(true);
-          setRatingValue(item.rating);
-          setFavorite(true);
-        }
-      });
     };
     getResponseRatedMovie();
-  }, [id, user.id, movieDetails.id, sucess]);
-  console.log(sucess);
+  }, [id, user.id, sucess]);
+
+  useEffect(() => {
+    const getResponseDetailedMovie = async () => {
+      if (movieDetails.id) {
+        const response = await getMovieDetailsPlus(movieDetails.id, id);
+        console.log(response.data.favorite);
+        if (response.data.favorite) {
+          setFavorite(response.data.favorite);
+          setRatingValue(response.data.rated.value);
+        }
+      }
+    };
+    getResponseDetailedMovie();
+  }, [id, movieDetails.id]);
+  console.log(favorite);
   const Directing = movieCredits.crew?.find(
     element => element.job === 'Director',
   )?.name;
@@ -90,11 +106,11 @@ const MoviePage = ({route, navigation}) => {
           style={styles.buttonRight}
           onPress={() => {
             setFavorite(favorite ? false : true);
-            FavoriteFilm('movie', movieDetails.id, favorite);
+            FavoriteFilm('movie', movieDetails.id);
           }}>
           <Star
-            color={favorite ? 'black' : 'red'}
-            name={favorite ? 'star-outline' : 'star'}
+            name={favorite ? 'star' : 'star-outline'}
+            color={favorite ? 'red' : 'black'}
             size={25}
           />
         </TouchableOpacity>
@@ -108,7 +124,7 @@ const MoviePage = ({route, navigation}) => {
               uri: `http://image.tmdb.org/t/p/original/${movieDetails.poster_path}`,
             }}
           />
-          {rated ? (
+          {ratingValue ? (
             <TouchableOpacity
               style={styles.rated}
               onPress={() => {

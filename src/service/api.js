@@ -121,7 +121,7 @@ export const postRatedFilm = async (
       },
     )
     .catch(error => {
-      console.warn('error na api');
+      console.warn('error na api 10');
     });
 };
 
@@ -155,6 +155,16 @@ export const getSeriesDetailsSeason = async (id, season) => {
     .get(`/tv/${id}/season/${season}?api_key=${api_key}&language=pt-BR`)
     .catch(error => {
       console.warn('Erro ao buscar detalhes das séries');
+    });
+};
+
+export const getMovieDetailsPlus = async (movie_id, id) => {
+  return api
+    .get(
+      `/movie/${movie_id}/account_states?api_key=${api_key}&session_id=${id}`,
+    )
+    .catch(error => {
+      console.warn('erro na api');
     });
 };
 

@@ -4,7 +4,7 @@ import {Modal, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import styles from './style';
-import api, { postRatingFilm } from '../../../service/api';
+import api, {postRatingFilm} from '../../../service/api';
 import {Context} from '../../../context';
 
 const EvaluateModal = ({
@@ -14,7 +14,7 @@ const EvaluateModal = ({
   setRated,
   movieDetailsId,
 }) => {
-  const {id, setSucess, sucess} = useContext(Context)
+  const {id, setSucess, sucess} = useContext(Context);
   const [rating, setRating] = useState('');
   const [invalidRating, setInvalideRating] = useState(false);
 
@@ -26,10 +26,10 @@ const EvaluateModal = ({
       ? true
       : false;
   };
-  const sendPostRatingValue = async (value) => {
+  const sendPostRatingValue = async value => {
     await postRatingFilm(movieDetailsId, id, value);
     setSucess(!sucess);
-  }
+  };
   return (
     <Modal transparent animationType="fade" visible={visible}>
       <View style={styles.background}>
