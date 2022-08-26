@@ -55,7 +55,7 @@ const Profile = ({navigation}) => {
 
   const Logout = async () => {
     await AsyncStorage.clear();
-    navigation.replace('Login');
+    navigation.reset({index: 0, routes: [{name: 'Tabs'}]});
   };
 
   return (
@@ -223,17 +223,29 @@ const Profile = ({navigation}) => {
             horizontal={true}
             keyExtractor={item => String(item.id)}
             renderItem={({item}) => (
-              <Image
-                style={{
-                  width: 67,
-                  height: 89,
-                  borderRadius: 7,
-                  marginEnd: 12,
-                }}
-                source={{
-                  uri: `http://image.tmdb.org/t/p/w185/${item.poster_path}`,
-                }}
-              />
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate(
+                    movieFocused ? 'movieScreen' : 'seriesScreen',
+                    {
+                      screen: movieFocused ? 'MoviePage' : 'SeriePage',
+                      params: {id: item.id},
+                    },
+                  )
+                }>
+                {console.log(item.id)}
+                <Image
+                  style={{
+                    width: 67,
+                    height: 89,
+                    borderRadius: 7,
+                    marginEnd: 12,
+                  }}
+                  source={{
+                    uri: `http://image.tmdb.org/t/p/w185/${item.poster_path}`,
+                  }}
+                />
+              </TouchableOpacity>
             )}
           />
         ) : (
@@ -298,7 +310,16 @@ const Profile = ({navigation}) => {
           keyExtractor={item => String(item.id)}
           horizontal={true}
           renderItem={({item}) => (
-            <View>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate(
+                  movieFocused ? 'movieScreen' : 'seriesScreen',
+                  {
+                    screen: movieFocused ? 'MoviePage' : 'SeriePage',
+                    params: {id: item.id},
+                  },
+                )
+              }>
               <Image
                 style={{width: 58, height: 82, borderRadius: 7, marginEnd: 12}}
                 source={{
@@ -315,7 +336,7 @@ const Profile = ({navigation}) => {
                     fontFamily: 'OpenSans-SemiBold',
                   }}>{`${item.rating?.toFixed(1)}/10`}</Text>
               </View>
-            </View>
+            </TouchableOpacity>
           )}
         />
       ) : (
