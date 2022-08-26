@@ -6,7 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export const Provider = ({children}) => {
   const [id, setId] = useState();
   const [user, setUser] = useState({});
-  const [mockRated, setMockRated] = useState(null);
+  const [mockRated, setMockRated] = useState(false);
 
   const loadUserStorageData = async () => {
     const storedUser = await AsyncStorage.getItem('SessionId');

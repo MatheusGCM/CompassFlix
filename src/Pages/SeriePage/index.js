@@ -8,7 +8,13 @@ import {
   ScrollView,
 } from 'react-native';
 import styles from './style';
-import {getSeriesDetails, getAccountStates, rate} from '../../service/api';
+import {
+  getSeriesDetails,
+  getAccountStates,
+  rate,
+  unmarkFavorite,
+  markFavorite,
+} from '../../service/api';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
 import Load from '../../Components/Load';
@@ -17,9 +23,10 @@ import Season from '../../Components/Season';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import {Context} from '../../context';
 import ModalRating from '../../Components/ModalRating';
+import ButtonFavorite from '../../Components/ButtonFavorite';
 
 const SeriePage = ({route, navigation}) => {
-  const {id, mockRated} = useContext(Context);
+  const {id, user, mockRated} = useContext(Context);
 
   const [seriesDetails, setSeriesDetails] = useState([]);
 
@@ -30,6 +37,9 @@ const SeriePage = ({route, navigation}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [rated, setRated] = useState();
   const [rating, setRating] = useState(0);
+
+  const [fav, setFav] = useState();
+  const [mockFavorite, setMockFavorite] = useState(false);
 
   useEffect(() => {
     const getResponseSeriesDetails = async () => {
@@ -42,7 +52,21 @@ const SeriePage = ({route, navigation}) => {
     };
     getResponseSeriesDetails();
 
-    if (mockRated >= 0.5) {
+    if (mockFavorite) {
+      const getResponseFavorite = async () => {
+        const response = await getAccountStates('tv', route.params.id, id);
+        setFav(response.data.favorite);
+      };
+      getResponseFavorite();
+    } else {
+      const getResponseFavorite = async () => {
+        const response = await getAccountStates('tv', route.params.id, id);
+        setFav(response.data.favorite);
+      };
+      getResponseFavorite();
+    }
+
+    if (mockRated) {
       const getResponse = async () => {
         const reponse = await getAccountStates('tv', route.params.id, id);
         setRated(reponse.data.rated);
@@ -55,7 +79,17 @@ const SeriePage = ({route, navigation}) => {
       };
       getResponse();
     }
-  }, [id, route.params.id, mockRated]);
+  }, [id, route.params.id, mockRated, mockFavorite]);
+
+  const favorite = async () => {
+    if (fav) {
+      await unmarkFavorite(user.id, id, 'tv', route.params.id);
+      setMockFavorite(!mockFavorite);
+    } else {
+      await markFavorite(user.id, id, 'tv', route.params.id);
+      setMockFavorite(!mockFavorite);
+    }
+  };
 
   const rateSeries = async () => {
     await rate('tv', route.params.id, id, rating);
@@ -74,9 +108,7 @@ const SeriePage = ({route, navigation}) => {
             style={styles.buttonLeft}>
             <Feather color="#000000" name="arrow-left" size={22} />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.buttonRight}>
-            <Feather color="#000000" name="star" size={22} />
-          </TouchableOpacity>
+          <ButtonFavorite onPress={favorite} favorite={fav} />
         </View>
       </ImageBackground>
 
@@ -90,12 +122,14 @@ const SeriePage = ({route, navigation}) => {
           />
           {rated ? (
             <TouchableOpacity
-              activeOpacity={0.5}
+              activeOpacity={1}
               style={styles.rated}
               onPress={() => {
                 setModalVisible(true);
               }}>
-              <Text style={styles.rated.text}>Sua nota: {rated.value}/10</Text>
+              <Text style={styles.rated.text}>
+                Sua nota: {rated.value.toFixed(1)}/10
+              </Text>
 
               <View style={styles.icon}>
                 <EvilIcons name="pencil" size={10} />
@@ -103,6 +137,7 @@ const SeriePage = ({route, navigation}) => {
             </TouchableOpacity>
           ) : (
             <TouchableOpacity
+              activeOpacity={0.9}
               style={styles.rate}
               onPress={() => {
                 setModalVisible(true);

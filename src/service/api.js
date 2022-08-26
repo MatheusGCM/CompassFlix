@@ -1,5 +1,4 @@
 import axios from 'axios';
-import {Alert} from 'react-native';
 
 const api_key = '53324f99056d3d75ddf758aad3ec3855';
 const api = axios.create({
@@ -145,6 +144,36 @@ export const getAccountStates = async (midia, movie_id, session_id) => {
   return api
     .get(
       `/${midia}/${movie_id}/account_states?api_key=${api_key}&session_id=${session_id}`,
+    )
+    .catch(error => {
+      console.warn('Erro na avaliação');
+    });
+};
+
+export const markFavorite = async (userId, session_id, midia, midiaId) => {
+  return api
+    .post(
+      `/account/${userId}/favorite?api_key=${api_key}&session_id=${session_id}`,
+      {
+        media_type: midia,
+        media_id: midiaId,
+        favorite: true,
+      },
+    )
+    .catch(error => {
+      console.warn('Erro na avaliação');
+    });
+};
+
+export const unmarkFavorite = async (userId, session_id, midia, midiaId) => {
+  return api
+    .post(
+      `/account/${userId}/favorite?api_key=${api_key}&session_id=${session_id}`,
+      {
+        media_type: midia,
+        media_id: midiaId,
+        favorite: false,
+      },
     )
     .catch(error => {
       console.warn('Erro na avaliação');
