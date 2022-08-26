@@ -103,7 +103,7 @@ const SeriePage = ({route, navigation}) => {
         }}>
         <View style={styles.btnsContainer}>
           <TouchableOpacity
-            onPress={() => navigation.goBack()}
+            onPress={() => navigation.navigate('HomeSerie')}
             style={styles.buttonLeft}>
             <Feather color="#000000" name="arrow-left" size={22} />
           </TouchableOpacity>

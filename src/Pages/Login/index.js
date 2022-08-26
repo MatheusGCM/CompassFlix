@@ -1,7 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {
   ActivityIndicator,
-  Alert,
   Image,
   ImageBackground,
   Keyboard,
@@ -52,7 +51,7 @@ const Login = ({navigation}) => {
         Keyboard.dismiss();
         setErrorHolder(false);
         onSubmit();
-        navigation.replace('Tabs');
+        navigation.reset({index: 0, routes: [{name: 'Tabs'}]});
         setEnabled(false);
       } else {
         onSubmit();
@@ -70,7 +69,7 @@ const Login = ({navigation}) => {
   const checkLogin = async () => {
     const userStorage = await AsyncStorage.getItem('SessionId');
     if (userStorage) {
-      navigation.navigate('Tabs');
+      navigation.reset({index: 0, routes: [{name: 'Tabs'}]});
       setId(userStorage);
     }
   };
