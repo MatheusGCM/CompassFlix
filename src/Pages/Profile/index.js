@@ -3,7 +3,6 @@ import {
   ActivityIndicator,
   FlatList,
   Image,
-  Modal,
   Text,
   TouchableOpacity,
   TouchableWithoutFeedback,
@@ -22,7 +21,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import ModalExit from '../../Components/ModalExit';
 
 const Profile = ({navigation}) => {
-  const {id, user} = useContext(Context);
+  const {id, user, udapte} = useContext(Context);
   const [movieFocused, setMovieFocused] = useState(true);
   const [modalExit, setModalExit] = useState(false);
   const [favMovie, setFavMovie] = useState({});
@@ -47,11 +46,12 @@ const Profile = ({navigation}) => {
       const response = await getRatedSeries(id, user.id);
       setRatedSeries(response.data);
     };
+
     getResponseRatedMovies();
     getResponseRatedSeries();
     getResponseFavoriteMovies();
     getResponseFavoriteSeries();
-  }, [id, user.id]);
+  }, [id, user.id, udapte]);
 
   const Logout = async () => {
     await AsyncStorage.clear();
@@ -88,7 +88,7 @@ const Profile = ({navigation}) => {
         {user.avatar?.tmdb.avatar_path ? (
           <Image
             source={{
-              uri: `http://image.tmdb.org/t/p/original/${user.avatar?.tmdb.avatar_path}`,
+              uri: `http://image.tmdb.org/t/p/w92/${user.avatar?.tmdb.avatar_path}`,
             }}
             style={{width: 78, height: 78, borderRadius: 100}}
           />
@@ -104,7 +104,7 @@ const Profile = ({navigation}) => {
 
         <Text style={styles.userName}>{user.name}</Text>
         <View style={{alignItems: 'center', marginTop: 46, height: 54}}>
-          {ratedMovie?.total_results + ratedSeries?.total_results ? (
+          {ratedMovie?.total_results + ratedSeries?.total_results >= 0 ? (
             <>
               <Text
                 style={{
