@@ -80,7 +80,11 @@ const Favorites = ({navigation, route}) => {
         keyExtractor={item => String(item.id)}
         numColumns={4}
         renderItem={({item}) => (
-          <FavoriteMovies poster_path={item.poster_path} />
+          <FavoriteMovies
+            poster_path={item.poster_path}
+            movieFocused={route.params.movieFocused}
+            item={item.id}
+          />
         )}
       />
     </View>

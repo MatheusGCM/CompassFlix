@@ -104,7 +104,7 @@ const Profile = ({navigation}) => {
 
         <Text style={styles.userName}>{user.name}</Text>
         <View style={{alignItems: 'center', marginTop: 46, height: 54}}>
-          {ratedMovie?.total_results + ratedSeries?.total_results ? (
+          {ratedMovie?.total_results && ratedSeries?.total_results ? (
             <>
               <Text
                 style={{
@@ -113,7 +113,9 @@ const Profile = ({navigation}) => {
                   fontFamily: 'OpenSans-Bold',
                   lineHeight: 32,
                 }}>
-                {ratedMovie?.total_results + ratedSeries?.total_results}
+                {movieFocused
+                  ? ratedMovie?.total_results
+                  : ratedSeries?.total_results}
               </Text>
               <Text
                 style={{
@@ -233,7 +235,6 @@ const Profile = ({navigation}) => {
                     },
                   )
                 }>
-                {console.log(item.id)}
                 <Image
                   style={{
                     width: 67,
