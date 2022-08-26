@@ -28,13 +28,13 @@ import {Context} from '../../context';
 import ButtonFavorite from '../../Components/ButtonFavorite';
 
 const MoviePage = ({route, navigation}) => {
-  const {id, user, mockRated} = useContext(Context);
+  const {id, user, udapte, setUpdate} = useContext(Context);
 
   const [movieDetails, setMovieDetails] = useState([]);
   const [movieCredits, setMovieCredits] = useState({});
 
   const [fav, setFav] = useState();
-  const [mockFavorite, setMockFavorite] = useState(false);
+  // const [mockFavorite, setMockFavorite] = useState(false);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [rated, setRated] = useState();
@@ -55,7 +55,7 @@ const MoviePage = ({route, navigation}) => {
     };
     getResponseMovieDetails();
 
-    if (mockFavorite) {
+    if (udapte) {
       const getResponseFavorite = async () => {
         const response = await getAccountStates('movie', route.params.id, id);
         setFav(response.data.favorite);
@@ -69,7 +69,7 @@ const MoviePage = ({route, navigation}) => {
       getResponseFavorite();
     }
 
-    if (mockRated) {
+    if (udapte) {
       const getResponseRated = async () => {
         const reponse = await getAccountStates('movie', route.params.id, id);
         setRated(reponse.data.rated);
@@ -82,19 +82,18 @@ const MoviePage = ({route, navigation}) => {
       };
       getResponseRated();
     }
-  }, [id, route.params.id, mockRated, mockFavorite]);
+  }, [id, route.params.id, udapte]);
 
   const Directing = movieCredits.crew?.find(
     element => element.job === 'Director',
   )?.name;
 
   const favorite = async () => {
+    setUpdate(!udapte);
     if (fav) {
       await unmarkFavorite(user.id, id, 'movie', route.params.id);
-      setMockFavorite(!mockFavorite);
     } else {
       await markFavorite(user.id, id, 'movie', route.params.id);
-      setMockFavorite(!mockFavorite);
     }
   };
 
@@ -161,7 +160,7 @@ const MoviePage = ({route, navigation}) => {
             }}
             rating={rating}
             setRating={value => setRating(value)}
-            rate={value => rateMovie(value)}
+            rate={rateMovie}
           />
 
           <View style={styles.flex1}>

@@ -5,7 +5,7 @@ import {Context} from '../../context';
 import styles from './style';
 
 const ModalRating = ({modalVisible, onPress, rate, rating, setRating}) => {
-  const {setMockRated, mockRated} = useContext(Context);
+  const {udapte, setUpdate} = useContext(Context);
   const [invalido, setInvalido] = useState(false);
 
   return (
@@ -66,8 +66,8 @@ const ModalRating = ({modalVisible, onPress, rate, rating, setRating}) => {
               style={styles.btnOk}
               onPress={() => {
                 if (rating >= 0.5 && rating <= 10 && rating % 0.5 === 0) {
+                  setUpdate(!udapte);
                   rate(rating);
-                  setMockRated(!mockRated);
                   setInvalido(false);
                   setRating('');
                   onPress();

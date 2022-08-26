@@ -26,7 +26,7 @@ import ModalRating from '../../Components/ModalRating';
 import ButtonFavorite from '../../Components/ButtonFavorite';
 
 const SeriePage = ({route, navigation}) => {
-  const {id, user, mockRated} = useContext(Context);
+  const {id, user, udapte, setUpdate} = useContext(Context);
 
   const [seriesDetails, setSeriesDetails] = useState([]);
 
@@ -39,7 +39,7 @@ const SeriePage = ({route, navigation}) => {
   const [rating, setRating] = useState(0);
 
   const [fav, setFav] = useState();
-  const [mockFavorite, setMockFavorite] = useState(false);
+  // const [mockFavorite, setMockFavorite] = useState(false);
 
   useEffect(() => {
     const getResponseSeriesDetails = async () => {
@@ -52,7 +52,7 @@ const SeriePage = ({route, navigation}) => {
     };
     getResponseSeriesDetails();
 
-    if (mockFavorite) {
+    if (udapte) {
       const getResponseFavorite = async () => {
         const response = await getAccountStates('tv', route.params.id, id);
         setFav(response.data.favorite);
@@ -66,7 +66,7 @@ const SeriePage = ({route, navigation}) => {
       getResponseFavorite();
     }
 
-    if (mockRated) {
+    if (udapte) {
       const getResponse = async () => {
         const reponse = await getAccountStates('tv', route.params.id, id);
         setRated(reponse.data.rated);
@@ -79,15 +79,14 @@ const SeriePage = ({route, navigation}) => {
       };
       getResponse();
     }
-  }, [id, route.params.id, mockRated, mockFavorite]);
+  }, [id, route.params.id, udapte]);
 
   const favorite = async () => {
+    setUpdate(!udapte);
     if (fav) {
       await unmarkFavorite(user.id, id, 'tv', route.params.id);
-      setMockFavorite(!mockFavorite);
     } else {
       await markFavorite(user.id, id, 'tv', route.params.id);
-      setMockFavorite(!mockFavorite);
     }
   };
 
@@ -153,7 +152,7 @@ const SeriePage = ({route, navigation}) => {
             }}
             rating={rating}
             setRating={value => setRating(value)}
-            rate={value => rateSeries(value)}
+            rate={rateSeries}
           />
 
           <View style={styles.flex1}>
