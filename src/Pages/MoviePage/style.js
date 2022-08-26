@@ -47,6 +47,7 @@ const styles = StyleSheet.create({
     text: {
       fontSize: 10,
       color: '#000000',
+      lineHeight: 13.62,
       textTransform: 'uppercase',
       fontFamily: 'OpenSans-Bold',
     },
@@ -64,7 +65,7 @@ const styles = StyleSheet.create({
     text: {
       fontSize: 10,
       color: '#000000',
-      textTransform: 'uppercase',
+      lineHeight: 13.62,
       fontFamily: 'OpenSans-Bold',
     },
   },
@@ -74,19 +75,15 @@ const styles = StyleSheet.create({
     marginStart: 15,
   },
   contentHeader: {
-    // flex: 1,
     height: '30%',
     flexDirection: 'row',
     marginBottom: 5,
-    // borderColor: 'red',
-    // borderWidth: 2,
   },
   posterMovie: {
     width: 116,
     height: 182,
     borderRadius: 7,
     marginEnd: 16,
-    borderWidth: 2,
     top: -50,
   },
   contentHeaderTop: {

@@ -47,6 +47,7 @@ const styles = StyleSheet.create({
     text: {
       fontSize: 10,
       color: '#000000',
+      lineHeight: 13.62,
       textTransform: 'uppercase',
       fontFamily: 'OpenSans-Bold',
     },
@@ -64,7 +65,7 @@ const styles = StyleSheet.create({
     text: {
       fontSize: 10,
       color: '#000000',
-      textTransform: 'uppercase',
+      lineHeight: 13.62,
       fontFamily: 'OpenSans-Bold',
     },
   },
