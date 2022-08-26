@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   Image,
   Text,
@@ -8,19 +8,39 @@ import {
   ScrollView,
 } from 'react-native';
 import styles from './style';
-import {getSeriesDetails} from '../../service/api';
+import {
+  getRatedSeries,
+  getSeriesDetails,
+  getSeriesDetailsPlus,
+  postRatedFilm,
+} from '../../service/api';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
 import Load from '../../Components/Load';
 import * as Animatable from 'react-native-animatable';
 import Season from '../../Components/Season';
+import EvaluateModal from './EvaluateModal';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import {Context} from '../../context';
+import Star from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const SeriePage = ({route, navigation}) => {
   const [seriesDetails, setSeriesDetails] = useState([]);
   const [visible, setVisible] = useState(false);
   const [seasonNumber, setSeasonNumber] = useState();
   const [seasonSelected, setSeasonSelected] = useState();
+  const [rated, setRated] = useState(false);
+  const {id, user, sucess, setSucess} = useContext(Context);
+  const [ratingValue, setRatingValue] = useState(0);
+  const [favorite, setFavorite] = useState(false);
+  const [favoriteSerie, setFavoriteSerie] = useState({});
 
+  const [modalVisible, setModalVisible] = useState(false);
+  const [rating, setRating] = useState(0);
+
+  const FavoriteSerie = async (media_type, media_id) => {
+    await postRatedFilm(id, user.id, media_type, media_id, !favorite);
+  };
   useEffect(() => {
     const getResponseSeriesDetails = async () => {
       const [responseSeriesDetails] = await Promise.all([
@@ -33,6 +53,30 @@ const SeriePage = ({route, navigation}) => {
     getResponseSeriesDetails();
   }, [route.params.id]);
 
+  useEffect(() => {
+    const getResponseRatedSeries = async () => {
+      const response = await getRatedSeries(id, user.id);
+      setFavoriteSerie(response.data);
+    };
+    getResponseRatedSeries();
+  }, [id, user.id, sucess]);
+
+  useEffect(() => {
+    const getResponseDetailedSeries = async () => {
+      if (seriesDetails.id) {
+        const response = await getSeriesDetailsPlus(seriesDetails.id, id);
+        if (response.data.rated.value > 0) {
+          setRatingValue(response.data.rated.value);
+          setRated(true);
+        }
+        if (response.data.favorite) {
+          setFavorite(response.data.favorite);
+          setRated(true);
+        }
+      }
+    };
+    getResponseDetailedSeries();
+  }, [id, seriesDetails.id, sucess]);
   return seriesDetails.backdrop_path && seriesDetails.poster_path ? (
     <View style={styles.container}>
       <ImageBackground
@@ -45,8 +89,18 @@ const SeriePage = ({route, navigation}) => {
           style={styles.buttonLeft}>
           <Feather color="#000000" name="arrow-left" size={22} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.buttonRight}>
-          <Feather color="#000000" name="star" size={22} />
+        <TouchableOpacity
+          style={styles.buttonRight}
+          onPress={() => {
+            setSucess(!sucess);
+            setFavorite(favorite ? false : true);
+            FavoriteSerie('tv', seriesDetails.id);
+          }}>
+          <Star
+            name={favorite ? 'star' : 'star-outline'}
+            color={favorite ? 'red' : 'black'}
+            size={25}
+          />
         </TouchableOpacity>
       </ImageBackground>
 
@@ -58,11 +112,35 @@ const SeriePage = ({route, navigation}) => {
               uri: `http://image.tmdb.org/t/p/original/${seriesDetails.poster_path}`,
             }}
           />
-          <TouchableOpacity
-            //criar modal
-            style={styles.rate}>
-            <Text style={styles.rate.text}>Avalie Agora</Text>
-          </TouchableOpacity>
+          {ratingValue ? (
+            <TouchableOpacity
+              style={styles.rated}
+              onPress={() => {
+                setModalVisible(true);
+              }}>
+              <Text style={styles.rated.text}>Sua nota: {ratingValue}/10</Text>
+
+              <View style={styles.icon}>
+                <EvilIcons name="pencil" size={10} />
+              </View>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              style={styles.rate}
+              onPress={() => {
+                setModalVisible(true);
+              }}>
+              <Text style={styles.rate.text}>Avalie agora</Text>
+            </TouchableOpacity>
+          )}
+
+          <EvaluateModal
+            visible={modalVisible}
+            setModalVisible={setModalVisible}
+            setCurrentRating={setRating}
+            setRated={setRated}
+            seriesDetailsId={seriesDetails.id}
+          />
           <View style={styles.flex1}>
             <View style={styles.contentHeaderTop}>
               <Text style={styles.titleMovie}>{seriesDetails.name}</Text>

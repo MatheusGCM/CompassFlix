@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {memo, useContext, useEffect, useMemo, useState} from 'react';
 import {
   Image,
   Text,
@@ -9,17 +9,38 @@ import {
   FlatList,
 } from 'react-native';
 import styles from './style';
-import {getMoviesDetails, getMovieCredits} from '../../service/api';
+import {
+  getMoviesDetails,
+  getMovieCredits,
+  getRatedMovie,
+  getFavoriteMovie,
+  postRatedFilm,
+  getMovieDetailsPlus,
+} from '../../service/api';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
 import Cast from '../../Components/Cast';
 import Load from '../../Components/Load';
 import * as Animatable from 'react-native-animatable';
+import EvaluateModal from './EvaluateModal';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import {Context} from '../../context';
+import Star from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const MoviePage = ({route, navigation}) => {
   const [movieDetails, setMovieDetails] = useState([]);
   const [movieCredits, setMovieCredits] = useState({});
+  const [rated, setRated] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [rating, setRating] = useState(false);
+  const [ratingValue, setRatingValue] = useState(0);
+  const {id, user, sucess, setSucess} = useContext(Context);
+  const [favorite, setFavorite] = useState(false);
+  const [movieFavorites, setMovieFavorites] = useState({});
 
+  const FavoriteFilm = async (media_type, media_id) => {
+    await postRatedFilm(id, user.id, media_type, media_id, !favorite);
+  };
   useEffect(() => {
     const getResponseMovieDetails = async () => {
       const [responseMoviesDetails, responseMovieCredits] = await Promise.all([
@@ -36,10 +57,24 @@ const MoviePage = ({route, navigation}) => {
     getResponseMovieDetails();
   }, [route.params.id]);
 
+  useEffect(() => {
+    const getResponseDetailedMovie = async () => {
+      if (movieDetails.id) {
+        const response = await getMovieDetailsPlus(movieDetails.id, id);
+        if (response.data.rated.value > 0) {
+          setRatingValue(response.data.rated.value);
+          setRated(true);
+        }
+        if (response.data.favorite) {
+          setFavorite(response.data.favorite);
+        }
+      }
+    };
+    getResponseDetailedMovie();
+  }, [id, movieDetails.id, sucess]);
   const Directing = movieCredits.crew?.find(
     element => element.job === 'Director',
   )?.name;
-
   return movieDetails.backdrop_path && movieDetails.poster_path ? (
     <View style={styles.container}>
       <ImageBackground
@@ -52,9 +87,18 @@ const MoviePage = ({route, navigation}) => {
           style={styles.buttonLeft}>
           <Feather color="#000000" name="arrow-left" size={22} />
         </TouchableOpacity>
-        <TouchableOpacity 
-        style={styles.buttonRight}>
-          <Feather color="#000000" name="star" size={22} />
+        <TouchableOpacity
+          style={styles.buttonRight}
+          onPress={() => {
+            setSucess(!sucess);
+            setFavorite(favorite ? false : true);
+            FavoriteFilm('movie', movieDetails.id);
+          }}>
+          <Star
+            name={favorite ? 'star' : 'star-outline'}
+            color={favorite ? 'red' : 'black'}
+            size={25}
+          />
         </TouchableOpacity>
       </ImageBackground>
 
@@ -66,11 +110,35 @@ const MoviePage = ({route, navigation}) => {
               uri: `http://image.tmdb.org/t/p/original/${movieDetails.poster_path}`,
             }}
           />
-          <TouchableOpacity 
-          //criar modal
-          style={styles.rate}> 
-            <Text style={styles.rate.text}>Avalie Agora</Text>
-          </TouchableOpacity>
+          {ratingValue ? (
+            <TouchableOpacity
+              style={styles.rated}
+              onPress={() => {
+                setModalVisible(true);
+              }}>
+              <Text style={styles.rated.text}>Sua nota: {ratingValue}/10</Text>
+
+              <View style={styles.icon}>
+                <EvilIcons name="pencil" size={10} />
+              </View>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              style={styles.rate}
+              onPress={() => {
+                setModalVisible(true);
+              }}>
+              <Text style={styles.rate.text}>Avalie agora</Text>
+            </TouchableOpacity>
+          )}
+
+          <EvaluateModal
+            visible={modalVisible}
+            setModalVisible={setModalVisible}
+            setCurrentRating={setRating}
+            setRated={setRated}
+            movieDetailsId={movieDetails.id}
+          />
           <View style={styles.flex1}>
             <View style={styles.contentHeaderTop}>
               <Text style={styles.titleMovie}>{movieDetails.title}</Text>

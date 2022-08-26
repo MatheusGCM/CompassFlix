@@ -22,7 +22,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import ModalExit from '../../Components/ModalExit';
 
 const Profile = ({navigation}) => {
-  const {id, user} = useContext(Context);
+  const {id, user, sucess} = useContext(Context);
   const [movieFocused, setMovieFocused] = useState(true);
   const [modalExit, setModalExit] = useState(false);
   const [favMovie, setFavMovie] = useState({});
@@ -51,7 +51,7 @@ const Profile = ({navigation}) => {
     getResponseRatedSeries();
     getResponseFavoriteMovies();
     getResponseFavoriteSeries();
-  }, [id, user.id]);
+  }, [id, user.id, sucess]);
 
   const Logout = async () => {
     await AsyncStorage.clear();
