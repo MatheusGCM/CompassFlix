@@ -82,24 +82,26 @@ const MoviePage = ({route, navigation}) => {
         source={{
           uri: `http://image.tmdb.org/t/p/original/${movieDetails.backdrop_path}`,
         }}>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={styles.buttonLeft}>
-          <Feather color="#000000" name="arrow-left" size={22} />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.buttonRight}
-          onPress={() => {
-            setSucess(!sucess);
-            setFavorite(favorite ? false : true);
-            FavoriteFilm('movie', movieDetails.id);
-          }}>
-          <Star
-            name={favorite ? 'star' : 'star-outline'}
-            color={favorite ? 'red' : 'black'}
-            size={25}
-          />
-        </TouchableOpacity>
+        <View style={styles.btnsContainer}>
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+            style={styles.buttonLeft}>
+            <Feather color="#000000" name="arrow-left" size={22} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.buttonRight}
+            onPress={() => {
+              setSucess(!sucess);
+              setFavorite(favorite ? false : true);
+              FavoriteFilm('movie', movieDetails.id);
+            }}>
+            <Star
+              name={favorite ? 'star' : 'star-outline'}
+              color={favorite ? 'red' : 'black'}
+              size={25}
+            />
+          </TouchableOpacity>
+        </View>
       </ImageBackground>
 
       <View style={styles.content}>

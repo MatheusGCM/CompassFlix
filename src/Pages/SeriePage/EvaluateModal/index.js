@@ -22,7 +22,8 @@ const EvaluateModal = ({
     return userRating >= 0.5 &&
       userRating <= 10 &&
       userRating[0] !== '.' &&
-      userRating[userRating.length - 1] !== '.'
+      userRating[userRating.length - 1] !== '.' &&
+      userRating !== ''
       ? true
       : false;
   };
@@ -78,7 +79,7 @@ const EvaluateModal = ({
               style={styles.btnOk}
               onPress={() => {
                 if (ratingIsValid(rating) === false) {
-                  return setInvalideRating(rating);
+                  return setInvalideRating(true);
                 }
                 sendPostRatingValue(rating);
                 setModalVisible('false');
