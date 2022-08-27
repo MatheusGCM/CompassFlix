@@ -18,6 +18,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginTop: 15,
   },
+  btnsContainer: {
+    width: '90%',
+    flexDirection: 'row',
+    alignSelf: 'center',
+    justifyContent: 'space-between',
+    marginTop: 15,
+  },
   buttonLeft: {
     width: 30,
     height: 30,

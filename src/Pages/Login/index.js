@@ -16,6 +16,7 @@ import {getToken, validateToken} from '../../service/api';
 import {Context} from '../../context';
 import * as Animatable from 'react-native-animatable';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Load from '../../Components/Load';
 
 const Login = ({navigation}) => {
   const {setId} = useContext(Context);
@@ -48,7 +49,6 @@ const Login = ({navigation}) => {
         const session_id = response.data.session_id;
         setId(session_id);
         await AsyncStorage.setItem('SessionId', session_id);
-        Keyboard.dismiss();
         setErrorHolder(false);
         onSubmit();
         navigation.reset({index: 0, routes: [{name: 'Tabs'}]});
