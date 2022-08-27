@@ -55,7 +55,7 @@ const Profile = ({navigation}) => {
 
   const Logout = async () => {
     await AsyncStorage.clear();
-    navigation.reset({index: 0, routes: [{name: 'Tabs'}]});
+    navigation.reset({index: 0, routes: [{name: 'Login'}]});
   };
 
   return (

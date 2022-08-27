@@ -97,8 +97,8 @@ const MoviePage = ({route, navigation}) => {
   };
 
   const rateMovie = async () => {
-    setUpdate(!udapte);
     await rate('movie', route.params.id, id, rating);
+    setUpdate(!udapte);
   };
 
   return movieDetails.backdrop_path && movieDetails.poster_path ? (

@@ -91,8 +91,8 @@ const SeriePage = ({route, navigation}) => {
   };
 
   const rateSeries = async () => {
-    setUpdate(!udapte);
     await rate('tv', route.params.id, id, rating);
+    setUpdate(!udapte);
   };
 
   return seriesDetails.backdrop_path && seriesDetails.poster_path ? (

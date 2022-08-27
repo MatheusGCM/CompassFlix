@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignSelf: 'center',
     marginTop: 16,
-    marginBottom: 20,
+    marginBottom: 15,
   },
   textInfo: {
     fontFamily: 'OpenSans-SemiBold',

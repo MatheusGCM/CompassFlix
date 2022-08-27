@@ -1,5 +1,12 @@
 import React, {useContext} from 'react';
-import {FlatList, Image, Text, TouchableOpacity, View} from 'react-native';
+import {
+  ActivityIndicator,
+  FlatList,
+  Image,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {Context} from '../../context';
 
 import styles from './style';
@@ -24,28 +31,59 @@ const Preview = ({dataFavorite, dataRated, focused, navigation}) => {
             <Text style={styles.buttonShowAll}>Ver tudo</Text>
           </TouchableOpacity>
         </View>
-        <FlatList
-          style={styles.center}
-          data={dataFavorite?.slice(0, 4)}
-          horizontal={true}
-          keyExtractor={item => String(item.id)}
-          renderItem={({item}) => (
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate(focused ? 'movieScreen' : 'seriesScreen', {
-                  screen: focused ? 'MoviePage' : 'SeriePage',
-                  params: {id: item.id},
-                })
-              }>
-              <Image
-                style={styles.imgFavorite}
-                source={{
-                  uri: `http://image.tmdb.org/t/p/w185/${item.poster_path}`,
-                }}
-              />
-            </TouchableOpacity>
-          )}
-        />
+        {dataFavorite ? (
+          <FlatList
+            ListEmptyComponent={() => (
+              <View
+                style={{
+                  height: 89,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                {focused ? (
+                  <Image source={require('../../assets/movieNotFocused.png')} />
+                ) : (
+                  <Image
+                    source={require('../../assets/seriesNotFocused.png')}
+                  />
+                )}
+              </View>
+            )}
+            style={styles.center}
+            data={dataFavorite?.slice(0, 4)}
+            horizontal={true}
+            keyExtractor={item => String(item.id)}
+            renderItem={({item}) => (
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate(
+                    focused ? 'movieScreen' : 'seriesScreen',
+                    {
+                      screen: focused ? 'MoviePage' : 'SeriePage',
+                      params: {id: item.id},
+                    },
+                  )
+                }>
+                <Image
+                  resizeMode="cover"
+                  style={styles.imgFavorite}
+                  source={{
+                    uri: `http://image.tmdb.org/t/p/w185/${item.poster_path}`,
+                  }}
+                />
+              </TouchableOpacity>
+            )}
+          />
+        ) : (
+          <View
+            style={{
+              height: 89,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <ActivityIndicator size={38} color={'#E9A6A6'} />
+          </View>
+        )}
       </View>
       <View style={styles.borderTop}>
         <View style={styles.containerBottom}>
@@ -63,34 +101,65 @@ const Preview = ({dataFavorite, dataRated, focused, navigation}) => {
             <Text style={styles.buttonShowAll}>Ver tudo</Text>
           </TouchableOpacity>
         </View>
-        <FlatList
-          style={styles.center}
-          data={dataRated?.slice(0, 5)}
-          horizontal={true}
-          keyExtractor={item => String(item.id)}
-          renderItem={({item}) => (
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate(focused ? 'movieScreen' : 'seriesScreen', {
-                  screen: focused ? 'MoviePage' : 'SeriePage',
-                  params: {id: item.id},
-                })
-              }>
-              <Image
-                style={styles.imgRated}
-                source={{
-                  uri: `http://image.tmdb.org/t/p/w185/${item.poster_path}`,
-                }}
-              />
-              <View style={styles.flexRow}>
-                <Image source={require('../../assets/starRated.png')} />
-                <Text style={styles.txtRating}>{`${item.rating?.toFixed(
-                  1,
-                )}/10`}</Text>
+        {dataRated ? (
+          <FlatList
+            ListEmptyComponent={() => (
+              <View
+                style={{
+                  height: 89,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                {focused ? (
+                  <Image source={require('../../assets/movieNotFocused.png')} />
+                ) : (
+                  <Image
+                    source={require('../../assets/seriesNotFocused.png')}
+                  />
+                )}
               </View>
-            </TouchableOpacity>
-          )}
-        />
+            )}
+            style={styles.center}
+            data={dataRated?.slice(0, 5)}
+            horizontal={true}
+            keyExtractor={item => String(item.id)}
+            renderItem={({item}) => (
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate(
+                    focused ? 'movieScreen' : 'seriesScreen',
+                    {
+                      screen: focused ? 'MoviePage' : 'SeriePage',
+                      params: {id: item.id},
+                    },
+                  )
+                }>
+                <Image
+                  resizeMode="center"
+                  style={styles.imgRated}
+                  source={{
+                    uri: `http://image.tmdb.org/t/p/w185/${item.poster_path}`,
+                  }}
+                />
+                <View style={styles.flexRow}>
+                  <Image source={require('../../assets/starRated.png')} />
+                  <Text style={styles.txtRating}>{`${item.rating?.toFixed(
+                    1,
+                  )}/10`}</Text>
+                </View>
+              </TouchableOpacity>
+            )}
+          />
+        ) : (
+          <View
+            style={{
+              height: 89,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <ActivityIndicator size={38} color={'#E9A6A6'} />
+          </View>
+        )}
       </View>
     </>
   );
