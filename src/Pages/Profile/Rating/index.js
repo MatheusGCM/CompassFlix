@@ -84,6 +84,8 @@ const Rating = ({navigation, route}) => {
             poster_path={item.poster_path}
             rated={true}
             rating={`${item.rating?.toFixed(1)}/10`}
+            movieFocused={route.params?.movieFocused}
+            item={item.id}
           />
         )}
       />

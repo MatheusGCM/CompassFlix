@@ -52,7 +52,7 @@ const Login = ({navigation}) => {
         await AsyncStorage.setItem('SessionId', session_id);
         setErrorHolder(false);
         onSubmit();
-        navigation.replace('Tabs');
+        navigation.reset({index: 0, routes: [{name: 'Tabs'}]});
         setEnabled(false);
       } else {
         onSubmit();
@@ -70,7 +70,7 @@ const Login = ({navigation}) => {
   const checkLogin = async () => {
     const userStorage = await AsyncStorage.getItem('SessionId');
     if (userStorage) {
-      navigation.navigate('Tabs');
+      navigation.reset({index: 0, routes: [{name: 'Tabs'}]});
       setId(userStorage);
     }
   };
