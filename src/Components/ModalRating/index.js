@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useState} from 'react';
 import {
   Modal,
   Text,
@@ -8,11 +8,9 @@ import {
   View,
 } from 'react-native';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
-import {Context} from '../../context';
 import styles from './style';
 
 const ModalRating = ({modalVisible, onPress, rate, rating, setRating}) => {
-  const {udapte, setUpdate} = useContext(Context);
   const [invalido, setInvalido] = useState(false);
 
   return (
@@ -28,9 +26,8 @@ const ModalRating = ({modalVisible, onPress, rate, rating, setRating}) => {
           <View style={styles.body}>
             <Text style={styles.title}>Faça a sua avaliação!</Text>
 
-            <View
-              style={{marginTop: 22, marginBottom: 10, alignItems: 'center'}}>
-              <View style={{flexDirection: 'row', marginBottom: 10}}>
+            <View style={styles.container}>
+              <View style={styles.boxContainer}>
                 <View style={styles.bodyinput}>
                   <EvilIcons
                     style={styles.icon}
@@ -81,7 +78,6 @@ const ModalRating = ({modalVisible, onPress, rate, rating, setRating}) => {
                 style={styles.btnOk}
                 onPress={() => {
                   if (rating >= 0.5 && rating <= 10 && rating % 0.5 === 0) {
-                    setUpdate(!udapte);
                     rate(rating);
                     setInvalido(false);
                     setRating('');

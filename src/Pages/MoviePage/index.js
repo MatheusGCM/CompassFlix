@@ -34,7 +34,6 @@ const MoviePage = ({route, navigation}) => {
   const [movieCredits, setMovieCredits] = useState({});
 
   const [fav, setFav] = useState();
-  // const [mockFavorite, setMockFavorite] = useState(false);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [rated, setRated] = useState();
@@ -98,6 +97,7 @@ const MoviePage = ({route, navigation}) => {
   };
 
   const rateMovie = async () => {
+    setUpdate(!udapte);
     await rate('movie', route.params.id, id, rating);
   };
 

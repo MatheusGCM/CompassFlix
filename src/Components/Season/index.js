@@ -3,13 +3,11 @@ import {Text, TouchableOpacity, View} from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import {getSeriesDetailsSeason} from '../../service/api';
 
-// import { Container } from './styles';
-
 const Season = ({
   id,
+  name,
   visible,
-  index,
-  seasonNumber,
+  season_number,
   seasonSelected,
   onPress,
 }) => {
@@ -18,18 +16,16 @@ const Season = ({
   useEffect(() => {
     if (visible) {
       const getResponseSeriesDetailsSeason = async () => {
-        const response = await getSeriesDetailsSeason(id, seasonNumber);
+        const response = await getSeriesDetailsSeason(id, season_number);
         setSeriesDetailsSeason(response.data.episodes);
       };
       getResponseSeriesDetailsSeason();
     } else {
       setSeriesDetailsSeason(null);
     }
-  }, [id, seasonNumber, visible]);
+  }, [id, season_number, visible]);
 
-  index++;
-
-  return (
+  return season_number !== 0 ? (
     <View>
       <View
         style={{
@@ -40,7 +36,7 @@ const Season = ({
           height: 42,
           borderRadius: 5,
           borderBottomColor:
-            visible && index === seasonSelected ? '#E9A6A6' : '#BFBFBF',
+            visible && season_number === seasonSelected ? '#E9A6A6' : '#BFBFBF',
           borderBottomWidth: 4,
           alignItems: 'center',
           marginBottom: 10,
@@ -52,12 +48,12 @@ const Season = ({
             fontSize: 14,
             marginEnd: 4,
           }}>
-          {`Temporada ${index}`}
+          {name}
         </Text>
         <TouchableOpacity onPress={onPress} activeOpacity={1}>
           <Feather
             name={
-              visible && index === seasonSelected
+              visible && season_number === seasonSelected
                 ? 'chevron-up'
                 : 'chevron-down'
             }
@@ -67,7 +63,7 @@ const Season = ({
         </TouchableOpacity>
       </View>
       {visible &&
-        index === seasonSelected &&
+        season_number === seasonSelected &&
         seriesDetailsSeason?.map(item => (
           <View
             key={String(item.id)}
@@ -86,9 +82,11 @@ const Season = ({
                 fontFamily: 'OpenSans-Bold',
                 fontSize: 12,
               }}>
-              {`T${String(seasonSelected).padStart(2, '0')} | E${String(
-                item.episode_number,
-              ).padStart(2, '0')}`}
+              {season_number !== 0
+                ? `T${String(seasonSelected).padStart(2, '0')} | E${String(
+                    item.episode_number,
+                  ).padStart(2, '0')}`
+                : `${name}`}
             </Text>
             <Text
               style={{
@@ -96,12 +94,16 @@ const Season = ({
                 fontFamily: 'OpenSans-Regular',
                 fontSize: 10,
               }}>
-              {item.name ? item.name : `Episódio ${item.episode_number}`}
+              {season_number !== 0
+                ? item.name
+                  ? item.name
+                  : `Episódio ${item.episode_number}`
+                : item.name}
             </Text>
           </View>
         ))}
     </View>
-  );
+  ) : null;
 };
 
 export default Season;

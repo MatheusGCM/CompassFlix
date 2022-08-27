@@ -4,15 +4,15 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import styles from '../Rating/styles';
 import {Context} from '../../../context';
 import {getFavoriteMovie, getFavoriteSeries} from '../../../service/api';
-import FavoriteMovies from '../../../Components/FavoriteMovies';
 import Load from '../../../Components/Load';
+import Midia from '../../../Components/Midia';
 
 const Favorites = ({navigation, route}) => {
   const {id, user} = useContext(Context);
   const [favorites, setFavorites] = useState();
 
   useEffect(() => {
-    if (route.params?.movieFocused) {
+    if (route.params?.focused) {
       const getResponseFavoriteMovies = async () => {
         const response = await getFavoriteMovie(id, user.id);
         setFavorites(response.data.results);
@@ -25,7 +25,7 @@ const Favorites = ({navigation, route}) => {
       };
       getResponseFavoriteSeries();
     }
-  }, [id, route.params?.movieFocused, user.id]);
+  }, [id, route.params?.focused, user.id]);
 
   return favorites ? (
     <View
@@ -55,7 +55,7 @@ const Favorites = ({navigation, route}) => {
                   fontSize: 20,
                   color: 'white',
                 }}>
-                {route.params?.movieFocused
+                {route.params?.focused
                   ? 'Filmes favoritos'
                   : 'Séries favoritas'}{' '}
                 de
@@ -80,7 +80,11 @@ const Favorites = ({navigation, route}) => {
         keyExtractor={item => String(item.id)}
         numColumns={4}
         renderItem={({item}) => (
-          <FavoriteMovies poster_path={item.poster_path} />
+          <Midia
+            poster_path={item.poster_path}
+            focused={route.params?.focused}
+            id={item.id}
+          />
         )}
       />
     </View>

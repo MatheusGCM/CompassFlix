@@ -19,6 +19,8 @@ const styles = StyleSheet.create({
     fontFamily: 'OpenSans-Bold',
     color: '#000000',
   },
+  container: {marginTop: 22, marginBottom: 10, alignItems: 'center'},
+  boxContainer: {flexDirection: 'row', marginBottom: 10},
   ratingbody: {
     flexDirection: 'row',
     alignItems: 'center',
