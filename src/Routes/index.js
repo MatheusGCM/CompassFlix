@@ -91,7 +91,6 @@ const Tabs = () => {
           height: 54,
           backgroundColor: '#454545',
           borderTopWidth: 0,
-          position: 'absolute',
         },
       })}>
       <Tab.Screen name="seriesScreen" component={SerieStackScreen} />

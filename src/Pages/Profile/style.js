@@ -4,7 +4,7 @@ const styles = StyleSheet.create({
   page: {
     flex: 1,
     backgroundColor: 'black',
-    alignItems: 'center',
+    // alignItems: 'center',
   },
   exitButton: {
     width: 58,
@@ -18,11 +18,50 @@ const styles = StyleSheet.create({
     backgroundColor: '#E9A6A6',
     borderRadius: 7,
   },
+  txtExit: {
+    color: '#000',
+    fontFamily: 'OpenSans-Bold',
+    fontSize: 10,
+    lineHeight: 12,
+  },
+  containerTop: {
+    flex: 1,
+    marginTop: 13,
+    alignItems: 'center',
+  },
+  imgAvatar: {
+    width: 78,
+    height: 78,
+    borderRadius: 100,
+  },
   userName: {
     fontFamily: 'OpenSans-Bold',
     fontSize: 18,
     color: 'white',
     lineHeight: 24,
+  },
+  containerRated: {
+    alignItems: 'center',
+    marginTop: 46,
+    height: 54,
+  },
+  txtNumberRated: {
+    color: '#9C4A8B',
+    fontSize: 24,
+    fontFamily: 'OpenSans-Bold',
+    lineHeight: 32,
+  },
+  txtRated: {
+    fontFamily: 'OpenSans-Regular',
+    color: 'white',
+    fontSize: 11,
+    lineHeight: 15,
+  },
+  flex1_25: {
+    flex: 1.75,
+  },
+  flexRow: {
+    flexDirection: 'row',
   },
   borderMidia: {
     width: '50%',

@@ -4,15 +4,15 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import styles from '../Rating/styles';
 import {Context} from '../../../context';
 import {getRatedMovie, getRatedSeries} from '../../../service/api';
-import FavoriteMovies from '../../../Components/FavoriteMovies';
 import Load from '../../../Components/Load';
+import Midia from '../../../Components/Midia';
 
 const Rating = ({navigation, route}) => {
   const {id, user} = useContext(Context);
   const [rated, setRated] = useState();
 
   useEffect(() => {
-    if (route.params?.movieFocused) {
+    if (route.params?.focused) {
       const getResponseRatedMovies = async () => {
         const response = await getRatedMovie(id, user.id);
         setRated(response.data.results);
@@ -25,7 +25,7 @@ const Rating = ({navigation, route}) => {
       };
       getResponseRatedSeries();
     }
-  }, [id, route.params?.movieFocused, user.id]);
+  }, [id, route.params?.focused, user.id]);
 
   return rated ? (
     <View
@@ -56,7 +56,7 @@ const Rating = ({navigation, route}) => {
                   color: 'white',
                   textAlign: 'center',
                 }}>
-                {route.params?.movieFocused
+                {route.params?.focused
                   ? 'Avaliações de filmes recentes de'
                   : 'Avaliações de séries recentes de'}
                 <Text
@@ -80,12 +80,13 @@ const Rating = ({navigation, route}) => {
         keyExtractor={item => String(item.id)}
         numColumns={4}
         renderItem={({item}) => (
-          <FavoriteMovies
+          <Midia
             poster_path={item.poster_path}
             rated={true}
             rating={`${item.rating?.toFixed(1)}/10`}
-            movieFocused={route.params?.movieFocused}
-            item={item.id}
+            focused={route.params?.focused}
+            navigation={navigation}
+            id={item.id}
           />
         )}
       />

@@ -9,38 +9,38 @@ import {
 } from 'react-native';
 import styles from './style';
 import {
-  getRatedSeries,
   getSeriesDetails,
-  getSeriesDetailsPlus,
-  postRatedFilm,
+  getAccountStates,
+  rate,
+  unmarkFavorite,
+  markFavorite,
 } from '../../service/api';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
 import Load from '../../Components/Load';
 import * as Animatable from 'react-native-animatable';
 import Season from '../../Components/Season';
-import EvaluateModal from './EvaluateModal';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import {Context} from '../../context';
-import Star from 'react-native-vector-icons/MaterialCommunityIcons';
+import ModalRating from '../../Components/ModalRating';
+import ButtonFavorite from '../../Components/ButtonFavorite';
 
 const SeriePage = ({route, navigation}) => {
+  const {id, user, udapte, setUpdate} = useContext(Context);
+
   const [seriesDetails, setSeriesDetails] = useState([]);
+
   const [visible, setVisible] = useState(false);
   const [seasonNumber, setSeasonNumber] = useState();
   const [seasonSelected, setSeasonSelected] = useState();
-  const [rated, setRated] = useState(false);
-  const {id, user, sucess, setSucess} = useContext(Context);
-  const [ratingValue, setRatingValue] = useState(0);
-  const [favorite, setFavorite] = useState(false);
-  const [favoriteSerie, setFavoriteSerie] = useState({});
 
   const [modalVisible, setModalVisible] = useState(false);
+  const [rated, setRated] = useState();
   const [rating, setRating] = useState(0);
 
-  const FavoriteSerie = async (media_type, media_id) => {
-    await postRatedFilm(id, user.id, media_type, media_id, !favorite);
-  };
+  const [fav, setFav] = useState();
+  // const [mockFavorite, setMockFavorite] = useState(false);
+
   useEffect(() => {
     const getResponseSeriesDetails = async () => {
       const [responseSeriesDetails] = await Promise.all([
@@ -51,32 +51,50 @@ const SeriePage = ({route, navigation}) => {
       }
     };
     getResponseSeriesDetails();
-  }, [route.params.id]);
 
-  useEffect(() => {
-    const getResponseRatedSeries = async () => {
-      const response = await getRatedSeries(id, user.id);
-      setFavoriteSerie(response.data);
-    };
-    getResponseRatedSeries();
-  }, [id, user.id, sucess]);
+    if (udapte) {
+      const getResponseFavorite = async () => {
+        const response = await getAccountStates('tv', route.params.id, id);
+        setFav(response.data.favorite);
+      };
+      getResponseFavorite();
+    } else {
+      const getResponseFavorite = async () => {
+        const response = await getAccountStates('tv', route.params.id, id);
+        setFav(response.data.favorite);
+      };
+      getResponseFavorite();
+    }
 
-  useEffect(() => {
-    const getResponseDetailedSeries = async () => {
-      if (seriesDetails.id) {
-        const response = await getSeriesDetailsPlus(seriesDetails.id, id);
-        if (response.data.rated.value > 0) {
-          setRatingValue(response.data.rated.value);
-          setRated(true);
-        }
-        if (response.data.favorite) {
-          setFavorite(response.data.favorite);
-          setRated(true);
-        }
-      }
-    };
-    getResponseDetailedSeries();
-  }, [id, seriesDetails.id, sucess]);
+    if (udapte) {
+      const getResponse = async () => {
+        const reponse = await getAccountStates('tv', route.params.id, id);
+        setRated(reponse.data.rated);
+      };
+      getResponse();
+    } else {
+      const getResponse = async () => {
+        const reponse = await getAccountStates('tv', route.params.id, id);
+        setRated(reponse.data.rated);
+      };
+      getResponse();
+    }
+  }, [id, route.params.id, udapte]);
+
+  const favorite = async () => {
+    setUpdate(!udapte);
+    if (fav) {
+      await unmarkFavorite(user.id, id, 'tv', route.params.id);
+    } else {
+      await markFavorite(user.id, id, 'tv', route.params.id);
+    }
+  };
+
+  const rateSeries = async () => {
+    setUpdate(!udapte);
+    await rate('tv', route.params.id, id, rating);
+  };
+
   return seriesDetails.backdrop_path && seriesDetails.poster_path ? (
     <View style={styles.container}>
       <ImageBackground
@@ -84,24 +102,14 @@ const SeriePage = ({route, navigation}) => {
         source={{
           uri: `http://image.tmdb.org/t/p/original/${seriesDetails.backdrop_path}`,
         }}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('HomeSerie')}
-          style={styles.buttonLeft}>
-          <Feather color="#000000" name="arrow-left" size={22} />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.buttonRight}
-          onPress={() => {
-            setSucess(!sucess);
-            setFavorite(favorite ? false : true);
-            FavoriteSerie('tv', seriesDetails.id);
-          }}>
-          <Star
-            name={favorite ? 'star' : 'star-outline'}
-            color={favorite ? 'red' : 'black'}
-            size={25}
-          />
-        </TouchableOpacity>
+        <View style={styles.btnsContainer}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('HomeSerie')}
+            style={styles.buttonLeft}>
+            <Feather color="#000000" name="arrow-left" size={22} />
+          </TouchableOpacity>
+          <ButtonFavorite onPress={favorite} favorite={fav} />
+        </View>
       </ImageBackground>
 
       <View style={styles.content}>
@@ -112,13 +120,16 @@ const SeriePage = ({route, navigation}) => {
               uri: `http://image.tmdb.org/t/p/original/${seriesDetails.poster_path}`,
             }}
           />
-          {ratingValue ? (
+          {rated ? (
             <TouchableOpacity
+              activeOpacity={1}
               style={styles.rated}
               onPress={() => {
                 setModalVisible(true);
               }}>
-              <Text style={styles.rated.text}>Sua nota: {ratingValue}/10</Text>
+              <Text style={styles.rated.text}>
+                Sua nota: {rated.value.toFixed(1)}/10
+              </Text>
 
               <View style={styles.icon}>
                 <EvilIcons name="pencil" size={10} />
@@ -126,6 +137,7 @@ const SeriePage = ({route, navigation}) => {
             </TouchableOpacity>
           ) : (
             <TouchableOpacity
+              activeOpacity={0.9}
               style={styles.rate}
               onPress={() => {
                 setModalVisible(true);
@@ -134,13 +146,16 @@ const SeriePage = ({route, navigation}) => {
             </TouchableOpacity>
           )}
 
-          <EvaluateModal
-            visible={modalVisible}
-            setModalVisible={setModalVisible}
-            setCurrentRating={setRating}
-            setRated={setRated}
-            seriesDetailsId={seriesDetails.id}
+          <ModalRating
+            modalVisible={modalVisible}
+            onPress={() => {
+              setModalVisible(!modalVisible);
+            }}
+            rating={rating}
+            setRating={value => setRating(value)}
+            rate={rateSeries}
           />
+
           <View style={styles.flex1}>
             <View style={styles.contentHeaderTop}>
               <Text style={styles.titleMovie}>{seriesDetails.name}</Text>

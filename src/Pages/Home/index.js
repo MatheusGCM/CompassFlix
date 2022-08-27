@@ -47,7 +47,7 @@ const Home = () => {
           {user.avatar?.tmdb.avatar_path ? (
             <Image
               source={{
-                uri: `http://image.tmdb.org/t/p/original/${user.avatar?.tmdb.avatar_path}`,
+                uri: `http://image.tmdb.org/t/p/w92/${user.avatar?.tmdb.avatar_path}`,
               }}
               style={{width: 44, height: 44, borderRadius: 100}}
             />
@@ -83,7 +83,7 @@ const Home = () => {
         ListFooterComponent={<Loading load={loading} />}
         renderItem={({item}) => (
           <Movies
-            text={`${item.vote_average}/10`}
+            text={`${item.vote_average.toFixed(1)}/10`}
             poster_path={item.poster_path}
             id={item.id}
             stack="MoviePage"

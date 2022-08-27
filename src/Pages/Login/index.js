@@ -1,7 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {
   ActivityIndicator,
-  Alert,
   Image,
   ImageBackground,
   Keyboard,

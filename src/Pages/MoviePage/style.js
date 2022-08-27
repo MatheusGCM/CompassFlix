@@ -18,6 +18,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginTop: 15,
   },
+  btnsContainer: {
+    width: '90%',
+    flexDirection: 'row',
+    alignSelf: 'center',
+    justifyContent: 'space-between',
+    marginTop: 15,
+  },
   buttonLeft: {
     width: 30,
     height: 30,
@@ -26,7 +33,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-
   buttonRight: {
     width: 30,
     height: 30,
@@ -41,15 +47,32 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: 116,
     height: 22,
-    borderBottomLeftRadius: 6,
-    borderBottomRightRadius: 6,
-    marginTop: 130,
+    borderBottomLeftRadius: 7,
+    borderBottomRightRadius: 7,
+    marginTop: 120,
     position: 'absolute',
-
     text: {
       fontSize: 10,
       color: '#000000',
+      lineHeight: 13.62,
       textTransform: 'uppercase',
+      fontFamily: 'OpenSans-Bold',
+    },
+  },
+  rated: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 116,
+    height: 22,
+    borderBottomLeftRadius: 7,
+    borderBottomRightRadius: 7,
+    marginTop: 120,
+    position: 'absolute',
+    backgroundColor: '#8BE0EC',
+    text: {
+      fontSize: 10,
+      color: '#000000',
+      lineHeight: 13.62,
       fontFamily: 'OpenSans-Bold',
     },
   },
@@ -59,19 +82,15 @@ const styles = StyleSheet.create({
     marginStart: 15,
   },
   contentHeader: {
-    // flex: 1,
     height: '30%',
     flexDirection: 'row',
     marginBottom: 5,
-    // borderColor: 'red',
-    // borderWidth: 2,
   },
   posterMovie: {
     width: 116,
     height: 182,
     borderRadius: 7,
     marginEnd: 16,
-    borderWidth: 2,
     top: -50,
   },
   contentHeaderTop: {
@@ -176,23 +195,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginBottom: 10,
   },
-  rated: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: 116,
-    height: 22,
-    borderBottomLeftRadius: 6,
-    borderBottomRightRadius: 6,
-    marginTop: 130,
-    position: 'absolute',
-    backgroundColor: '#8BE0EC',
-    text: {
-      fontSize: 10,
-      color: '#000000',
-      textTransform: 'uppercase',
-      fontFamily: 'OpenSans-Bold',
-    },
-  },
+
   icon: {
     position: 'absolute',
     top: -4,
