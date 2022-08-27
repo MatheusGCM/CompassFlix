@@ -1,29 +1,38 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {View, Text, FlatList, Image} from 'react-native';
+import {View, FlatList} from 'react-native';
 import Movies from '../../Components/Movies';
 import styles from './style';
-import {getAccount, getMovies} from '../../service/api';
+import {getAccount, getMovies, getSeries} from '../../service/api';
 import {Context} from '../../context';
 import Loading from '../../Components/Loading';
 import Load from '../../Components/Load';
-import Icon from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Avatar from '../../Components/Avatar';
+import Greeting from '../../Components/Greeting';
+import Series from '../../Components/Series';
 
-const Home = () => {
+const Home = ({route}) => {
   const {id, user, setUser} = useContext(Context);
 
   const [page, setPage] = useState(1);
 
   const [loading, setLoading] = useState(false);
   const [dataMovies, setDataMovies] = useState([]);
-  const getResponseMovies = async () => {
+  const [dataSeries, setDataSeries] = useState([]);
+
+  const getResponse = async () => {
     if (loading) {
       return;
     }
     setLoading(true);
 
-    const response = await getMovies(page);
-    setDataMovies([...dataMovies, ...response.data.results]);
+    if (route.name === 'HomeMovie') {
+      const response = await getMovies(page);
+      setDataMovies([...dataMovies, ...response.data.results]);
+    } else {
+      const response = await getSeries(page);
+      setDataSeries([...dataSeries, ...response.data.results]);
+    }
     setPage(page + 1);
     setLoading(false);
   };
@@ -37,58 +46,41 @@ const Home = () => {
   }, [id, setUser]);
 
   useEffect(() => {
-    getResponseMovies();
+    getResponse();
   }, []);
 
   return user && dataMovies ? (
     <View style={styles.container}>
       <View style={styles.header}>
-        <View style={styles.header_avatar}>
-          {user.avatar?.tmdb.avatar_path ? (
-            <Image
-              source={{
-                uri: `http://image.tmdb.org/t/p/w92/${user.avatar?.tmdb.avatar_path}`,
-              }}
-              style={{width: 44, height: 44, borderRadius: 100}}
-            />
-          ) : (
-            <View>
-              <Icon
-                name="person-circle"
-                color="rgba(255,255,255,0.4)"
-                size={44}
-              />
-            </View>
-          )}
-        </View>
-        <View style={styles.row}>
-          <Text style={styles.header_title}>Olá,</Text>
-          <Text style={styles.header_label}>{user.name}</Text>
-          <Text style={styles.header_text}>!</Text>
-        </View>
-        <Text style={styles.header_description}>
-          Reveja ou acompanhe os filmes que você assistiu...
-        </Text>
+        <Avatar user={user} />
+        <Greeting screen={route.name} user={user} />
       </View>
-      <View style={styles.container_header}>
-        <Text style={styles.title}>Filmes populares este mês</Text>
-      </View>
+
       <FlatList
         numColumns={4}
         contentContainerStyle={styles.contentContainerStyle}
-        data={dataMovies}
+        data={route.name === 'HomeMovie' ? dataMovies : dataSeries}
         keyExtractor={item => String(item.id)}
-        onEndReached={getResponseMovies}
+        onEndReached={getResponse}
         onEndReachedThreshold={0.1}
         ListFooterComponent={<Loading load={loading} />}
-        renderItem={({item}) => (
-          <Movies
-            text={`${item.vote_average.toFixed(1)}/10`}
-            poster_path={item.poster_path}
-            id={item.id}
-            stack="MoviePage"
-          />
-        )}
+        renderItem={({item}) =>
+          route.name === 'HomeMovie' ? (
+            <Movies
+              text={`${item.vote_average.toFixed(1)}/10`}
+              poster_path={item.poster_path}
+              id={item.id}
+              stack="MoviePage"
+            />
+          ) : (
+            <Series
+              text={`${item.vote_average.toFixed(1)}/10`}
+              poster_path={item.poster_path}
+              id={item.id}
+              stack="SeriePage"
+            />
+          )
+        }
       />
     </View>
   ) : (

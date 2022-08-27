@@ -5,7 +5,6 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Login from '../Pages/Login';
 import Home from '../Pages/Home';
 import MoviePage from '../Pages/MoviePage';
-import HomeSerie from '../Pages/HomeSerie';
 import SeriePage from '../Pages/SeriePage';
 import Profile from '../Pages/Profile';
 import Favorites from '../Pages/Profile/Favorites';
@@ -38,7 +37,7 @@ function MovieStackScreen() {
 function SerieStackScreen() {
   return (
     <HomeStack.Navigator screenOptions={{headerShown: false}}>
-      <HomeStack.Screen name="HomeSerie" component={HomeSerie} />
+      <HomeStack.Screen name="HomeSerie" component={Home} />
       <HomeStack.Screen name="SeriePage" component={SeriePage} />
     </HomeStack.Navigator>
   );
