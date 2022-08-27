@@ -28,7 +28,8 @@ const Season = ({
 
   return season_number !== 0 ? (
     <View>
-      <Animatable.View animation="slideInLeft"
+      <Animatable.View
+        animation="slideInLeft"
         style={{
           flexDirection: 'row',
           backgroundColor: 'rgba(255, 255, 255, 0.5)',
@@ -66,7 +67,9 @@ const Season = ({
       {visible &&
         season_number === seasonSelected &&
         seriesDetailsSeason?.map(item => (
-          <Animatable.View animation="fadeInDown"
+          <Animatable.View
+            animation="fadeInDown"
+            duration={800}
             key={String(item.id)}
             style={{
               backgroundColor: 'rgba(255, 255, 255, 0.5)',
