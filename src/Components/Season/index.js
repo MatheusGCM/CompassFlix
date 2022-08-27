@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import {getSeriesDetailsSeason} from '../../service/api';
+import * as Animatable from 'react-native-animatable';
 
 const Season = ({
   id,
@@ -27,7 +28,7 @@ const Season = ({
 
   return season_number !== 0 ? (
     <View>
-      <View
+      <Animatable.View animation="slideInLeft"
         style={{
           flexDirection: 'row',
           backgroundColor: 'rgba(255, 255, 255, 0.5)',
@@ -61,11 +62,11 @@ const Season = ({
             size={15}
           />
         </TouchableOpacity>
-      </View>
+      </Animatable.View>
       {visible &&
         season_number === seasonSelected &&
         seriesDetailsSeason?.map(item => (
-          <View
+          <Animatable.View animation="fadeInDown"
             key={String(item.id)}
             style={{
               backgroundColor: 'rgba(255, 255, 255, 0.5)',
@@ -100,7 +101,7 @@ const Season = ({
                   : `Episódio ${item.episode_number}`
                 : item.name}
             </Text>
-          </View>
+          </Animatable.View>
         ))}
     </View>
   ) : null;
