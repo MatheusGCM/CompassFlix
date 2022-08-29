@@ -129,7 +129,7 @@ const MoviePage = ({route, navigation}) => {
           />
           {rated ? (
             <TouchableOpacity
-              activeOpacity={1}
+              activeOpacity={0.5}
               style={styles.rated}
               onPress={() => {
                 setModalVisible(true);
@@ -144,7 +144,7 @@ const MoviePage = ({route, navigation}) => {
             </TouchableOpacity>
           ) : (
             <TouchableOpacity
-              activeOpacity={0.9}
+              activeOpacity={0.5}
               style={styles.rate}
               onPress={() => {
                 setModalVisible(true);

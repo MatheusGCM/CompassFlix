@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     height: 22,
     borderBottomLeftRadius: 7,
     borderBottomRightRadius: 7,
-    marginTop: 120,
+    marginTop: 130,
     position: 'absolute',
     text: {
       fontSize: 10,
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     height: 22,
     borderBottomLeftRadius: 7,
     borderBottomRightRadius: 7,
-    marginTop: 120,
+    marginTop: 130,
     position: 'absolute',
     backgroundColor: '#8BE0EC',
     text: {
