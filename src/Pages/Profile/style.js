@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
   },
   containerRated: {
     alignItems: 'center',
-    marginTop: 46,
+    marginTop: 30,
     height: 54,
   },
   txtNumberRated: {
@@ -111,6 +111,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff30',
     height: 0.1,
     marginTop: 20,
+  },
+  buttonListFilms: {
+    width: 140,
+    height: 35,
+    backgroundColor: '#6C7BFC',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 17,
+    borderRadius: 7,
+    borderWidth: 2,
+    borderColor: '#2456B6',
   },
 });
 
