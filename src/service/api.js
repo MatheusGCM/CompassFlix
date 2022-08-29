@@ -187,6 +187,7 @@ export const createListFilms = async (session_id, name, description) => {
       {
         name: name,
         description: description,
+        language: 'pt-BR',
       },
     )
     .catch(console.warn('Erro na api'));
@@ -225,7 +226,17 @@ export const deleteListFilm = async (session_id, media_id, list_id) => {
 
 export const getFilmsDetailsList = async list_id => {
   return api
-    .get(`https://api.themoviedb.org/3/list/${list_id}?api_key=${api.key}`)
+    .get(
+      `https://api.themoviedb.org/3/list/${list_id}?api_key=${api.key}&language=pt-BR`,
+    )
     .catch(console.warn('Erro na api'));
 };
 export default api;
+
+export const getUserList = async (account_id, session_id) => {
+  return api
+    .get(
+      `https://api.themoviedb.org/3/account/${account_id}/lists?api_key=${api_key}&language=pt-BR&session_id=${session_id}&page=1`,
+    )
+    .catch(console.warn('Erro na api'));
+};
