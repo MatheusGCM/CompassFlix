@@ -1,9 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {
   ActivityIndicator,
-  FlatList,
   Image,
-  Modal,
   Text,
   TouchableOpacity,
   TouchableWithoutFeedback,
@@ -20,10 +18,11 @@ import {
 import {Context} from '../../context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ModalExit from '../../Components/ModalExit';
+import Preview from '../../Components/Preview';
 
 const Profile = ({navigation}) => {
-  const {id, user, sucess} = useContext(Context);
-  const [movieFocused, setMovieFocused] = useState(true);
+  const {id, user, udapte} = useContext(Context);
+  const [focused, setFocused] = useState(true);
   const [modalExit, setModalExit] = useState(false);
   const [favMovie, setFavMovie] = useState({});
   const [favSeries, setFavSeries] = useState({});
@@ -47,15 +46,16 @@ const Profile = ({navigation}) => {
       const response = await getRatedSeries(id, user.id);
       setRatedSeries(response.data);
     };
+
     getResponseRatedMovies();
     getResponseRatedSeries();
     getResponseFavoriteMovies();
     getResponseFavoriteSeries();
-  }, [id, user.id, sucess]);
+  }, [id, user.id, udapte]);
 
   const Logout = async () => {
     await AsyncStorage.clear();
-    navigation.replace('Login');
+    navigation.reset({index: 0, routes: [{name: 'Login'}]});
   };
 
   return (
@@ -65,32 +65,20 @@ const Profile = ({navigation}) => {
         style={styles.exitButton}
         onPress={() => setModalExit(!modalExit)}>
         <Icon name="exit-outline" size={15} color="#000" />
-        <Text
-          style={{
-            color: '#000',
-            fontFamily: 'OpenSans-Bold',
-            fontSize: 10,
-            lineHeight: 12,
-          }}>
-          Sair
-        </Text>
+        <Text style={styles.txtExit}>Sair</Text>
       </TouchableOpacity>
       <ModalExit
         modalExit={modalExit}
         onPress={() => setModalExit(!modalExit)}
         logout={Logout}
       />
-      <View
-        style={{
-          marginTop: 13,
-          alignItems: 'center',
-        }}>
+      <View style={styles.containerTop}>
         {user.avatar?.tmdb.avatar_path ? (
           <Image
             source={{
-              uri: `http://image.tmdb.org/t/p/original/${user.avatar?.tmdb.avatar_path}`,
+              uri: `http://image.tmdb.org/t/p/w92/${user.avatar?.tmdb.avatar_path}`,
             }}
-            style={{width: 78, height: 78, borderRadius: 100}}
+            style={styles.imgAvatar}
           />
         ) : (
           <View>
@@ -103,40 +91,36 @@ const Profile = ({navigation}) => {
         )}
 
         <Text style={styles.userName}>{user.name}</Text>
-        <View style={{alignItems: 'center', marginTop: 46, height: 54}}>
-          {ratedMovie?.total_results + ratedSeries?.total_results ? (
-            <>
-              <Text
-                style={{
-                  color: '#9C4A8B',
-                  fontSize: 24,
-                  fontFamily: 'OpenSans-Bold',
-                  lineHeight: 32,
-                }}>
-                {ratedMovie?.total_results + ratedSeries?.total_results}
-              </Text>
-              <Text
-                style={{
-                  fontFamily: 'OpenSans-Regular',
-                  color: 'white',
-                  fontSize: 11,
-                  lineHeight: 15,
-                }}>
-                Avaliações
-              </Text>
-            </>
+        <View style={styles.containerRated}>
+          {ratedMovie?.total_results || ratedSeries?.total_results >= 0 ? (
+            focused ? (
+              <>
+                <Text style={styles.txtNumberRated}>
+                  {ratedMovie?.total_results}
+                </Text>
+                <Text style={styles.txtRated}>Avaliações</Text>
+              </>
+            ) : (
+              <>
+                <Text style={styles.txtNumberRated}>
+                  {ratedSeries?.total_results}
+                </Text>
+                <Text style={styles.txtRated}>Avaliações</Text>
+              </>
+            )
           ) : (
             <ActivityIndicator size="large" color="#E9A6A6" />
           )}
         </View>
-
-        <View style={{flexDirection: 'row', paddingTop: 22}}>
+      </View>
+      <View style={styles.flex1_25}>
+        <View style={styles.flexRow}>
           <View style={styles.borderMidia}>
             <TouchableWithoutFeedback
               onPress={() => {
-                setMovieFocused(true);
+                setFocused(true);
               }}>
-              {movieFocused ? (
+              {focused ? (
                 <Image
                   style={styles.imgMidia}
                   source={require('../../assets/movieColored.png')}
@@ -152,181 +136,38 @@ const Profile = ({navigation}) => {
           <View style={[styles.borderMidia, {borderEndWidth: 0}]}>
             <TouchableWithoutFeedback
               onPress={() => {
-                setMovieFocused(false);
+                setFocused(false);
               }}>
-              {!movieFocused ? (
+              {focused ? (
                 <Image
                   style={styles.imgMidia}
-                  source={require('../../assets/seriesColored.png')}
+                  source={require('../../assets/seriesNotFocused.png')}
                 />
               ) : (
                 <Image
                   style={styles.imgMidia}
-                  source={require('../../assets/seriesNotFocused.png')}
+                  source={require('../../assets/seriesColored.png')}
                 />
               )}
             </TouchableWithoutFeedback>
           </View>
         </View>
-      </View>
-      <View style={styles.boxMidia}>
-        {movieFocused ? (
-          <>
-            <Text style={styles.textInfo}>Filmes favoritos de {user.name}</Text>
-            <TouchableWithoutFeedback
-              onPress={() =>
-                navigation.navigate('Favorites', {
-                  movieFocused: movieFocused,
-                })
-              }>
-              <Text
-                style={{
-                  fontFamily: 'OpenSans-SemiBold',
-                  fontSize: 10,
-                  lineHeight: 12.26,
-                  color: '#E9A6A6',
-                }}>
-                Ver tudo
-              </Text>
-            </TouchableWithoutFeedback>
-          </>
-        ) : (
-          <>
-            <Text style={styles.textInfo}>Séries favoritas de {user.name}</Text>
-            <TouchableWithoutFeedback
-              onPress={() =>
-                navigation.navigate('Favorites', {
-                  movieFocused: movieFocused,
-                })
-              }>
-              <Text
-                style={{
-                  fontFamily: 'OpenSans-SemiBold',
-                  fontSize: 10,
-                  lineHeight: 12.26,
-                  color: '#E9A6A6',
-                }}>
-                Ver tudo
-              </Text>
-            </TouchableWithoutFeedback>
-          </>
-        )}
-      </View>
-      <View style={{height: 89, justifyContent: 'center'}}>
-        {favMovie?.results || favSeries?.results ? (
-          <FlatList
-            data={
-              movieFocused
-                ? favMovie?.results?.slice(0, 4)
-                : favSeries?.results?.slice(0, 4)
-            }
-            horizontal={true}
-            keyExtractor={item => String(item.id)}
-            renderItem={({item}) => (
-              <Image
-                style={{
-                  width: 67,
-                  height: 89,
-                  borderRadius: 7,
-                  marginEnd: 12,
-                }}
-                source={{
-                  uri: `http://image.tmdb.org/t/p/w185/${item.poster_path}`,
-                }}
-              />
-            )}
+        {focused ? (
+          <Preview
+            dataFavorite={favMovie.results}
+            dataRated={ratedMovie.results}
+            focused={focused}
+            navigation={navigation}
           />
         ) : (
-          <ActivityIndicator size="large" color="#E9A6A6" />
+          <Preview
+            dataFavorite={favSeries.results}
+            dataRated={ratedSeries.results}
+            focused={focused}
+            navigation={navigation}
+          />
         )}
       </View>
-      <View style={styles.line} />
-      <View style={styles.boxMidia}>
-        {movieFocused ? (
-          <>
-            <Text style={styles.textInfo}>
-              Avaliações de filmes recentes de {user.name}
-            </Text>
-            <TouchableWithoutFeedback
-              onPress={() =>
-                navigation.navigate('Rating', {
-                  movieFocused: movieFocused,
-                })
-              }>
-              <Text
-                style={{
-                  fontFamily: 'OpenSans-SemiBold',
-                  fontSize: 10,
-                  lineHeight: 12.26,
-                  color: '#E9A6A6',
-                }}>
-                Ver tudo
-              </Text>
-            </TouchableWithoutFeedback>
-          </>
-        ) : (
-          <>
-            <Text style={styles.textInfo}>
-              Avaliações de séries recentes de {user.name}
-            </Text>
-            <TouchableWithoutFeedback
-              onPress={() =>
-                navigation.navigate('Rating', {
-                  movieFocused: movieFocused,
-                })
-              }>
-              <Text
-                style={{
-                  fontFamily: 'OpenSans-SemiBold',
-                  fontSize: 10,
-                  lineHeight: 12.26,
-                  color: '#E9A6A6',
-                }}>
-                Ver tudo
-              </Text>
-            </TouchableWithoutFeedback>
-          </>
-        )}
-      </View>
-      {ratedMovie?.results || ratedSeries?.results ? (
-        <FlatList
-          data={
-            movieFocused
-              ? ratedMovie?.results?.slice(0, 5)
-              : ratedSeries?.results?.slice(0, 5)
-          }
-          keyExtractor={item => String(item.id)}
-          horizontal={true}
-          renderItem={({item}) => (
-            <View>
-              <Image
-                style={{width: 58, height: 82, borderRadius: 7, marginEnd: 12}}
-                source={{
-                  uri: `http://image.tmdb.org/t/p/w185/${item.poster_path}`,
-                }}
-              />
-              <View style={{flexDirection: 'row'}}>
-                <Icon name="star" color="#EC2626" size={10} />
-                <Text
-                  style={{
-                    fontSize: 8,
-                    color: '#fff',
-                    marginLeft: 4.5,
-                    fontFamily: 'OpenSans-SemiBold',
-                  }}>{`${item.rating?.toFixed(1)}/10`}</Text>
-              </View>
-            </View>
-          )}
-        />
-      ) : (
-        <View
-          style={{
-            height: 82,
-            justifyContent: 'center',
-          }}>
-          <ActivityIndicator size="large" color="#E9A6A6" />
-        </View>
-      )}
     </View>
   );
 };

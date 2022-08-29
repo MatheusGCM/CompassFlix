@@ -1,5 +1,4 @@
 import axios from 'axios';
-import {Alert} from 'react-native';
 
 const api_key = '53324f99056d3d75ddf758aad3ec3855';
 const api = axios.create({
@@ -104,36 +103,6 @@ export const getRatedSeries = async (session_id, id) => {
     });
 };
 
-export const postRatedFilm = async (
-  session_id,
-  id,
-  media_type,
-  media_id,
-  favorite,
-) => {
-  return api
-    .post(
-      `/account/${id}/favorite?api_key=${api_key}&session_id=${session_id}`,
-      {
-        media_type: media_type,
-        media_id: media_id,
-        favorite: favorite,
-      },
-    )
-    .catch(error => {
-      console.warn('error na api');
-    });
-};
-
-export const postRatingFilm = async (movie_id, session_id, value) => {
-  return api.post(
-    `/movie/${movie_id}/rating?api_key=${api_key}&session_id=${session_id}`,
-    {
-      value: value,
-    },
-  );
-};
-
 // Requisições das series
 
 export const getSeries = async page => {
@@ -158,29 +127,57 @@ export const getSeriesDetailsSeason = async (id, season) => {
     });
 };
 
-export const getMovieDetailsPlus = async (movie_id, id) => {
+export const rate = async (midia, movie_id, session_id, value) => {
   return api
-    .get(
-      `/movie/${movie_id}/account_states?api_key=${api_key}&session_id=${id}`,
+    .post(
+      `/${midia}/${movie_id}/rating?api_key=${api_key}&session_id=${session_id}`,
+      {
+        value: value,
+      },
     )
     .catch(error => {
-      console.warn('erro na api');
+      console.warn('Erro na avaliação');
     });
 };
 
-export const getSeriesDetailsPlus = async (serie_id, id) => {
-  return api.get(
-    `/tv/${serie_id}/account_states?api_key=${api_key}&session_id=${id}`,
-  );
+export const getAccountStates = async (midia, movie_id, session_id) => {
+  return api
+    .get(
+      `/${midia}/${movie_id}/account_states?api_key=${api_key}&session_id=${session_id}`,
+    )
+    .catch(error => {
+      console.warn('Erro na avaliação');
+    });
 };
 
-export const postRatingSerie = async (serie_id, session_id, value) => {
-  return api.post(
-    `/tv/${serie_id}/rating?api_key=${api_key}&session_id=${session_id}`,
-    {
-      value: value,
-    },
-  );
+export const markFavorite = async (userId, session_id, midia, midiaId) => {
+  return api
+    .post(
+      `/account/${userId}/favorite?api_key=${api_key}&session_id=${session_id}`,
+      {
+        media_type: midia,
+        media_id: midiaId,
+        favorite: true,
+      },
+    )
+    .catch(error => {
+      console.warn('Erro na avaliação');
+    });
+};
+
+export const unmarkFavorite = async (userId, session_id, midia, midiaId) => {
+  return api
+    .post(
+      `/account/${userId}/favorite?api_key=${api_key}&session_id=${session_id}`,
+      {
+        media_type: midia,
+        media_id: midiaId,
+        favorite: false,
+      },
+    )
+    .catch(error => {
+      console.warn('Erro na avaliação');
+    });
 };
 
 export default api;

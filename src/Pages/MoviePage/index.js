@@ -1,4 +1,4 @@
-import React, {memo, useContext, useEffect, useMemo, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   Image,
   Text,
@@ -12,35 +12,33 @@ import styles from './style';
 import {
   getMoviesDetails,
   getMovieCredits,
-  getRatedMovie,
-  getFavoriteMovie,
-  postRatedFilm,
-  getMovieDetailsPlus,
+  rate,
+  getAccountStates,
+  markFavorite,
+  unmarkFavorite,
 } from '../../service/api';
 import Icon from 'react-native-vector-icons/AntDesign';
-import Feather from 'react-native-vector-icons/Feather';
+import ArrowLeft from 'react-native-vector-icons/Feather';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Cast from '../../Components/Cast';
 import Load from '../../Components/Load';
 import * as Animatable from 'react-native-animatable';
-import EvaluateModal from './EvaluateModal';
-import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import ModalRating from '../../Components/ModalRating';
 import {Context} from '../../context';
-import Star from 'react-native-vector-icons/MaterialCommunityIcons';
+import ButtonFavorite from '../../Components/ButtonFavorite';
 
 const MoviePage = ({route, navigation}) => {
+  const {id, user, udapte, setUpdate} = useContext(Context);
+
   const [movieDetails, setMovieDetails] = useState([]);
   const [movieCredits, setMovieCredits] = useState({});
-  const [rated, setRated] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [rating, setRating] = useState(false);
-  const [ratingValue, setRatingValue] = useState(0);
-  const {id, user, sucess, setSucess} = useContext(Context);
-  const [favorite, setFavorite] = useState(false);
-  const [movieFavorites, setMovieFavorites] = useState({});
 
-  const FavoriteFilm = async (media_type, media_id) => {
-    await postRatedFilm(id, user.id, media_type, media_id, !favorite);
-  };
+  const [fav, setFav] = useState();
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const [rated, setRated] = useState();
+  const [rating, setRating] = useState(0);
+
   useEffect(() => {
     const getResponseMovieDetails = async () => {
       const [responseMoviesDetails, responseMovieCredits] = await Promise.all([
@@ -55,26 +53,54 @@ const MoviePage = ({route, navigation}) => {
       }
     };
     getResponseMovieDetails();
-  }, [route.params.id]);
 
-  useEffect(() => {
-    const getResponseDetailedMovie = async () => {
-      if (movieDetails.id) {
-        const response = await getMovieDetailsPlus(movieDetails.id, id);
-        if (response.data.rated.value > 0) {
-          setRatingValue(response.data.rated.value);
-          setRated(true);
-        }
-        if (response.data.favorite) {
-          setFavorite(response.data.favorite);
-        }
-      }
-    };
-    getResponseDetailedMovie();
-  }, [id, movieDetails.id, sucess]);
+    if (udapte) {
+      const getResponseFavorite = async () => {
+        const response = await getAccountStates('movie', route.params.id, id);
+        setFav(response.data.favorite);
+      };
+      getResponseFavorite();
+    } else {
+      const getResponseFavorite = async () => {
+        const response = await getAccountStates('movie', route.params.id, id);
+        setFav(response.data.favorite);
+      };
+      getResponseFavorite();
+    }
+
+    if (udapte) {
+      const getResponseRated = async () => {
+        const reponse = await getAccountStates('movie', route.params.id, id);
+        setRated(reponse.data.rated);
+      };
+      getResponseRated();
+    } else {
+      const getResponseRated = async () => {
+        const reponse = await getAccountStates('movie', route.params.id, id);
+        setRated(reponse.data.rated);
+      };
+      getResponseRated();
+    }
+  }, [id, route.params.id, udapte]);
+
   const Directing = movieCredits.crew?.find(
     element => element.job === 'Director',
   )?.name;
+
+  const favorite = async () => {
+    setUpdate(!udapte);
+    if (fav) {
+      await unmarkFavorite(user.id, id, 'movie', route.params.id);
+    } else {
+      await markFavorite(user.id, id, 'movie', route.params.id);
+    }
+  };
+
+  const rateMovie = async () => {
+    await rate('movie', route.params.id, id, rating);
+    setUpdate(!udapte);
+  };
+
   return movieDetails.backdrop_path && movieDetails.poster_path ? (
     <View style={styles.container}>
       <ImageBackground
@@ -82,24 +108,15 @@ const MoviePage = ({route, navigation}) => {
         source={{
           uri: `http://image.tmdb.org/t/p/original/${movieDetails.backdrop_path}`,
         }}>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={styles.buttonLeft}>
-          <Feather color="#000000" name="arrow-left" size={22} />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.buttonRight}
-          onPress={() => {
-            setSucess(!sucess);
-            setFavorite(favorite ? false : true);
-            FavoriteFilm('movie', movieDetails.id);
-          }}>
-          <Star
-            name={favorite ? 'star' : 'star-outline'}
-            color={favorite ? 'red' : 'black'}
-            size={25}
-          />
-        </TouchableOpacity>
+        <View style={styles.btnsContainer}>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={() => navigation.goBack()}
+            style={styles.buttonLeft}>
+            <ArrowLeft color="#000000" name="arrow-left" size={22} />
+          </TouchableOpacity>
+          <ButtonFavorite onPress={favorite} favorite={fav} />
+        </View>
       </ImageBackground>
 
       <View style={styles.content}>
@@ -110,13 +127,16 @@ const MoviePage = ({route, navigation}) => {
               uri: `http://image.tmdb.org/t/p/original/${movieDetails.poster_path}`,
             }}
           />
-          {ratingValue ? (
+          {rated ? (
             <TouchableOpacity
+              activeOpacity={0.5}
               style={styles.rated}
               onPress={() => {
                 setModalVisible(true);
               }}>
-              <Text style={styles.rated.text}>Sua nota: {ratingValue}/10</Text>
+              <Text style={styles.rated.text}>
+                Sua nota: {rated.value.toFixed(1)}/10
+              </Text>
 
               <View style={styles.icon}>
                 <EvilIcons name="pencil" size={10} />
@@ -124,6 +144,7 @@ const MoviePage = ({route, navigation}) => {
             </TouchableOpacity>
           ) : (
             <TouchableOpacity
+              activeOpacity={0.5}
               style={styles.rate}
               onPress={() => {
                 setModalVisible(true);
@@ -132,13 +153,16 @@ const MoviePage = ({route, navigation}) => {
             </TouchableOpacity>
           )}
 
-          <EvaluateModal
-            visible={modalVisible}
-            setModalVisible={setModalVisible}
-            setCurrentRating={setRating}
-            setRated={setRated}
-            movieDetailsId={movieDetails.id}
+          <ModalRating
+            modalVisible={modalVisible}
+            onPress={() => {
+              setModalVisible(!modalVisible);
+            }}
+            rating={rating}
+            setRating={value => setRating(value)}
+            rate={rateMovie}
           />
+
           <View style={styles.flex1}>
             <View style={styles.contentHeaderTop}>
               <Text style={styles.titleMovie}>{movieDetails.title}</Text>

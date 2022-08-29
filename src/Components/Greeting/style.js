@@ -1,20 +1,8 @@
 import {StyleSheet} from 'react-native';
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#000',
-  },
-  header: {
-    flexDirection: 'column',
-    marginLeft: 14,
-    marginBottom: 21,
-    marginTop: 16,
-  },
-  header_avatar: {
-    alignItems: 'flex-end',
-    marginEnd: 19,
-    marginBottom: 5,
+  row: {
+    flexDirection: 'row',
   },
   header_title: {
     fontSize: 18,
@@ -38,22 +26,14 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     fontFamily: 'OpenSans-Regular',
   },
-  container_header: {
-    marginBottom: 30,
-    marginLeft: 14,
+  marginBottom: {
+    marginBottom: 21,
   },
   title: {
     fontSize: 16,
     color: '#fff',
     fontWeight: '600',
     fontFamily: 'OpenSans-Regular',
-  },
-  row: {
-    flexDirection: 'row',
-  },
-  contentContainerStyle: {
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 });
 

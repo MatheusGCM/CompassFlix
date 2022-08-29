@@ -19,10 +19,13 @@ const styles = StyleSheet.create({
     fontFamily: 'OpenSans-Bold',
     color: '#000000',
   },
+  container: {marginTop: 22, marginBottom: 10, alignItems: 'center'},
+  boxContainer: {flexDirection: 'row', marginBottom: 10},
   ratingbody: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 25,
+    marginTop: 22,
+    marginBottom: 30,
   },
   bodyinput: {
     width: '28%',
@@ -46,8 +49,8 @@ const styles = StyleSheet.create({
     color: '#000000',
   },
   invalidnumber: {
-    margin: 10,
-    fontSize: 12,
+    fontSize: 10,
+    // lineHeight: 12,
     fontFamily: 'OpenSans-Regular',
     color: '#EC2626',
   },
