@@ -9,8 +9,8 @@ const {Navigator, Screen} = createNativeStackNavigator();
 const SerieStackScreen = () => {
   return (
     <Navigator screenOptions={{headerShown: false}}>
-      <Screen name="HomeMovie" component={Home} />
-      <Screen name="MoviePage" component={SeriePage} />
+      <Screen name="HomeSerie" component={Home} />
+      <Screen name="SeriePage" component={SeriePage} />
     </Navigator>
   );
 };
