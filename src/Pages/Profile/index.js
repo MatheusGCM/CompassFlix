@@ -91,6 +91,11 @@ const Profile = ({navigation}) => {
         )}
 
         <Text style={styles.userName}>{user.name}</Text>
+        <TouchableOpacity
+          style={styles.buttonListFilms}
+          onPress={() => navigation.navigate('ListPage')}>
+          <Text>Ver lista de filmes</Text>
+        </TouchableOpacity>
         <View style={styles.containerRated}>
           {ratedMovie?.total_results || ratedSeries?.total_results >= 0 ? (
             focused ? (
