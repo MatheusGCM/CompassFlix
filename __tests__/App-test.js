@@ -1,14 +1,8 @@
-/**
- * @format
- */
+import React, {useState} from 'react';
+import {render} from '@testing-library/react-native';
+import {Text, View} from 'react-native';
+import {EmailPasswordField} from '../src/Components/EmailPasswordField';
 
-import 'react-native';
-import React from 'react';
-import App from '../App';
-
-// Note: test renderer must be required after react-native.
-import renderer from 'react-test-renderer';
-
-it('renders correctly', () => {
-  renderer.create(<App />);
+test('campo senha faz algo', () => {
+  render(<EmailPasswordField />);
 });
