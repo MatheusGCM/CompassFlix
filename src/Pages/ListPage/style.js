@@ -13,6 +13,7 @@ export default StyleSheet.create({
     height: 30,
     borderRadius: 15,
     marginVertical: 35,
+    marginLeft: 3,
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'flex-start',

@@ -2,6 +2,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ListComponent from '../../Components/ListComponent';
+import Loading from '../../Components/Loading';
 import {Context} from '../../context';
 import {getUserList} from '../../service/api';
 import style from './style';
@@ -9,10 +10,12 @@ import style from './style';
 export default function ListPage({navigation}) {
   const {id, user, udapte} = useContext(Context);
   const [listFilms, setListFilms] = useState({});
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     const getResponseListMovies = async () => {
       const response = await getUserList(user.id, id);
       setListFilms(response.data);
+      setLoading(true);
     };
     getResponseListMovies();
   }, [id, user.id, udapte]);
@@ -25,7 +28,9 @@ export default function ListPage({navigation}) {
         <Icon name="ios-arrow-back" size={25} color="black" />
       </TouchableOpacity>
       <Text style={style.listText}>Minhas listas</Text>
-      {listFilms.results?.length > 0 ? (
+      {!loading ? (
+        <Loading load={loading} />
+      ) : listFilms.results?.length > 0 && loading ? (
         <ListComponent data={listFilms.results} />
       ) : (
         <View style={{flex: 1}}>
