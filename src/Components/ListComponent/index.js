@@ -29,93 +29,114 @@ export default function ListComponent(data) {
     setModalAddList(!modalAddList);
   };
   return (
-    <FlatList
-      data={data.data}
-      keyExtractor={item => String(item.id)}
-      ListFooterComponent={() => (
+    <>
+      <FlatList
+        data={data.data}
+        keyExtractor={item => String(item.id)}
+        ListFooterComponent={
+          data.data.length > 3
+            ? () => (
+                <TouchableOpacity
+                  style={style.buttonPlus}
+                  onPress={() => setModalAddList(!modalAddList)}>
+                  <PlusIcon name="plus" size={28} color="black" />
+                </TouchableOpacity>
+              )
+            : null
+        }
+        renderItem={({item}) => (
+          <View
+            style={{
+              width: '100%',
+              flexDirection: 'row',
+              paddingBottom: 16,
+            }}>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('ListFilmPage', {list_id: item.id})
+              }
+              style={{
+                backgroundColor: '#8F9AFC',
+                height: 100,
+                width: '88%',
+                flexGrow: 0,
+                paddingLeft: 37,
+                paddingVertical: 20,
+                borderBottomLeftRadius: 10,
+                borderTopLeftRadius: 10,
+                borderColor: '#E9A6A6',
+              }}>
+              <Text
+                style={{
+                  color: 'white',
+                  fontSize: 14,
+                  width: 120,
+                  fontFamily: 'OpenSans-Medium',
+                }}>
+                {item.name}
+              </Text>
+              <Text
+                style={{
+                  color: 'white',
+                  fontSize: 10,
+                  paddingTop: 14,
+                  fontFamily: 'OpenSans-Bold',
+                }}>
+                {item.item_count} filmes
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                setModalExit(!modalExit), setDeleteId(item.id);
+              }}
+              style={{
+                backgroundColor: '#E9A6A6',
+                borderColor: '#E9A6A6',
+                width: 40,
+                borderBottomRightRadius: 10,
+                borderTopRightRadius: 10,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <IconTrash name="trash" size={28} color="#EC26269C" />
+            </TouchableOpacity>
+            <ModalExit
+              modalExit={modalExit}
+              onPress={() => setModalExit(!modalExit)}
+              logout={() => getResponseDeleteList(deleteId)}
+              type={'RemoveList'}
+            />
+            <ModalAddList
+              modalAddList={modalAddList}
+              onPress={() => setModalAddList(!modalAddList)}
+              valueName={valueName}
+              setValueName={setValueName}
+              valueDescription={valueDescription}
+              setValueDescription={setValueDescription}
+              action={() => {
+                getResponseAddList(valueName, valueDescription),
+                  setValueName(''),
+                  setValueDescription('');
+              }}
+            />
+          </View>
+        )}
+      />
+      {data.data.length <= 3 && !modalAddList ? (
         <TouchableOpacity
-          style={style.buttonPlus}
+          style={{
+            display: 'flex',
+            backgroundColor: 'pink',
+            alignSelf: 'flex-end',
+            padding: 10,
+            marginBottom: 52,
+            marginRight: 18,
+            borderRadius: 100,
+          }}
           onPress={() => setModalAddList(!modalAddList)}>
           <PlusIcon name="plus" size={28} color="black" />
         </TouchableOpacity>
-      )}
-      renderItem={({item}) => (
-        <View
-          style={{
-            width: '100%',
-            flexDirection: 'row',
-            paddingBottom: 16,
-          }}>
-          <TouchableOpacity
-            onPress={() =>
-              navigation.navigate('ListFilmPage', {list_id: item.id})
-            }
-            style={{
-              backgroundColor: '#8F9AFC',
-              height: 100,
-              width: '88%',
-              flexGrow: 0,
-              paddingLeft: 37,
-              paddingVertical: 20,
-              borderBottomLeftRadius: 10,
-              borderTopLeftRadius: 10,
-              borderColor: '#E9A6A6',
-            }}>
-            <Text
-              style={{
-                color: 'white',
-                fontSize: 14,
-                width: 120,
-                fontFamily: 'OpenSans-Medium',
-              }}>
-              {item.name}
-            </Text>
-            <Text
-              style={{
-                color: 'white',
-                fontSize: 10,
-                paddingTop: 14,
-                fontFamily: 'OpenSans-Bold',
-              }}>
-              {item.item_count} filmes
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              setModalExit(!modalExit), setDeleteId(item.id);
-            }}
-            style={{
-              backgroundColor: '#E9A6A6',
-              borderColor: '#E9A6A6',
-              width: 40,
-              borderBottomRightRadius: 10,
-              borderTopRightRadius: 10,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <IconTrash name="trash" size={28} color="#EC26269C" />
-          </TouchableOpacity>
-          <ModalExit
-            modalExit={modalExit}
-            onPress={() => setModalExit(!modalExit)}
-            logout={() => getResponseDeleteList(deleteId)}
-            type={'RemoveList'}
-          />
-          <ModalAddList
-            modalAddList={modalAddList}
-            onPress={() => setModalAddList(!modalAddList)}
-            valueName={valueName}
-            setValueName={setValueName}
-            valueDescription={valueDescription}
-            setValueDescription={setValueDescription}
-            action={() => {
-              getResponseAddList(valueName, valueDescription),
-                setValueName(''),
-                setValueDescription('');
-            }}
-          />
-        </View>
-      )}
-    />
+      ) : null}
+    </>
   );
 }
