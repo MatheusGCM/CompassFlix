@@ -4,11 +4,15 @@ import IconTrash from 'react-native-vector-icons/EvilIcons';
 import {Context} from '../../context';
 import {deleteList} from '../../service/api';
 import ModalExit from '../ModalExit';
+import PlusIcon from 'react-native-vector-icons/Entypo';
+import style from './style';
+import ModalAddList from '../ModalAddList';
 
 export default function ListComponent(data) {
   const {id, udapte, setUpdate} = useContext(Context);
   const [modalExit, setModalExit] = useState(false);
-  console.log(udapte);
+  const [modalAddList, setModalAddList] = useState(false);
+  const [deleteId, setDeleteId] = useState('');
   const getResponseDeleteList = async list_id => {
     await deleteList(list_id, id);
     setUpdate(!udapte);
@@ -18,8 +22,20 @@ export default function ListComponent(data) {
     <FlatList
       data={data.data}
       keyExtractor={item => String(item.id)}
+      ListFooterComponent={() => (
+        <TouchableOpacity
+          style={style.buttonPlus}
+          onPress={() => setModalAddList(!modalAddList)}>
+          <PlusIcon name="plus" size={28} color="black" />
+        </TouchableOpacity>
+      )}
       renderItem={({item}) => (
-        <View style={{width: '100%', flexDirection: 'row'}}>
+        <View
+          style={{
+            width: '100%',
+            flexDirection: 'row',
+            paddingBottom: 16,
+          }}>
           <TouchableOpacity
             style={{
               backgroundColor: '#8F9AFC',
@@ -52,7 +68,9 @@ export default function ListComponent(data) {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => setModalExit(!modalExit)}
+            onPress={() => {
+              setModalExit(!modalExit), setDeleteId(item.id);
+            }}
             style={{
               backgroundColor: '#E9A6A6',
               borderColor: '#E9A6A6',
@@ -67,8 +85,13 @@ export default function ListComponent(data) {
           <ModalExit
             modalExit={modalExit}
             onPress={() => setModalExit(!modalExit)}
-            logout={() => getResponseDeleteList(item.id)}
+            logout={() => getResponseDeleteList(deleteId)}
             type={'RemoveList'}
+          />
+          <ModalAddList
+            modalAddList={modalAddList}
+            onPress={() => setModalAddList(!modalAddList)}
+            // action={() => ()}
           />
         </View>
       )}

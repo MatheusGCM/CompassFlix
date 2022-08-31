@@ -24,4 +24,13 @@ export default StyleSheet.create({
     fontFamily: 'OpenSans-SemiBold',
     marginBottom: 49,
   },
+  buttonPlus: {
+    display: 'flex',
+    backgroundColor: 'pink',
+    alignSelf: 'flex-end',
+    padding: 10,
+    marginRight: 10,
+    marginBottom: 10,
+    borderRadius: 100,
+  },
 });
