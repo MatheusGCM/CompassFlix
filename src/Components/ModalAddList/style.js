@@ -20,6 +20,7 @@ const styles = StyleSheet.create({
     lineHeight: 21,
     color: '#000',
     marginBottom: 17,
+    textAlign: 'center',
   },
   modalTxtMid: {
     fontSize: 13,
@@ -40,16 +41,16 @@ const styles = StyleSheet.create({
     cancelar: {
       width: 85,
       height: 20,
-      backgroundColor: '#000',
+      backgroundColor: '#fff',
       borderRadius: 5,
       alignItems: 'center',
       justifyContent: 'center',
+      borderWidth: 1,
     },
     sim: {
       width: 85,
       height: 20,
-      borderWidth: 1,
-      borderColor: '#000',
+      backgroundColor: '#000',
       borderRadius: 5,
       alignItems: 'center',
       justifyContent: 'center',
@@ -59,11 +60,11 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontFamily: 'OpenSans-Bold',
     lineHeight: 15,
-    color: '#000',
-    white: {
+    color: '#fff',
+    black: {
       fontSize: 10,
       fontFamily: 'OpenSans-Bold',
-      color: '#fff',
+      color: '#000',
     },
   },
 });

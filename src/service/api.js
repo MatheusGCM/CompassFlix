@@ -180,7 +180,7 @@ export const unmarkFavorite = async (userId, session_id, midia, midiaId) => {
     });
 };
 
-export const createListFilms = async (session_id, name, description) => {
+export const createListMovies = async (session_id, name, description) => {
   return api
     .post(
       `https://api.themoviedb.org/3/list?api_key=${api_key}&session_id=${session_id}`,
@@ -190,7 +190,9 @@ export const createListFilms = async (session_id, name, description) => {
         language: 'pt-BR',
       },
     )
-    .catch(console.warn('Erro na api'));
+    .catch(error => {
+      console.warn('Erro na api');
+    });
 };
 
 export const addMovieList = async (session_id, media_id, list_id) => {
@@ -215,7 +217,7 @@ export const removeMovieList = async (session_id, media_id, list_id) => {
     .catch(console.warn('Erro na api'));
 };
 
-export const getFilmsDetailsList = async list_id => {
+export const getMoviesDetailsList = async list_id => {
   return api
     .get(
       `https://api.themoviedb.org/3/list/${list_id}?api_key=${api.key}&language=pt-BR`,

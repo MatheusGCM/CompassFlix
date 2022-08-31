@@ -2,21 +2,31 @@ import React, {useContext, useState} from 'react';
 import {FlatList, Text, TouchableOpacity, View} from 'react-native';
 import IconTrash from 'react-native-vector-icons/EvilIcons';
 import {Context} from '../../context';
-import {deleteList} from '../../service/api';
+import {createListMovies, deleteList} from '../../service/api';
 import ModalExit from '../ModalExit';
 import PlusIcon from 'react-native-vector-icons/Entypo';
 import style from './style';
 import ModalAddList from '../ModalAddList';
+import {useNavigation} from '@react-navigation/native';
 
 export default function ListComponent(data) {
   const {id, udapte, setUpdate} = useContext(Context);
   const [modalExit, setModalExit] = useState(false);
   const [modalAddList, setModalAddList] = useState(false);
   const [deleteId, setDeleteId] = useState('');
+  const [valueName, setValueName] = useState('');
+  const [valueDescription, setValueDescription] = useState('');
+
+  const navigation = useNavigation();
   const getResponseDeleteList = async list_id => {
     await deleteList(list_id, id);
     setUpdate(!udapte);
     setModalExit(!modalExit);
+  };
+  const getResponseAddList = async (name, description) => {
+    await createListMovies(id, name, description);
+    setUpdate(!udapte);
+    setModalAddList(!modalAddList);
   };
   return (
     <FlatList
@@ -37,6 +47,9 @@ export default function ListComponent(data) {
             paddingBottom: 16,
           }}>
           <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('ListFilmPage', {list_id: item.id})
+            }
             style={{
               backgroundColor: '#8F9AFC',
               height: 100,
@@ -55,7 +68,7 @@ export default function ListComponent(data) {
                 width: 120,
                 fontFamily: 'OpenSans-Medium',
               }}>
-              {item.description}
+              {item.name}
             </Text>
             <Text
               style={{
@@ -91,7 +104,15 @@ export default function ListComponent(data) {
           <ModalAddList
             modalAddList={modalAddList}
             onPress={() => setModalAddList(!modalAddList)}
-            // action={() => ()}
+            valueName={valueName}
+            setValueName={setValueName}
+            valueDescription={valueDescription}
+            setValueDescription={setValueDescription}
+            action={() => {
+              getResponseAddList(valueName, valueDescription),
+                setValueName(''),
+                setValueDescription('');
+            }}
           />
         </View>
       )}

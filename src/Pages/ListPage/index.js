@@ -10,11 +10,11 @@ export default function ListPage({navigation}) {
   const {id, user, udapte} = useContext(Context);
   const [listFilms, setListFilms] = useState({});
   useEffect(() => {
-    const getResponseListFilms = async () => {
+    const getResponseListMovies = async () => {
       const response = await getUserList(user.id, id);
       setListFilms(response.data);
     };
-    getResponseListFilms();
+    getResponseListMovies();
   }, [id, user.id, udapte]);
 
   return (
