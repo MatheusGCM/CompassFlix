@@ -3,7 +3,7 @@ import {FlatList, Text, TouchableOpacity, View} from 'react-native';
 import ArrowBack from 'react-native-vector-icons/Ionicons';
 import Eye from 'react-native-vector-icons/Ionicons';
 import Pencil from 'react-native-vector-icons/EvilIcons';
-import {getFilmsDetailsList, removeMovieList} from '../../service/api';
+import {getMoviesDetailsList, removeMovieList} from '../../service/api';
 import Midia from '../../Components/Midia';
 import ModalExit from '../../Components/ModalExit';
 import {Context} from '../../context';
@@ -11,14 +11,14 @@ import {Context} from '../../context';
 export default function ListFilmPage({route, navigation}) {
   const {id, udapte, setUpdate} = useContext(Context);
   const [state, setState] = useState(false);
-  const [filmsDetailsList, setFilmsDetailsList] = useState([]);
+  const [moviesDetailsList, setMoviesDetailsList] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [filmSelected, setFilmSelected] = useState();
 
   useEffect(() => {
     const responseDetailsList = async () => {
-      const response = await getFilmsDetailsList(route.params.list_id);
-      setFilmsDetailsList(response.data);
+      const response = await getMoviesDetailsList(route.params.list_id);
+      setMoviesDetailsList(response.data);
     };
     responseDetailsList();
   }, [route.params.list_id, udapte]);
@@ -107,7 +107,7 @@ export default function ListFilmPage({route, navigation}) {
               lineHeight: 27,
               textAlign: 'center',
             }}>
-            {filmsDetailsList.name}
+            {moviesDetailsList.name}
           </Text>
         </View>
         <View style={{width: '95%'}}>
@@ -119,7 +119,7 @@ export default function ListFilmPage({route, navigation}) {
               lineHeight: 12,
               textAlign: 'justify',
             }}>
-            {filmsDetailsList.description}
+            {moviesDetailsList.description}
           </Text>
         </View>
         <View style={{width: '95%'}}>
@@ -127,7 +127,7 @@ export default function ListFilmPage({route, navigation}) {
             contentContainerStyle={{
               paddingTop: 30,
             }}
-            data={filmsDetailsList.items}
+            data={moviesDetailsList.items}
             keyExtractor={item => String(item.id)}
             numColumns={4}
             renderItem={({item}) => (
