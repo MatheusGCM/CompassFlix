@@ -139,6 +139,12 @@ const MoviePage = ({route, navigation}) => {
         <Text>Second</Text>
         <RadioButton value="second" />
       </View>
+      <View>
+      <TouchableOpacity
+      style={styles.btnSave}>
+        <Text style={styles.textSave}>Salvar</Text>
+      </TouchableOpacity>
+      </View>
     </RadioButton.Group>
           
           </View>

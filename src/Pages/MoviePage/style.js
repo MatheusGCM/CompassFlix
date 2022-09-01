@@ -244,6 +244,21 @@ const styles = StyleSheet.create({
     marginTop: 10,
     borderRadius: 20,
     backgroundColor: '#C4C4C4',
+  },
+  btnSave: {
+    alignSelf: 'center',
+    alignItems: 'center',
+    margin: 20,
+    padding: 10,
+    width: '25%',
+    borderRadius: 5,
+    backgroundColor: '#000'
+  },
+  textSave: {
+    textTransform: 'uppercase',
+    fontFamily: 'OpenSans-Bold',
+    fontSize: 10,
+    color: '#fff'
   }
 
 });
