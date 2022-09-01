@@ -9,6 +9,7 @@ import {
   ImageBackground,
   ScrollView,
   FlatList,
+  Modal
 } from 'react-native';
 import styles from './style';
 import {
@@ -43,6 +44,7 @@ const MoviePage = ({route, navigation}) => {
   const [rated, setRated] = useState();
   const [rating, setRating] = useState(0);
   const [value, setValue] = useState('');
+  const [modalVisibleSucess, setModalVisibleSucess] = useState(false);
 
   useEffect(() => {
     const getResponseMovieDetails = async () => {
@@ -131,16 +133,23 @@ const MoviePage = ({route, navigation}) => {
           <View style={styles.divisor} />
           <View>
           <RadioButton.Group value={value} onValueChange={newValue => setValue(newValue)}>
-        <View>
-        <Text>First</Text>
-        <RadioButton value="first" />
+        <View style={styles.radioBottomRow}>
+        <RadioButton color='#000' value="Filmes que mudaram a minha vida" />
+        <Text style={styles.textRadioBottom}>Filmes que mudaram a minha vida</Text>
+       
+      </View>
+      <View style={styles.radioBottomRow}>
+      <RadioButton color='#000' value="10 Melhores filmes de terror" />
+        <Text style={styles.textRadioBottom}>10 melhores filmes de terror</Text>
+        
+      </View>
+      <View style={styles.radioBottomRow}>
+      <RadioButton color='#000' value="Filmes para assistir e refletir" />
+        <Text style={styles.textRadioBottom}>FILMES PARA ASSISTIR E REFLETIR</Text>
+        
       </View>
       <View>
-        <Text>Second</Text>
-        <RadioButton value="second" />
-      </View>
-      <View>
-      <TouchableOpacity
+      <TouchableOpacity onPress={() => setModalVisibleSucess(true)} 
       style={styles.btnSave}>
         <Text style={styles.textSave}>Salvar</Text>
       </TouchableOpacity>
@@ -150,8 +159,39 @@ const MoviePage = ({route, navigation}) => {
           </View>
         </View>
       </BottomSheet>
+
     );
   };
+
+  
+  const modalListSucess = () => {
+    return (
+      <Modal
+        style={styles.modalContentSucess}
+        animationType="slide"
+        transparent={true}
+        visible={modalVisibleSucess}>
+        <View 
+          style={styles.modalContentSucess}>
+          <View
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginTop: 10,
+            }}>
+            <Text />
+            <Text>Lista atualizada com sucesso!</Text>
+            <TouchableOpacity  onPress={() => setModalVisibleSucess(false)} style={styles.btnSave}>
+              <Text style={styles.textSave}>Salvar</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+    );
+  };
+  
+
+
 
   return movieDetails.backdrop_path && movieDetails.poster_path ? (
     <View style={styles.container}>
@@ -286,6 +326,7 @@ const MoviePage = ({route, navigation}) => {
         </View>
       </View>
       {modalSalveFilme()}
+      {modalListSucess()}
 
     </View>
   ) : (

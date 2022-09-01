@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     backgroundColor: '#C4C4C4',
   },
-  
+
   modalContent: {
     flex: 1,
   },
@@ -259,6 +259,30 @@ const styles = StyleSheet.create({
     fontFamily: 'OpenSans-Bold',
     fontSize: 10,
     color: '#fff'
+  },
+
+  textRadioBottom: {
+    textTransform: 'uppercase',
+    fontFamily: 'OpenSans-Regular',
+    fontSize: 12,
+    color: '#000'
+
+  },
+  radioBottomRow:{
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+
+  },
+
+  modalContentSucess:{
+    marginTop: '50%',
+    marginLeft:'10%',
+    width:327,
+    height:166,
+    backgroundColor: '#fff',
+    borderRadius: 25,
+    
   }
 
 });
