@@ -204,6 +204,29 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     backgroundColor: '#C4C4C4',
   },
+  
+  modalContent: {
+    flex: 1,
+  },
+
+  modalViewHeaderTitle: {
+    color: '#000',
+    fontSize: 13,
+    fontFamily: 'OpenSans-Bold',
+  },
+  modalViewHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+  },
+  divisor: {
+    width: '100%',
+    marginTop: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#BEBEBE',
+  },
+
 });
 
 export default styles;

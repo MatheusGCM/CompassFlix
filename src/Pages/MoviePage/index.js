@@ -1,4 +1,6 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState, useRef} from 'react';
+import BottomSheet from '@gorhom/bottom-sheet';
+import { RadioButton} from 'react-native-paper';
 import {
   Image,
   Text,
@@ -29,6 +31,7 @@ import ButtonFavorite from '../../Components/ButtonFavorite';
 
 const MoviePage = ({route, navigation}) => {
   const {id, user, udapte, setUpdate} = useContext(Context);
+  const bottomSheetRef = useRef(BottomSheet);
 
   const [movieDetails, setMovieDetails] = useState([]);
   const [movieCredits, setMovieCredits] = useState({});
@@ -38,6 +41,7 @@ const MoviePage = ({route, navigation}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [rated, setRated] = useState();
   const [rating, setRating] = useState(0);
+  const [value, setValue] = useState('');
 
   useEffect(() => {
     const getResponseMovieDetails = async () => {
@@ -99,6 +103,47 @@ const MoviePage = ({route, navigation}) => {
   const rateMovie = async () => {
     await rate('movie', route.params.id, id, rating);
     setUpdate(!udapte);
+  };
+
+  function handleOpen() {
+    bottomSheetRef.current?.expand();
+  }
+
+  function handleClose() {
+    bottomSheetRef.current?.close();
+  }
+
+  const modalSalveFilme = () => {
+    return (
+      <BottomSheet
+        backgroundStyle={styles.modal}
+        handleIndicatorStyle={styles.indicator}
+        ref={bottomSheetRef}
+        snapPoints={[1, 280]}>
+        <View>
+          <View style={styles.modalViewHeader}>
+            <Text style={styles.modalViewHeaderTitle}>Salvar filme em...</Text>
+            <TouchableOpacity onPress={handleClose}>
+              <Icon name="close" color={'#000'} size={22} />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.divisor} />
+          <View>
+          <RadioButton.Group value={value} onValueChange={newValue => setValue(newValue)}>
+        <View>
+        <Text>First</Text>
+        <RadioButton value="first" />
+      </View>
+      <View>
+        <Text>Second</Text>
+        <RadioButton value="second" />
+      </View>
+    </RadioButton.Group>
+          
+          </View>
+        </View>
+      </BottomSheet>
+    );
   };
 
   return movieDetails.backdrop_path && movieDetails.poster_path ? (
@@ -179,6 +224,7 @@ const MoviePage = ({route, navigation}) => {
             </View>
 
             <View style={styles.contentHeaderBottom}>
+              
               <Text style={styles.voteAverageMovie}>
                 {movieDetails.vote_average?.toFixed(1)} / 10
               </Text>
@@ -195,7 +241,14 @@ const MoviePage = ({route, navigation}) => {
                     ? `${(movieDetails.popularity / 1000)?.toFixed(0)}K`
                     : movieDetails.popularity?.toFixed()}
                 </Text>
-              </View>
+              </View> 
+            </View>
+            <View>
+              <TouchableOpacity onPress={handleOpen}>
+                <Text style={styles.popularityMovie}>
+                  Adicionar a uma lista
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -223,6 +276,8 @@ const MoviePage = ({route, navigation}) => {
           />
         </View>
       </View>
+      {modalSalveFilme()}
+
     </View>
   ) : (
     <Load />
