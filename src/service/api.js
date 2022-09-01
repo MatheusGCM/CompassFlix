@@ -190,7 +190,7 @@ export const createListFilms = async (session_id, name, description) => {
         language: 'pt-BR',
       },
     )
-    .catch(console.warn('Erro na api'));
+    .catch(err => console.warn(err));
 };
 
 export const addMovieList = async (session_id, media_id, list_id) => {
@@ -201,18 +201,18 @@ export const addMovieList = async (session_id, media_id, list_id) => {
         media_id: media_id,
       },
     )
-    .catch(console.warn('Erro na api'));
+    .catch(err => console.warn(err));
 };
 
-export const removeMovieList = async (session_id, media_id, list_id) => {
+export const removeMovieList = async (list_id, session_id, media_id) => {
   return api
     .post(
-      `https://api.themoviedb.org/3/list/${list_id}/remove_item?api_key=${api_key}&session_id=${session_id}`,
+      `list/${list_id}/remove_item?api_key=${api_key}&session_id=${session_id}`,
       {
         media_id: media_id,
       },
     )
-    .catch(console.warn('Erro na api'));
+    .catch(err => console.warn(err));
 };
 
 export const getFilmsDetailsList = async list_id => {

@@ -1,14 +1,19 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {FlatList, Text, TouchableOpacity, View} from 'react-native';
 import ArrowBack from 'react-native-vector-icons/Ionicons';
 import Eye from 'react-native-vector-icons/Ionicons';
 import Pencil from 'react-native-vector-icons/EvilIcons';
-import {getFilmsDetailsList} from '../../service/api';
+import {getFilmsDetailsList, removeMovieList} from '../../service/api';
 import Midia from '../../Components/Midia';
+import ModalExit from '../../Components/ModalExit';
+import {Context} from '../../context';
 
 export default function ListFilmPage({route, navigation}) {
+  const {id, udapte, setUpdate} = useContext(Context);
   const [state, setState] = useState(false);
   const [filmsDetailsList, setFilmsDetailsList] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [filmSelected, setFilmSelected] = useState();
 
   useEffect(() => {
     const responseDetailsList = async () => {
@@ -16,7 +21,13 @@ export default function ListFilmPage({route, navigation}) {
       setFilmsDetailsList(response.data);
     };
     responseDetailsList();
-  }, [route.params.id]);
+  }, [route.params.id, udapte]);
+
+  const removeFilm = async () => {
+    await removeMovieList(route.params.id, id, filmSelected);
+    setUpdate(!udapte);
+    setModalVisible(!modalVisible);
+  };
   return (
     <View
       style={{
@@ -68,7 +79,7 @@ export default function ListFilmPage({route, navigation}) {
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-            <Eye name="eye" size={20} color={state ? '#000' : '#fff'} />
+            <Eye name="eye" size={16} color={state ? '#000' : '#fff'} />
           </TouchableOpacity>
           <TouchableOpacity
             activeOpacity={1}
@@ -81,7 +92,7 @@ export default function ListFilmPage({route, navigation}) {
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-            <Pencil name="pencil" size={22} color={state ? '#fff' : '#000'} />
+            <Pencil name="pencil" size={21} color={state ? '#fff' : '#000'} />
           </TouchableOpacity>
         </View>
       </View>
@@ -99,7 +110,7 @@ export default function ListFilmPage({route, navigation}) {
             {filmsDetailsList.name}
           </Text>
         </View>
-        <View style={{width: '95%', marginBottom: 27}}>
+        <View style={{width: '95%'}}>
           <Text
             style={{
               color: '#fff',
@@ -113,6 +124,9 @@ export default function ListFilmPage({route, navigation}) {
         </View>
         <View style={{width: '95%'}}>
           <FlatList
+            contentContainerStyle={{
+              paddingTop: 30,
+            }}
             data={filmsDetailsList.items}
             keyExtractor={item => String(item.id)}
             numColumns={4}
@@ -122,8 +136,17 @@ export default function ListFilmPage({route, navigation}) {
                 id={item.id}
                 focused={true}
                 state={state}
+                onPress={() => {
+                  setModalVisible(!modalVisible);
+                  setFilmSelected(item.id);
+                }}
               />
             )}
+          />
+          <ModalExit
+            modalExit={modalVisible}
+            onPress={() => setModalVisible(!modalVisible)}
+            logout={removeFilm}
           />
         </View>
       </View>
