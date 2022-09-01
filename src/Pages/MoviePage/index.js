@@ -22,6 +22,7 @@ import {
 import Icon from 'react-native-vector-icons/AntDesign';
 import ArrowLeft from 'react-native-vector-icons/Feather';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Cast from '../../Components/Cast';
 import Load from '../../Components/Load';
 import * as Animatable from 'react-native-animatable';
@@ -244,11 +245,13 @@ const MoviePage = ({route, navigation}) => {
               </View> 
             </View>
             <View>
-              <TouchableOpacity onPress={handleOpen}>
-                <Text style={styles.popularityMovie}>
-                  Adicionar a uma lista
-                </Text>
-              </TouchableOpacity>
+              <TouchableOpacity onPress={handleOpen}
+              style={styles.containerAdd}>
+              <View style={styles.btnAddList}>
+                <MaterialIcons name='add' size={22} color='#000' backgroundStyle='#fff' />
+              </View>
+              <Text style={styles.textAddList}>Adicionar a uma lista</Text>
+            </TouchableOpacity>
             </View>
           </View>
         </View>
