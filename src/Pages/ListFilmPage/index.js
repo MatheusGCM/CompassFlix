@@ -1,5 +1,12 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {FlatList, Text, TouchableOpacity, View} from 'react-native';
+import {
+  ActivityIndicator,
+  FlatList,
+  Image,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import ArrowBack from 'react-native-vector-icons/Ionicons';
 import Eye from 'react-native-vector-icons/Ionicons';
 import Pencil from 'react-native-vector-icons/EvilIcons';
@@ -123,26 +130,65 @@ export default function ListFilmPage({route, navigation}) {
           </Text>
         </View>
         <View style={{width: '95%'}}>
-          <FlatList
-            contentContainerStyle={{
-              paddingTop: 30,
-            }}
-            data={moviesDetailsList.items}
-            keyExtractor={item => String(item.id)}
-            numColumns={4}
-            renderItem={({item}) => (
-              <Midia
-                poster_path={item.poster_path}
-                id={item.id}
-                focused={true}
-                state={state}
-                onPress={() => {
-                  setModalVisible(!modalVisible);
-                  setFilmSelected(item.id);
-                }}
-              />
-            )}
-          />
+          {moviesDetailsList.items ? (
+            <FlatList
+              contentContainerStyle={{
+                height: '90%',
+                paddingTop: 30,
+              }}
+              data={moviesDetailsList.items}
+              keyExtractor={item => String(item.id)}
+              numColumns={4}
+              ListEmptyComponent={() => (
+                <TouchableOpacity
+                  activeOpacity={0.7}
+                  onPress={() => navigation.navigate('movieScreen')}
+                  style={{
+                    height: '70%',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <Image
+                    style={{width: 40, height: 40}}
+                    source={require('../../assets/movie.png')}
+                  />
+                  <Text
+                    style={{
+                      marginTop: 5,
+                      width: '50%',
+                      color: 'rgba(255,255,255,0.4)',
+                      fontSize: 14,
+                      fontFamily: 'OpenSans-Regular',
+                      textAlign: 'center',
+                    }}>
+                    Sem filmes na lista, clique para adicionar.
+                  </Text>
+                </TouchableOpacity>
+              )}
+              renderItem={({item}) => (
+                <Midia
+                  poster_path={item.poster_path}
+                  id={item.id}
+                  focused={true}
+                  state={state}
+                  onPress={() => {
+                    setModalVisible(!modalVisible);
+                    setFilmSelected(item.id);
+                  }}
+                />
+              )}
+            />
+          ) : (
+            <View
+              style={{
+                height: '80%',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <ActivityIndicator size={50} color="#EC2626" />
+            </View>
+          )}
+
           <ModalExit
             modalExit={modalVisible}
             onPress={() => setModalVisible(!modalVisible)}
