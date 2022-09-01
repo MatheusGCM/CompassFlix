@@ -217,10 +217,8 @@ export const removeMovieList = async (session_id, media_id, list_id) => {
 
 export const getFilmsDetailsList = async list_id => {
   return api
-    .get(
-      `https://api.themoviedb.org/3/list/${list_id}?api_key=${api.key}&language=pt-BR`,
-    )
-    .catch(err => console.log(err));
+    .get(`/list/${list_id}?api_key=${api_key}&language=en-US`)
+    .catch(err => console.warn(err));
 };
 export default api;
 
@@ -229,7 +227,7 @@ export const getUserList = async (account_id, session_id) => {
     .get(
       `https://api.themoviedb.org/3/account/${account_id}/lists?api_key=${api_key}&language=pt-BR&session_id=${session_id}&page=1`,
     )
-    .catch(err => console.log(err));
+    .catch(err => console.warn(err));
 };
 
 export const deleteList = async (list_id, session_id) => {
@@ -237,5 +235,5 @@ export const deleteList = async (list_id, session_id) => {
     .delete(
       `https://api.themoviedb.org/3/list/${list_id}?api_key=${api_key}&session_id=${session_id}`,
     )
-    .catch(err => console.log(err));
+    .catch(err => console.warn(err));
 };

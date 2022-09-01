@@ -1,3 +1,4 @@
+import {useNavigation} from '@react-navigation/native';
 import React, {useContext, useState} from 'react';
 import {FlatList, Text, TouchableOpacity, View} from 'react-native';
 import IconTrash from 'react-native-vector-icons/EvilIcons';
@@ -6,9 +7,10 @@ import {deleteList} from '../../service/api';
 import ModalExit from '../ModalExit';
 
 export default function ListComponent(data) {
+  const navigation = useNavigation();
   const {id, udapte, setUpdate} = useContext(Context);
   const [modalExit, setModalExit] = useState(false);
-  console.log(udapte);
+
   const getResponseDeleteList = async list_id => {
     await deleteList(list_id, id);
     setUpdate(!udapte);
@@ -21,6 +23,7 @@ export default function ListComponent(data) {
       renderItem={({item}) => (
         <View style={{width: '100%', flexDirection: 'row'}}>
           <TouchableOpacity
+            onPress={() => navigation.navigate('ListFilmPage', {id: item.id})}
             style={{
               backgroundColor: '#8F9AFC',
               height: 100,
