@@ -17,14 +17,14 @@ export default function ListFilmPage({route, navigation}) {
 
   useEffect(() => {
     const responseDetailsList = async () => {
-      const response = await getFilmsDetailsList(route.params.id);
+      const response = await getFilmsDetailsList(route.params.list_id);
       setFilmsDetailsList(response.data);
     };
     responseDetailsList();
-  }, [route.params.id, udapte]);
+  }, [route.params.list_id, udapte]);
 
   const removeFilm = async () => {
-    await removeMovieList(route.params.id, id, filmSelected);
+    await removeMovieList(route.params.list_id, id, filmSelected);
     setUpdate(!udapte);
     setModalVisible(!modalVisible);
   };
