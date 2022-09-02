@@ -30,14 +30,8 @@ export default function ListPage({navigation}) {
       <Text style={style.listText}>Minhas listas</Text>
       {!loading ? (
         <Loading load={loading} />
-      ) : listFilms.results?.length > 0 && loading ? (
-        <ListComponent data={listFilms.results} />
       ) : (
-        <View style={{flex: 1}}>
-          <Text style={{textAlign: 'center', color: 'white'}}>
-            Sem listas de filmes, Clique no botão Mais para criar uma lista
-          </Text>
-        </View>
+        <ListComponent data={listFilms.results} />
       )}
     </View>
   );

@@ -44,6 +44,14 @@ export default function ListComponent(data) {
               )
             : null
         }
+        ListEmptyComponent={
+          <View>
+            <Text style={{color: 'white', textAlign: 'center'}}>
+              Sem lista de filmes! Para adicionar uma nova lista clique no botão
+              mais
+            </Text>
+          </View>
+        }
         renderItem={({item}) => (
           <View style={style.flatListStyle}>
             <TouchableOpacity
@@ -61,25 +69,6 @@ export default function ListComponent(data) {
               style={style.buttonTrash}>
               <IconTrash name="trash" size={28} color="#EC26269C" />
             </TouchableOpacity>
-            <ModalExit
-              modalExit={modalExit}
-              onPress={() => setModalExit(!modalExit)}
-              logout={() => getResponseDeleteList(deleteId)}
-              type={'RemoveList'}
-            />
-            <ModalAddList
-              modalAddList={modalAddList}
-              onPress={() => setModalAddList(!modalAddList)}
-              valueName={valueName}
-              setValueName={setValueName}
-              valueDescription={valueDescription}
-              setValueDescription={setValueDescription}
-              action={() => {
-                getResponseAddList(valueName, valueDescription),
-                  setValueName(''),
-                  setValueDescription('');
-              }}
-            />
           </View>
         )}
       />
@@ -90,6 +79,25 @@ export default function ListComponent(data) {
           <PlusIcon name="plus" size={28} color="black" />
         </TouchableOpacity>
       ) : null}
+      <ModalExit
+        modalExit={modalExit}
+        onPress={() => setModalExit(!modalExit)}
+        logout={() => getResponseDeleteList(deleteId)}
+        type={'RemoveList'}
+      />
+      <ModalAddList
+        modalAddList={modalAddList}
+        onPress={() => setModalAddList(!modalAddList)}
+        valueName={valueName}
+        setValueName={setValueName}
+        valueDescription={valueDescription}
+        setValueDescription={setValueDescription}
+        action={() => {
+          getResponseAddList(valueName, valueDescription),
+            setValueName(''),
+            setValueDescription('');
+        }}
+      />
     </>
   );
 }
