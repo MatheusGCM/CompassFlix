@@ -35,6 +35,7 @@ export default function ListFilmPage({route, navigation}) {
     setUpdate(!udapte);
     setModalVisible(!modalVisible);
   };
+
   return (
     <View
       style={{
@@ -89,6 +90,7 @@ export default function ListFilmPage({route, navigation}) {
             <Eye name="eye" size={16} color={state ? '#000' : '#fff'} />
           </TouchableOpacity>
           <TouchableOpacity
+            disabled={!moviesDetailsList.items?.length}
             activeOpacity={1}
             onPress={() => setState(true)}
             style={{
@@ -165,17 +167,56 @@ export default function ListFilmPage({route, navigation}) {
                   </Text>
                 </TouchableOpacity>
               )}
-              renderItem={({item}) => (
-                <Midia
-                  poster_path={item.poster_path}
-                  id={item.id}
-                  focused={true}
-                  state={state}
-                  onPress={() => {
-                    setModalVisible(!modalVisible);
-                    setFilmSelected(item.id);
-                  }}
-                />
+              renderItem={({item, index}) => (
+                <View>
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate('movieScreen', {
+                        screen: 'MoviePage',
+                        params: {id: item.id},
+                      })
+                    }>
+                    <Image
+                      style={{
+                        marginEnd: (index + 1) % 4 == 0 ? 0 : 13,
+                        width: 80,
+                        height: 100,
+                        borderRadius: 10,
+                        marginBottom: 18,
+                      }}
+                      source={{
+                        uri: `http://image.tmdb.org/t/p/w154/${item.poster_path}`,
+                      }}
+                    />
+                  </TouchableOpacity>
+                  {state && (
+                    <TouchableOpacity
+                      activeOpacity={0.7}
+                      onPress={() => {
+                        setModalVisible(!modalVisible);
+                        setFilmSelected(item.id);
+                      }}
+                      style={{
+                        width: 18,
+                        height: 18,
+                        backgroundColor: '#fff',
+                        borderRadius: 9,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        position: 'absolute',
+                        right: (index + 1) % 4 == 0 ? -5 : 5,
+                        top: -5,
+                      }}>
+                      <View
+                        style={{
+                          width: 7,
+                          height: 1,
+                          backgroundColor: '#EC2626',
+                        }}
+                      />
+                    </TouchableOpacity>
+                  )}
+                </View>
               )}
             />
           ) : (
