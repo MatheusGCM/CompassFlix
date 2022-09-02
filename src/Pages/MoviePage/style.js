@@ -274,15 +274,50 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
 
   },
-
-  modalContentSucess:{
-    marginTop: '50%',
-    marginLeft:'10%',
-    width:327,
-    height:166,
-    backgroundColor: '#fff',
-    borderRadius: 25,
     
+  containerSucess: {
+    width: '80%',
+    height: '23%',
+    marginBottom: '50%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 25,
+    backgroundColor: '#fff',
+  },
+  modalbackground: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0,0,0,0.6)',
+  },
+  iconCheck: {
+    paddingTop: 8,
+    paddingLeft: 8,
+    padding: 2,
+    borderRadius: 30,
+    borderWidth: 3,
+    borderColor: '#000',
+  },
+  textSucess: {
+    margin: 25,
+    fontFamily: 'OpenSans-Bold',
+    color: '#000',
+    fontSize: 14,
+  },
+  btnOk: {
+    alignSelf: 'center',
+    alignItems: 'center',
+    width: '30%',
+    borderRadius: 5,
+    backgroundColor: '#000',
+    margin: 5
+  },
+  textOk: {
+    textTransform: 'uppercase',
+    fontFamily: 'OpenSans-Bold',
+    fontSize: 10,
+    color: '#fff',
+    padding: 10
   }
 
 });

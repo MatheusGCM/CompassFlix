@@ -21,6 +21,7 @@ import {
   unmarkFavorite,
 } from '../../service/api';
 import Icon from 'react-native-vector-icons/AntDesign';
+import Check from 'react-native-vector-icons/FontAwesome5';
 import ArrowLeft from 'react-native-vector-icons/Feather';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -167,22 +168,19 @@ const MoviePage = ({route, navigation}) => {
   const modalListSucess = () => {
     return (
       <Modal
-        style={styles.modalContentSucess}
-        animationType="slide"
+        animationType="fade"
         transparent={true}
         visible={modalVisibleSucess}>
         <View 
-          style={styles.modalContentSucess}>
-          <View
-            style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginTop: 10,
-            }}>
-            <Text />
-            <Text>Lista atualizada com sucesso!</Text>
-            <TouchableOpacity  onPress={() => setModalVisibleSucess(false)} style={styles.btnSave}>
-              <Text style={styles.textSave}>Salvar</Text>
+          style={styles.modalbackground}>
+          <View style={styles.containerSucess}>
+              <View>
+                <Check style={styles.iconCheck} name='check' size={20} color='#000'/>
+              </View>
+            
+            <Text style={styles.textSucess}>Lista atualizada com sucesso!</Text>
+            <TouchableOpacity  onPress={() => setModalVisibleSucess(false)} style={styles.btnOk}>
+              <Text style={styles.textOk}>Ok</Text>
             </TouchableOpacity>
           </View>
         </View>
