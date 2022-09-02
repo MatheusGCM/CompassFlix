@@ -1,3 +1,4 @@
+import {useNavigation} from '@react-navigation/native';
 import React, {useContext, useState} from 'react';
 import {Dimensions, FlatList, Text, TouchableOpacity, View} from 'react-native';
 import IconTrash from 'react-native-vector-icons/EvilIcons';
@@ -7,7 +8,6 @@ import ModalExit from '../ModalExit';
 import PlusIcon from 'react-native-vector-icons/Entypo';
 import style from './style';
 import ModalAddList from '../ModalAddList';
-import {useNavigation} from '@react-navigation/native';
 
 export default function ListComponent(data) {
   const {id, udapte, setUpdate} = useContext(Context);
@@ -16,8 +16,8 @@ export default function ListComponent(data) {
   const [deleteId, setDeleteId] = useState('');
   const [valueName, setValueName] = useState('');
   const [valueDescription, setValueDescription] = useState('');
-
   const navigation = useNavigation();
+
   const getResponseDeleteList = async list_id => {
     await deleteList(list_id, id);
     setUpdate(!udapte);

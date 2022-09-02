@@ -25,18 +25,20 @@ const Midia = memo(({poster_path, rated, rating, focused, id}) => {
       </View>
     </View>
   ) : (
-    <TouchableOpacity
-      onPress={() =>
-        navigation.navigate(focused ? 'movieScreen' : 'seriesScreen', {
-          screen: focused ? 'MoviePage' : 'SeriePage',
-          params: {id: id},
-        })
-      }>
-      <Image
-        style={styles.imgFavorite}
-        source={{uri: `http://image.tmdb.org/t/p/w185/${poster_path}`}}
-      />
-    </TouchableOpacity>
+    <View>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate(focused ? 'movieScreen' : 'seriesScreen', {
+            screen: focused ? 'MoviePage' : 'SeriePage',
+            params: {id: id},
+          })
+        }>
+        <Image
+          style={styles.imgFavorite}
+          source={{uri: `http://image.tmdb.org/t/p/w185/${poster_path}`}}
+        />
+      </TouchableOpacity>
+    </View>
   );
 });
 
