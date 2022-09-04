@@ -1,6 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import ButtonGoBack from '../../Components/ButtonGoBack';
 import ListComponent from '../../Components/ListComponent';
 import Loading from '../../Components/Loading';
 import {Context} from '../../context';
@@ -22,11 +23,9 @@ export default function ListPage({navigation}) {
 
   return (
     <View style={style.page}>
-      <TouchableOpacity
-        style={style.buttonBack}
-        onPress={() => navigation.goBack()}>
-        <Icon name="ios-arrow-back" size={25} color="black" />
-      </TouchableOpacity>
+      <View style={style.flexStart}>
+        <ButtonGoBack navigation={navigation} />
+      </View>
       <Text style={style.listText}>Minhas listas</Text>
       {!loading ? (
         <Loading load={loading} />

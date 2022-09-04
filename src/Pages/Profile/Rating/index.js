@@ -1,11 +1,11 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {FlatList, Text, TouchableOpacity, View} from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
-import styles from '../Rating/styles';
+import {FlatList, Text, View} from 'react-native';
+import styles from './style';
 import {Context} from '../../../context';
 import {getRatedMovie, getRatedSeries} from '../../../service/api';
 import Load from '../../../Components/Load';
 import Midia from '../../../Components/Midia';
+import ButtonGoBack from '../../../Components/ButtonGoBack';
 
 const Rating = ({navigation, route}) => {
   const {id, user} = useContext(Context);
@@ -37,14 +37,11 @@ const Rating = ({navigation, route}) => {
       <FlatList
         ListHeaderComponent={() => (
           <>
-            <TouchableOpacity
-              style={styles.buttonBack}
-              onPress={() => navigation.goBack()}>
-              <Icon name="ios-arrow-back" size={25} color="black" />
-            </TouchableOpacity>
+            <ButtonGoBack navigation={navigation} />
             <View
               style={{
                 flexDirection: 'row',
+                marginTop: 16,
                 marginBottom: 43,
                 alignSelf: 'center',
                 width: 220,

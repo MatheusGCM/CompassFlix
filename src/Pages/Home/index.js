@@ -11,7 +11,7 @@ import Avatar from '../../Components/Avatar';
 import Greeting from '../../Components/Greeting';
 import Series from '../../Components/Series';
 
-const Home = ({route}) => {
+const Home = ({route, navigation}) => {
   const {id, user, setUser} = useContext(Context);
 
   const [page, setPage] = useState(1);
@@ -52,7 +52,7 @@ const Home = ({route}) => {
   return user && dataMovies ? (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Avatar user={user} />
+        <Avatar user={user} navigation={navigation} />
         <Greeting screen={route.name} user={user} />
       </View>
 

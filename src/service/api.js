@@ -232,8 +232,6 @@ export const getUserList = async (account_id, session_id) => {
 
 export const deleteList = async (list_id, session_id) => {
   return api
-    .delete(
-      `https://api.themoviedb.org/3/list/${list_id}?api_key=${api_key}&session_id=${session_id}`,
-    )
-    .catch(err => console.warn(err));
+    .delete(`list/${list_id}?api_key=${api_key}&session_id=${session_id}`)
+    .catch(error => console.warn(error));
 };

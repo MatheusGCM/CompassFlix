@@ -64,7 +64,8 @@ export default function ListComponent(data) {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
-                setModalExit(!modalExit), setDeleteId(item.id);
+                setModalExit(!modalExit);
+                setDeleteId(item.id);
               }}
               style={style.buttonTrash}>
               <IconTrash name="trash" size={28} color="#EC26269C" />

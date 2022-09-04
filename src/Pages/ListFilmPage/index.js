@@ -7,13 +7,12 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import ArrowBack from 'react-native-vector-icons/Ionicons';
 import Eye from 'react-native-vector-icons/Ionicons';
 import Pencil from 'react-native-vector-icons/EvilIcons';
 import {getMoviesDetailsList, removeMovieList} from '../../service/api';
-import Midia from '../../Components/Midia';
 import ModalExit from '../../Components/ModalExit';
 import {Context} from '../../context';
+import ButtonGoBack from '../../Components/ButtonGoBack';
 
 export default function ListFilmPage({route, navigation}) {
   const {id, udapte, setUpdate} = useContext(Context);
@@ -51,19 +50,7 @@ export default function ListFilmPage({route, navigation}) {
           marginTop: 17,
           marginBottom: 32,
         }}>
-        <TouchableOpacity
-          style={{
-            backgroundColor: 'white',
-            width: 30,
-            height: 30,
-            borderRadius: 15,
-            alignItems: 'center',
-            justifyContent: 'center',
-            alignSelf: 'flex-start',
-          }}
-          onPress={() => navigation.goBack()}>
-          <ArrowBack name="ios-arrow-back" size={25} color="black" />
-        </TouchableOpacity>
+        <ButtonGoBack navigation={navigation} />
         <View
           style={{
             flexDirection: 'row',
@@ -73,7 +60,6 @@ export default function ListFilmPage({route, navigation}) {
             borderRadius: 20,
             borderColor: '#E9A6A6',
             borderWidth: 1,
-            // justifyContent: 'space-around',
             alignItems: 'center',
           }}>
           <TouchableOpacity

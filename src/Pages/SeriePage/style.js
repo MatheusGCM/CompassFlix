@@ -18,22 +18,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginTop: 15,
   },
-  buttonLeft: {
-    width: 30,
-    height: 30,
-    backgroundColor: '#fff',
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  buttonRight: {
-    width: 30,
-    height: 30,
-    backgroundColor: '#fff',
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   rate: {
     backgroundColor: '#E9A6A6',
     alignItems: 'center',
@@ -75,12 +59,9 @@ const styles = StyleSheet.create({
     marginStart: 15,
   },
   contentHeader: {
-    // flex: 1,
     height: '30%',
     flexDirection: 'row',
     marginBottom: 5,
-    // borderColor: 'red',
-    // borderWidth: 2,
   },
   posterMovie: {
     width: 116,
@@ -153,8 +134,6 @@ const styles = StyleSheet.create({
     flex: 1,
     marginEnd: 20,
     marginBottom: 15,
-    // borderColor: 'red',
-    // borderWidth: 2,
   },
   taglineMovie: {
     color: '#fff',
