@@ -1,6 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {View, FlatList} from 'react-native';
-import Movies from '../../Components/Movies';
 import styles from './style';
 import {getAccount, getMovies, getSeries} from '../../service/api';
 import {Context} from '../../context';
@@ -9,7 +8,7 @@ import Load from '../../Components/Load';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Avatar from '../../Components/Avatar';
 import Greeting from '../../Components/Greeting';
-import Series from '../../Components/Series';
+import Midia from '../../Components/Midia';
 
 const Home = ({route, navigation}) => {
   const {id, user, setUser} = useContext(Context);
@@ -66,17 +65,19 @@ const Home = ({route, navigation}) => {
         ListFooterComponent={<Loading load={loading} />}
         renderItem={({item}) =>
           route.name === 'HomeMovie' ? (
-            <Movies
-              text={`${item.vote_average.toFixed(1)}/10`}
-              poster_path={item.poster_path}
-              id={item.id}
+            <Midia
+              {...item}
+              navigation={navigation}
+              rating={item.vote_average}
+              rated={true}
               stack="MoviePage"
             />
           ) : (
-            <Series
-              text={`${item.vote_average.toFixed(1)}/10`}
-              poster_path={item.poster_path}
-              id={item.id}
+            <Midia
+              {...item}
+              navigation={navigation}
+              rating={item.vote_average}
+              rated={true}
               stack="SeriePage"
             />
           )

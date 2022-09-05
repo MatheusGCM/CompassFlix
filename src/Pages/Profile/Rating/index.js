@@ -8,7 +8,7 @@ import Midia from '../../../Components/Midia';
 import ButtonGoBack from '../../../Components/ButtonGoBack';
 
 const Rating = ({navigation, route}) => {
-  const {id, user} = useContext(Context);
+  const {id, user, udapte} = useContext(Context);
   const [rated, setRated] = useState();
 
   useEffect(() => {
@@ -25,65 +25,37 @@ const Rating = ({navigation, route}) => {
       };
       getResponseRatedSeries();
     }
-  }, [id, route.params?.focused, user.id]);
+  }, [id, route.params?.focused, user.id, udapte]);
 
   return rated ? (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: 'black',
-        padding: 20,
-      }}>
+    <View style={styles.page}>
       <FlatList
         ListHeaderComponent={() => (
           <>
-            <ButtonGoBack navigation={navigation} />
-            <View
-              style={{
-                flexDirection: 'row',
-                marginTop: 16,
-                marginBottom: 43,
-                alignSelf: 'center',
-                width: 220,
-              }}>
-              <Text
-                style={{
-                  fontFamily: 'OpenSans-Bold',
-                  fontSize: 20,
-                  color: 'white',
-                  textAlign: 'center',
-                }}>
+            <View style={{marginStart: 10}}>
+              <ButtonGoBack navigation={navigation} />
+            </View>
+            <View style={styles.headerContainer}>
+              <Text style={styles.headerTxt}>
                 {route.params?.focused
                   ? 'Avaliações de filmes recentes de'
                   : 'Avaliações de séries recentes de'}
-                <Text
-                  style={{
-                    color: '#E9A6A6',
-                  }}>
-                  {' '}
-                  {user.name}
-                </Text>
-                <Text
-                  style={{
-                    color: 'white',
-                  }}>
-                  !
-                </Text>
+                <Text style={styles.headerTxt.userName}> {user.name}</Text>
+                <Text style={styles.headerTxt}>!</Text>
               </Text>
             </View>
           </>
         )}
+        contentContainerStyle={{marginHorizontal: 5, marginTop: 15}}
         data={rated}
         keyExtractor={item => String(item.id)}
         numColumns={4}
         renderItem={({item}) => (
           <Midia
-            poster_path={item.poster_path}
-            rated={true}
-            rating={`${item.rating?.toFixed(1)}/10`}
+            {...item}
             focused={route.params?.focused}
             navigation={navigation}
-            id={item.id}
+            rated={true}
           />
         )}
       />
