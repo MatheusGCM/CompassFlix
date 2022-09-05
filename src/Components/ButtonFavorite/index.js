@@ -10,9 +10,15 @@ const ButtonFavorite = ({onPress, favorite}) => {
       style={styles.buttonRight}
       onPress={onPress}>
       {favorite ? (
-        <Image source={require('../../assets/starSelected.png')} />
+        <Image
+          testID="starSelected"
+          source={require('../../assets/starSelected.png')}
+        />
       ) : (
-        <Image source={require('../../assets/star.png')} />
+        <Image
+          testID="starNoSelected"
+          source={require('../../assets/star.png')}
+        />
       )}
     </TouchableOpacity>
   );
