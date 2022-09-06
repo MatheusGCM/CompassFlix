@@ -18,21 +18,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginTop: 15,
   },
-  btnsContainer: {
-    width: '90%',
-    flexDirection: 'row',
-    alignSelf: 'center',
-    justifyContent: 'space-between',
-    marginTop: 15,
-  },
-  buttonLeft: {
-    width: 30,
-    height: 30,
-    backgroundColor: '#fff',
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   buttonRight: {
     width: 30,
     height: 30,

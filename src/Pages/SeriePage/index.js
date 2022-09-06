@@ -16,7 +16,6 @@ import {
   markFavorite,
 } from '../../service/api';
 import Icon from 'react-native-vector-icons/AntDesign';
-import Feather from 'react-native-vector-icons/Feather';
 import Load from '../../Components/Load';
 import * as Animatable from 'react-native-animatable';
 import Season from '../../Components/Season';
@@ -24,6 +23,7 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import {Context} from '../../context';
 import ModalRating from '../../Components/ModalRating';
 import ButtonFavorite from '../../Components/ButtonFavorite';
+import ButtonGoBack from '../../Components/ButtonGoBack';
 
 const SeriePage = ({route, navigation}) => {
   const {id, user, udapte, setUpdate} = useContext(Context);
@@ -39,7 +39,6 @@ const SeriePage = ({route, navigation}) => {
   const [rating, setRating] = useState(0);
 
   const [fav, setFav] = useState();
-  // const [mockFavorite, setMockFavorite] = useState(false);
 
   useEffect(() => {
     const getResponseSeriesDetails = async () => {
@@ -103,11 +102,7 @@ const SeriePage = ({route, navigation}) => {
           uri: `http://image.tmdb.org/t/p/original/${seriesDetails.backdrop_path}`,
         }}>
         <View style={styles.btnsContainer}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('HomeSerie')}
-            style={styles.buttonLeft}>
-            <Feather color="#000000" name="arrow-left" size={22} />
-          </TouchableOpacity>
+          <ButtonGoBack navigation={navigation} />
           <ButtonFavorite onPress={favorite} favorite={fav} />
         </View>
       </ImageBackground>

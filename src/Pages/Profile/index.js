@@ -71,6 +71,7 @@ const Profile = ({navigation}) => {
         modalExit={modalExit}
         onPress={() => setModalExit(!modalExit)}
         logout={Logout}
+        type={'exitButton'}
       />
       <View style={styles.containerTop}>
         {user.avatar?.tmdb.avatar_path ? (

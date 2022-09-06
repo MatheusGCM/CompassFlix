@@ -1,14 +1,14 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {FlatList, Text, TouchableOpacity, View} from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
-import styles from '../Rating/styles';
+import {FlatList, Text, View} from 'react-native';
+import styles from './style';
 import {Context} from '../../../context';
 import {getFavoriteMovie, getFavoriteSeries} from '../../../service/api';
 import Load from '../../../Components/Load';
 import Midia from '../../../Components/Midia';
+import ButtonGoBack from '../../../Components/ButtonGoBack';
 
 const Favorites = ({navigation, route}) => {
-  const {id, user} = useContext(Context);
+  const {id, user, udapte} = useContext(Context);
   const [favorites, setFavorites] = useState();
 
   useEffect(() => {
@@ -25,53 +25,21 @@ const Favorites = ({navigation, route}) => {
       };
       getResponseFavoriteSeries();
     }
-  }, [id, route.params?.focused, user.id]);
+  }, [id, route.params?.focused, user.id, udapte]);
 
   return favorites ? (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: 'black',
-        padding: 20,
-      }}>
+    <View style={styles.page}>
       <FlatList
         ListHeaderComponent={() => (
           <>
-            <TouchableOpacity
-              style={styles.buttonBack}
-              onPress={() => navigation.goBack()}>
-              <Icon name="ios-arrow-back" size={25} color="black" />
-            </TouchableOpacity>
-            <View
-              style={{
-                flex: 1,
-                flexDirection: 'row',
-                marginBottom: 43,
-                alignSelf: 'center',
-              }}>
-              <Text
-                style={{
-                  fontFamily: 'OpenSans-Bold',
-                  fontSize: 20,
-                  color: 'white',
-                }}>
+            <ButtonGoBack navigation={navigation} />
+            <View style={styles.headerContainer}>
+              <Text style={styles.headerTxt}>
                 {route.params?.focused
-                  ? 'Filmes favoritos'
-                  : 'Séries favoritas'}{' '}
-                de
-                <Text
-                  style={{
-                    color: '#E9A6A6',
-                  }}>
-                  {' '}
-                  {user.name}
-                </Text>
-                <Text
-                  style={{
-                    color: 'white',
-                  }}>
-                  !
-                </Text>
+                  ? 'Filmes favoritos de'
+                  : 'Séries favoritas de'}
+                <Text style={styles.headerTxt.userName}> {user.name}</Text>
+                <Text style={styles.headerTxt}>!</Text>
               </Text>
             </View>
           </>
@@ -81,9 +49,9 @@ const Favorites = ({navigation, route}) => {
         numColumns={4}
         renderItem={({item}) => (
           <Midia
-            poster_path={item.poster_path}
+            {...item}
             focused={route.params?.focused}
-            id={item.id}
+            navigation={navigation}
           />
         )}
       />
