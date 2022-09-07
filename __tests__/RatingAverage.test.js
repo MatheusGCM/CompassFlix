@@ -6,7 +6,7 @@ describe('RatingAverage', () => {
   describe('avaliação informada', () => {
     it('mostre a avaliação', () => {
       const {getByText} = render(<RatingAverage rating={5.5} />);
-      expect(getByText('5.5/10')).toBeTruthy();
+      expect(getByText(/5.5/)).toBeTruthy();
     });
     it('mostre o star icon', () => {
       const {getByTestId} = render(<RatingAverage rating={5.5} />);
@@ -16,7 +16,7 @@ describe('RatingAverage', () => {
   describe('avaliação NÃO informada', () => {
     it('mostre o tratamento', () => {
       const {getByText} = render(<RatingAverage />);
-      expect(getByText('0.0/10')).toBeTruthy();
+      expect(getByText(/0.0/)).toBeTruthy();
     });
   });
 });
