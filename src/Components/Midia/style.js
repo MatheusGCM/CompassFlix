@@ -2,8 +2,7 @@ import {StyleSheet} from 'react-native';
 
 const styles = StyleSheet.create({
   margins: {
-    marginEnd: 13,
-    marginBottom: 20,
+    margin: 9,
   },
   imgFavorite: {
     width: 76,
