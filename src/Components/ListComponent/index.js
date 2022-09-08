@@ -1,5 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Dimensions, FlatList, Text, TouchableOpacity, View} from 'react-native';
 import IconTrash from 'react-native-vector-icons/EvilIcons';
 import {Context} from '../../context';
@@ -16,6 +16,7 @@ export default function ListComponent(data) {
   const [deleteId, setDeleteId] = useState('');
   const [valueName, setValueName] = useState('');
   const [valueDescription, setValueDescription] = useState('');
+  const [isShortName, setIsShortName] = useState(false);
   const navigation = useNavigation();
 
   const getResponseDeleteList = async list_id => {
@@ -28,6 +29,11 @@ export default function ListComponent(data) {
     setUpdate(!udapte);
     setModalAddList(!modalAddList);
   };
+  useEffect(() => {
+    if (valueName.length > 0) {
+      setIsShortName(false);
+    }
+  }, [valueName]);
   return (
     <>
       <FlatList
@@ -88,15 +94,23 @@ export default function ListComponent(data) {
       />
       <ModalAddList
         modalAddList={modalAddList}
-        onPress={() => setModalAddList(!modalAddList)}
+        onPress={() => {
+          setModalAddList(!modalAddList), setIsShortName(false);
+        }}
         valueName={valueName}
         setValueName={setValueName}
         valueDescription={valueDescription}
         setValueDescription={setValueDescription}
+        shortName={isShortName}
         action={() => {
-          getResponseAddList(valueName, valueDescription),
-            setValueName(''),
-            setValueDescription('');
+          if (valueName <= 0) {
+            setIsShortName(true);
+          } else {
+            setIsShortName(false);
+            getResponseAddList(valueName, valueDescription),
+              setValueName(''),
+              setValueDescription('');
+          }
         }}
       />
     </>

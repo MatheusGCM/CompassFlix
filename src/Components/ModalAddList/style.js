@@ -67,6 +67,32 @@ const styles = StyleSheet.create({
       color: '#000',
     },
   },
+  TextNewList: {
+    height: 30,
+    backgroundColor: '#c4c4c459',
+    marginTop: 5,
+    borderRadius: 5,
+  },
+  BoxInputName: {
+    paddingLeft: 16,
+    color: 'black',
+    height: 34,
+    fontSize: 12,
+    width: '95%',
+  },
+  BoxInputDescription: {
+    height: 50,
+    backgroundColor: '#c4c4c459',
+    marginTop: 5,
+    borderRadius: 5,
+    marginBottom: 17,
+  },
+  BoxInputInsideDescription: {
+    paddingLeft: 16,
+    color: 'black',
+    fontSize: 12,
+    width: '95%',
+  },
 });
 
 export default styles;
