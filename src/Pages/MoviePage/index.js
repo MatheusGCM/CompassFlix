@@ -1,4 +1,6 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState, useRef} from 'react';
+import BottomSheet from '@gorhom/bottom-sheet';
+import {RadioButton} from 'react-native-paper';
 import {
   Image,
   Text,
@@ -7,6 +9,7 @@ import {
   ImageBackground,
   ScrollView,
   FlatList,
+  Modal,
 } from 'react-native';
 import styles from './style';
 import {
@@ -16,9 +19,16 @@ import {
   getAccountStates,
   markFavorite,
   unmarkFavorite,
+  createListFilms,
+  addMovieList,
+  getMoviesDetailsList,
+  getUserList,
 } from '../../service/api';
 import Icon from 'react-native-vector-icons/AntDesign';
+import Check from 'react-native-vector-icons/FontAwesome5';
+import ArrowLeft from 'react-native-vector-icons/Feather';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Cast from '../../Components/Cast';
 import Load from '../../Components/Load';
 import * as Animatable from 'react-native-animatable';
@@ -29,6 +39,7 @@ import ButtonGoBack from '../../Components/ButtonGoBack';
 
 const MoviePage = ({route, navigation}) => {
   const {id, user, udapte, setUpdate} = useContext(Context);
+  const bottomSheetRef = useRef(BottomSheet);
 
   const [movieDetails, setMovieDetails] = useState([]);
   const [movieCredits, setMovieCredits] = useState({});
@@ -38,6 +49,9 @@ const MoviePage = ({route, navigation}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [rated, setRated] = useState();
   const [rating, setRating] = useState(0);
+  const [value, setValue] = useState('');
+  const [modalVisibleSucess, setModalVisibleSucess] = useState(false);
+  const [userList, setUserList] = useState({});
 
   useEffect(() => {
     const getResponseMovieDetails = async () => {
@@ -81,6 +95,11 @@ const MoviePage = ({route, navigation}) => {
       };
       getResponseRated();
     }
+    const getResponseListMovies = async () => {
+      const response = await getUserList(user.id, id);
+      setUserList(response.data);
+    };
+    getResponseListMovies();
   }, [id, route.params.id, udapte]);
 
   const Directing = movieCredits.crew?.find(
@@ -99,6 +118,98 @@ const MoviePage = ({route, navigation}) => {
   const rateMovie = async () => {
     await rate('movie', route.params.id, id, rating);
     setUpdate(!udapte);
+  };
+
+  function handleOpen() {
+    bottomSheetRef.current?.expand();
+  }
+
+  function handleClose() {
+    bottomSheetRef.current?.close();
+  }
+
+  const getResponseAddMovie = async () => {
+    const response = await addMovieList(id, route.params.id, value);
+    if (response.status === 201) {
+      setModalVisibleSucess(true);
+    }
+    console.log('response', response.data);
+  };
+  const modalSalveFilme = () => {
+    return (
+      <BottomSheet
+        backgroundStyle={styles.modal}
+        handleIndicatorStyle={styles.indicator}
+        ref={bottomSheetRef}
+        snapPoints={[1, 280]}>
+        <View>
+          <View style={styles.modalViewHeader}>
+            <Text style={styles.modalViewHeaderTitle}>Salvar filme em...</Text>
+            <TouchableOpacity onPress={handleClose}>
+              <Icon name="close" color={'#000'} size={22} />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.divisor} />
+          <View>
+            <RadioButton.Group
+              value={value}
+              onValueChange={newValue => {
+                setValue(newValue);
+              }}>
+              <View style={styles.radioBottomRow}>
+                <FlatList
+                  data={userList.results}
+                  keyExtractor={item => String(item.id)}
+                  style={{height: 125}}
+                  renderItem={({item}) => (
+                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                      <RadioButton color="#000" value={item.id} />
+                      <Text style={styles.textRadioBottom}>{item.name}</Text>
+                    </View>
+                  )}
+                />
+              </View>
+              <View>
+                <TouchableOpacity
+                  onPress={getResponseAddMovie}
+                  style={styles.btnSave}>
+                  <Text style={styles.textSave}>Salvar</Text>
+                </TouchableOpacity>
+              </View>
+            </RadioButton.Group>
+          </View>
+        </View>
+      </BottomSheet>
+    );
+  };
+
+  const modalListSucess = () => {
+    return (
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisibleSucess}>
+        <View style={styles.modalbackground}>
+          <View style={styles.containerSucess}>
+            <View>
+              <Check
+                style={styles.iconCheck}
+                name="check"
+                size={20}
+                color="#000"
+              />
+            </View>
+
+            <Text style={styles.textSucess}>Lista atualizada com sucesso!</Text>
+            <TouchableOpacity
+              onPress={() => setModalVisibleSucess(false)}
+              style={styles.btnOk}>
+              <Text style={styles.textOk}>Ok</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+    );
   };
 
   return movieDetails.backdrop_path && movieDetails.poster_path ? (
@@ -192,6 +303,21 @@ const MoviePage = ({route, navigation}) => {
                 </Text>
               </View>
             </View>
+            <View>
+              <TouchableOpacity
+                onPress={handleOpen}
+                style={styles.containerAdd}>
+                <View style={styles.btnAddList}>
+                  <MaterialIcons
+                    name="add"
+                    size={22}
+                    color="#000"
+                    backgroundStyle="#fff"
+                  />
+                </View>
+                <Text style={styles.textAddList}>Adicionar a uma lista</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
         <ScrollView style={styles.contentOverview}>
@@ -218,6 +344,8 @@ const MoviePage = ({route, navigation}) => {
           />
         </View>
       </View>
+      {modalSalveFilme()}
+      {modalListSucess()}
     </View>
   ) : (
     <Load />

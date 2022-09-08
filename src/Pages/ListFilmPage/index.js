@@ -27,14 +27,13 @@ export default function ListFilmPage({route, navigation}) {
       setMoviesDetailsList(response.data);
     };
     responseDetailsList();
-  }, [route.params.list_id, udapte]);
-
+    moviesDetailsList.items?.length === 0 && setState(false);
+  }, [route.params.list_id, udapte, moviesDetailsList.items]);
   const removeFilm = async () => {
     await removeMovieList(route.params.list_id, id, filmSelected);
     setUpdate(!udapte);
     setModalVisible(!modalVisible);
   };
-
   return (
     <View
       style={{

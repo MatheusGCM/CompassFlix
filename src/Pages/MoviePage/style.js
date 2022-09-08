@@ -189,6 +189,119 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     backgroundColor: '#C4C4C4',
   },
+
+  modalContent: {
+    flex: 1,
+  },
+
+  modalViewHeaderTitle: {
+    color: '#000',
+    fontSize: 13,
+    fontFamily: 'OpenSans-Bold',
+  },
+  modalViewHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+  },
+  divisor: {
+    width: '100%',
+    marginTop: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#BEBEBE',
+  },
+  textAddList: {
+    fontFamily: 'OpenSans-Bold',
+    fontSize: 10,
+    color: '#000',
+    width: '50%',
+    padding: 5,
+  },
+  btnAddList: {
+    borderRadius: 20,
+    backgroundColor: '#fff',
+  },
+  containerAdd: {
+    alignSelf: 'flex-start',
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 10,
+    borderRadius: 20,
+    backgroundColor: '#C4C4C4',
+  },
+  btnSave: {
+    alignSelf: 'center',
+    alignItems: 'center',
+    margin: 20,
+    padding: 10,
+    width: '25%',
+    borderRadius: 5,
+    backgroundColor: '#000',
+  },
+  textSave: {
+    textTransform: 'uppercase',
+    fontFamily: 'OpenSans-Bold',
+    fontSize: 10,
+    color: '#fff',
+  },
+
+  textRadioBottom: {
+    textTransform: 'uppercase',
+    fontFamily: 'OpenSans-Regular',
+    fontSize: 12,
+    color: '#000',
+  },
+  radioBottomRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+  },
+
+  containerSucess: {
+    width: '80%',
+    height: '23%',
+    marginBottom: '50%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 25,
+    backgroundColor: '#fff',
+  },
+  modalbackground: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0,0,0,0.6)',
+  },
+  iconCheck: {
+    paddingTop: 8,
+    paddingLeft: 8,
+    padding: 2,
+    borderRadius: 30,
+    borderWidth: 3,
+    borderColor: '#000',
+  },
+  textSucess: {
+    margin: 25,
+    fontFamily: 'OpenSans-Bold',
+    color: '#000',
+    fontSize: 14,
+  },
+  btnOk: {
+    alignSelf: 'center',
+    alignItems: 'center',
+    width: '30%',
+    borderRadius: 5,
+    backgroundColor: '#000',
+    margin: 5,
+  },
+  textOk: {
+    textTransform: 'uppercase',
+    fontFamily: 'OpenSans-Bold',
+    fontSize: 10,
+    color: '#fff',
+    padding: 10,
+  },
 });
 
 export default styles;
