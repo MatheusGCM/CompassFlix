@@ -82,7 +82,7 @@ const Login = ({navigation}) => {
     <TouchableWithoutFeedback
       onPress={() => Keyboard.dismiss()}
       touchSoundDisabled>
-      <KeyboardAvoidingView behavior="height" style={styles.page}>
+      <KeyboardAvoidingView behavior="padding" style={styles.page}>
         <ImageBackground
           resizeMode="contain"
           style={styles.banner}

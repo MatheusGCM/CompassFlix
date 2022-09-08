@@ -32,6 +32,7 @@ import * as Animatable from 'react-native-animatable';
 import ModalRating from '../../Components/ModalRating';
 import {Context} from '../../context';
 import ButtonFavorite from '../../Components/ButtonFavorite';
+import ButtonGoBack from '../../Components/ButtonGoBack';
 
 const MoviePage = ({route, navigation}) => {
   const {id, user, udapte, setUpdate} = useContext(Context);
@@ -226,12 +227,7 @@ const MoviePage = ({route, navigation}) => {
           uri: `http://image.tmdb.org/t/p/original/${movieDetails.backdrop_path}`,
         }}>
         <View style={styles.btnsContainer}>
-          <TouchableOpacity
-            activeOpacity={0.5}
-            onPress={() => navigation.goBack()}
-            style={styles.buttonLeft}>
-            <ArrowLeft color="#000000" name="arrow-left" size={22} />
-          </TouchableOpacity>
+          <ButtonGoBack navigation={navigation} />
           <ButtonFavorite onPress={favorite} favorite={fav} />
         </View>
       </ImageBackground>

@@ -9,21 +9,27 @@ import {
 
 import styles from './styles';
 
-const ModalExit = ({modalExit, onPress, logout}) => {
+const ModalExit = ({modalExit, onPress, logout, type}) => {
   return (
     <Modal transparent={true} visible={modalExit} onRequestClose={onPress}>
       <TouchableWithoutFeedback onPress={onPress} touchSoundDisabled>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <Text style={styles.modalTxtHeader}>Atenção!</Text>
-            <Text style={styles.modalTxtMid}>Deseja mesmo sair?</Text>
+            <Text style={styles.modalTxtMid}>
+              {type === 'exitButton'
+                ? 'Deseja mesmo sair?'
+                : 'Deseja mesmo remover o filme?'}
+            </Text>
             <View style={styles.modalContainerFooter}>
               <View style={styles.modalContentFooter}>
                 <TouchableOpacity
                   activeOpacity={0.7}
                   onPress={onPress}
                   style={styles.btn.cancelar}>
-                  <Text style={styles.modalTxtFooter.white}>CANCELAR</Text>
+                  <Text style={styles.modalTxtFooter.white}>
+                    {type === 'exitButton' ? 'CANCELAR' : 'NÃO'}
+                  </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   activeOpacity={0.7}
