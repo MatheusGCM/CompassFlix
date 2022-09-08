@@ -11,13 +11,19 @@ const ButtonAvatar = ({user, navigation}) => {
       onPress={() => navigation.navigate('profileScreen')}>
       {user.avatar?.tmdb.avatar_path ? (
         <Image
+          testID="avatar"
           source={{
             uri: `http://image.tmdb.org/t/p/w92/${user.avatar?.tmdb.avatar_path}`,
           }}
           style={styles.img}
         />
       ) : (
-        <Icon name="person-circle" color="rgba(255,255,255,0.4)" size={44} />
+        <Icon
+          testID="icon"
+          name="person-circle"
+          color="rgba(255,255,255,0.4)"
+          size={44}
+        />
       )}
     </TouchableOpacity>
   );
