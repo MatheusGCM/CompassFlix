@@ -176,7 +176,7 @@ export const unmarkFavorite = async (userId, session_id, midia, midiaId) => {
       },
     )
     .catch(error => {
-      console.warn('Erro na avaliação');
+      console.warn(error, 'Erro na avaliação');
     });
 };
 
