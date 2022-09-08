@@ -3,7 +3,7 @@ import {Image, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import styles from './style';
 
-const Avatar = ({user, navigation}) => {
+const ButtonAvatar = ({user, navigation}) => {
   return (
     <TouchableOpacity
       activeOpacity={0.7}
@@ -23,4 +23,4 @@ const Avatar = ({user, navigation}) => {
   );
 };
 
-export default Avatar;
+export default ButtonAvatar;
