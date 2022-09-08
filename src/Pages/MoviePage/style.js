@@ -237,29 +237,27 @@ const styles = StyleSheet.create({
     padding: 10,
     width: '25%',
     borderRadius: 5,
-    backgroundColor: '#000'
+    backgroundColor: '#000',
   },
   textSave: {
     textTransform: 'uppercase',
     fontFamily: 'OpenSans-Bold',
     fontSize: 10,
-    color: '#fff'
+    color: '#fff',
   },
 
   textRadioBottom: {
     textTransform: 'uppercase',
     fontFamily: 'OpenSans-Regular',
     fontSize: 12,
-    color: '#000'
-
+    color: '#000',
   },
-  radioBottomRow:{
+  radioBottomRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
-
   },
-    
+
   containerSucess: {
     width: '80%',
     height: '23%',
@@ -295,16 +293,15 @@ const styles = StyleSheet.create({
     width: '30%',
     borderRadius: 5,
     backgroundColor: '#000',
-    margin: 5
+    margin: 5,
   },
   textOk: {
     textTransform: 'uppercase',
     fontFamily: 'OpenSans-Bold',
     fontSize: 10,
     color: '#fff',
-    padding: 10
-  }
-
+    padding: 10,
+  },
 });
 
 export default styles;

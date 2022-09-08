@@ -21,6 +21,8 @@ import {
   unmarkFavorite,
   createListFilms,
   addMovieList,
+  getMoviesDetailsList,
+  getUserList,
 } from '../../service/api';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Check from 'react-native-vector-icons/FontAwesome5';
@@ -49,6 +51,7 @@ const MoviePage = ({route, navigation}) => {
   const [rating, setRating] = useState(0);
   const [value, setValue] = useState('');
   const [modalVisibleSucess, setModalVisibleSucess] = useState(false);
+  const [userList, setUserList] = useState({});
 
   useEffect(() => {
     const getResponseMovieDetails = async () => {
@@ -92,6 +95,11 @@ const MoviePage = ({route, navigation}) => {
       };
       getResponseRated();
     }
+    const getResponseListMovies = async () => {
+      const response = await getUserList(user.id, id);
+      setUserList(response.data);
+    };
+    getResponseListMovies();
   }, [id, route.params.id, udapte]);
 
   const Directing = movieCredits.crew?.find(
@@ -127,7 +135,6 @@ const MoviePage = ({route, navigation}) => {
     }
     console.log('response', response.data);
   };
-
   const modalSalveFilme = () => {
     return (
       <BottomSheet
@@ -150,29 +157,17 @@ const MoviePage = ({route, navigation}) => {
                 setValue(newValue);
               }}>
               <View style={styles.radioBottomRow}>
-                {/* lista esta mockado  */}
-                <RadioButton color="#000" value="8216445" />
-                <Text style={styles.textRadioBottom}>
-                  Filmes que mudaram a minha vida
-                </Text>
-              </View>
-              <View style={styles.radioBottomRow}>
-                <RadioButton
-                  color="#000"
-                  value="10 Melhores filmes de terror"
+                <FlatList
+                  data={userList.results}
+                  keyExtractor={item => String(item.id)}
+                  style={{height: 125}}
+                  renderItem={({item}) => (
+                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                      <RadioButton color="#000" value={item.id} />
+                      <Text style={styles.textRadioBottom}>{item.name}</Text>
+                    </View>
+                  )}
                 />
-                <Text style={styles.textRadioBottom}>
-                  10 melhores filmes de terror
-                </Text>
-              </View>
-              <View style={styles.radioBottomRow}>
-                <RadioButton
-                  color="#000"
-                  value="Filmes para assistir e refletir"
-                />
-                <Text style={styles.textRadioBottom}>
-                  FILMES PARA ASSISTIR E REFLETIR
-                </Text>
               </View>
               <View>
                 <TouchableOpacity
