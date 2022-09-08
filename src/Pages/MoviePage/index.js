@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState, useRef} from 'react';
 import BottomSheet from '@gorhom/bottom-sheet';
-import { RadioButton} from 'react-native-paper';
+import {RadioButton} from 'react-native-paper';
 import {
   Image,
   Text,
@@ -9,7 +9,7 @@ import {
   ImageBackground,
   ScrollView,
   FlatList,
-  Modal
+  Modal,
 } from 'react-native';
 import styles from './style';
 import {
@@ -19,6 +19,7 @@ import {
   getAccountStates,
   markFavorite,
   unmarkFavorite,
+  createListFilms,
 } from '../../service/api';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Check from 'react-native-vector-icons/FontAwesome5';
@@ -45,6 +46,7 @@ const MoviePage = ({route, navigation}) => {
   const [rated, setRated] = useState();
   const [rating, setRating] = useState(0);
   const [value, setValue] = useState('');
+  const [descriptions, setDescriptions] = useState('');
   const [modalVisibleSucess, setModalVisibleSucess] = useState(false);
 
   useEffect(() => {
@@ -117,6 +119,14 @@ const MoviePage = ({route, navigation}) => {
     bottomSheetRef.current?.close();
   }
 
+  const postcreateListFilms = async () => {
+    const response = await createListFilms(id, value, descriptions);
+    if (response.status == 201) {
+      setModalVisibleSucess(true);
+    }
+    console.log('response', response);
+  };
+
   const modalSalveFilme = () => {
     return (
       <BottomSheet
@@ -133,53 +143,73 @@ const MoviePage = ({route, navigation}) => {
           </View>
           <View style={styles.divisor} />
           <View>
-          <RadioButton.Group value={value} onValueChange={newValue => setValue(newValue)}>
-        <View style={styles.radioBottomRow}>
-        <RadioButton color='#000' value="Filmes que mudaram a minha vida" />
-        <Text style={styles.textRadioBottom}>Filmes que mudaram a minha vida</Text>
-       
-      </View>
-      <View style={styles.radioBottomRow}>
-      <RadioButton color='#000' value="10 Melhores filmes de terror" />
-        <Text style={styles.textRadioBottom}>10 melhores filmes de terror</Text>
-        
-      </View>
-      <View style={styles.radioBottomRow}>
-      <RadioButton color='#000' value="Filmes para assistir e refletir" />
-        <Text style={styles.textRadioBottom}>FILMES PARA ASSISTIR E REFLETIR</Text>
-        
-      </View>
-      <View>
-      <TouchableOpacity onPress={() => setModalVisibleSucess(true)} 
-      style={styles.btnSave}>
-        <Text style={styles.textSave}>Salvar</Text>
-      </TouchableOpacity>
-      </View>
-    </RadioButton.Group>
-          
+            <RadioButton.Group
+              value={value}
+              onValueChange={newValue => {
+                setValue(newValue), setDescriptions(newValue);
+              }}>
+              <View style={styles.radioBottomRow}>
+                <RadioButton
+                  color="#000"
+                  value="Filmes que mudaram a minha vida"
+                />
+                <Text style={styles.textRadioBottom}>
+                  Filmes que mudaram a minha vida
+                </Text>
+              </View>
+              <View style={styles.radioBottomRow}>
+                <RadioButton
+                  color="#000"
+                  value="10 Melhores filmes de terror"
+                />
+                <Text style={styles.textRadioBottom}>
+                  10 melhores filmes de terror
+                </Text>
+              </View>
+              <View style={styles.radioBottomRow}>
+                <RadioButton
+                  color="#000"
+                  value="Filmes para assistir e refletir"
+                />
+                <Text style={styles.textRadioBottom}>
+                  FILMES PARA ASSISTIR E REFLETIR
+                </Text>
+              </View>
+              <View>
+                <TouchableOpacity
+                  onPress={postcreateListFilms}
+                  style={styles.btnSave}>
+                  <Text style={styles.textSave}>Salvar</Text>
+                </TouchableOpacity>
+              </View>
+            </RadioButton.Group>
           </View>
         </View>
       </BottomSheet>
-
     );
   };
 
-  
   const modalListSucess = () => {
     return (
       <Modal
         animationType="fade"
         transparent={true}
         visible={modalVisibleSucess}>
-        <View 
-          style={styles.modalbackground}>
+        <View style={styles.modalbackground}>
           <View style={styles.containerSucess}>
-              <View>
-                <Check style={styles.iconCheck} name='check' size={20} color='#000'/>
-              </View>
-            
+            <View>
+              <Check
+                style={styles.iconCheck}
+                name="check"
+                size={20}
+                color="#000"
+              />
+            </View>
+
             <Text style={styles.textSucess}>Lista atualizada com sucesso!</Text>
-            <TouchableOpacity  onPress={() => setModalVisibleSucess(false)} style={styles.btnOk}>
+            <TouchableOpacity
+              onPress={() => setModalVisibleSucess(false)}
+              style={styles.btnOk}>
               <Text style={styles.textOk}>Ok</Text>
             </TouchableOpacity>
           </View>
@@ -187,9 +217,6 @@ const MoviePage = ({route, navigation}) => {
       </Modal>
     );
   };
-  
-
-
 
   return movieDetails.backdrop_path && movieDetails.poster_path ? (
     <View style={styles.container}>
@@ -269,7 +296,6 @@ const MoviePage = ({route, navigation}) => {
             </View>
 
             <View style={styles.contentHeaderBottom}>
-              
               <Text style={styles.voteAverageMovie}>
                 {movieDetails.vote_average?.toFixed(1)} / 10
               </Text>
@@ -286,16 +312,22 @@ const MoviePage = ({route, navigation}) => {
                     ? `${(movieDetails.popularity / 1000)?.toFixed(0)}K`
                     : movieDetails.popularity?.toFixed()}
                 </Text>
-              </View> 
+              </View>
             </View>
             <View>
-              <TouchableOpacity onPress={handleOpen}
-              style={styles.containerAdd}>
-              <View style={styles.btnAddList}>
-                <MaterialIcons name='add' size={22} color='#000' backgroundStyle='#fff' />
-              </View>
-              <Text style={styles.textAddList}>Adicionar a uma lista</Text>
-            </TouchableOpacity>
+              <TouchableOpacity
+                onPress={handleOpen}
+                style={styles.containerAdd}>
+                <View style={styles.btnAddList}>
+                  <MaterialIcons
+                    name="add"
+                    size={22}
+                    color="#000"
+                    backgroundStyle="#fff"
+                  />
+                </View>
+                <Text style={styles.textAddList}>Adicionar a uma lista</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -325,7 +357,6 @@ const MoviePage = ({route, navigation}) => {
       </View>
       {modalSalveFilme()}
       {modalListSucess()}
-
     </View>
   ) : (
     <Load />

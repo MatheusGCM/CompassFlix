@@ -181,16 +181,14 @@ export const unmarkFavorite = async (userId, session_id, midia, midiaId) => {
 };
 
 export const createListFilms = async (session_id, name, description) => {
-  return api
-    .post(
-      `https://api.themoviedb.org/3/list?api_key=${api_key}&session_id=${session_id}`,
-      {
-        name: name,
-        description: description,
-        language: 'pt-BR',
-      },
-    )
-    .catch(console.warn('Erro na api'));
+  return api.post(
+    `https://api.themoviedb.org/3/list?api_key=${api_key}&session_id=${session_id}`,
+    {
+      name: name,
+      description: description,
+      language: 'pt-BR',
+    },
+  );
 };
 
 export const addMovieList = async (session_id, media_id, list_id) => {
