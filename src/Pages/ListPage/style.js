@@ -3,19 +3,19 @@ import {StyleSheet} from 'react-native';
 export default StyleSheet.create({
   page: {
     flex: 1,
-    alignItems: 'center',
     backgroundColor: 'black',
-    paddingHorizontal: 25,
     paddingTop: 15,
   },
   flexStart: {
-    alignSelf: 'flex-start',
+    marginStart: 20,
   },
   listText: {
+    alignSelf: 'center',
     color: 'white',
     marginTop: 35,
     fontSize: 20,
-    fontFamily: 'OpenSans-SemiBold',
+    fontFamily: 'OpenSans-Bold',
+    lineHeight: 27,
     marginBottom: 49,
   },
   buttonPlus: {

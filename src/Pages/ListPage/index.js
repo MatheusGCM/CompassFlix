@@ -1,6 +1,5 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import {Text, View} from 'react-native';
 import ButtonGoBack from '../../Components/ButtonGoBack';
 import ListComponent from '../../Components/ListComponent';
 import Loading from '../../Components/Loading';
@@ -30,7 +29,9 @@ export default function ListPage({navigation}) {
       {!loading ? (
         <Loading load={loading} />
       ) : (
-        <ListComponent data={listFilms.results} />
+        <>
+          <ListComponent data={listFilms.results} />
+        </>
       )}
     </View>
   );

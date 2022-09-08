@@ -39,17 +39,6 @@ export default function ListComponent(data) {
       <FlatList
         data={data.data}
         keyExtractor={item => String(item.id)}
-        ListFooterComponent={
-          data.data.length > 3
-            ? () => (
-                <TouchableOpacity
-                  style={style.buttonPlus}
-                  onPress={() => setModalAddList(!modalAddList)}>
-                  <PlusIcon name="plus" size={28} color="black" />
-                </TouchableOpacity>
-              )
-            : null
-        }
         ListEmptyComponent={
           <View>
             <Text style={{color: 'white', textAlign: 'center'}}>
@@ -64,9 +53,13 @@ export default function ListComponent(data) {
               onPress={() =>
                 navigation.navigate('ListFilmPage', {list_id: item.id})
               }
-              style={style.buttonList}>
-              <Text style={style.textNameList}>{item.name}</Text>
-              <Text style={style.textMovies}>{item.item_count} filmes</Text>
+              style={style.boxContent}>
+              <View style={style.boxTxt}>
+                <Text style={style.textList}>{item.name}</Text>
+                <Text style={style.textList.size}>
+                  {item.item_count} filmes
+                </Text>
+              </View>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
@@ -74,18 +67,16 @@ export default function ListComponent(data) {
                 setDeleteId(item.id);
               }}
               style={style.buttonTrash}>
-              <IconTrash name="trash" size={28} color="#EC26269C" />
+              <IconTrash name="trash" size={22} color="#EC26269C" />
             </TouchableOpacity>
           </View>
         )}
       />
-      {data.data.length <= 3 && !modalAddList ? (
-        <TouchableOpacity
-          style={style.buttonPlusResponsive}
-          onPress={() => setModalAddList(!modalAddList)}>
-          <PlusIcon name="plus" size={28} color="black" />
-        </TouchableOpacity>
-      ) : null}
+      <TouchableOpacity
+        onPress={() => setModalAddList(!modalAddList)}
+        style={style.buttonPlus}>
+        <PlusIcon name="plus" size={28} color="black" />
+      </TouchableOpacity>
       <ModalExit
         modalExit={modalExit}
         onPress={() => setModalExit(!modalExit)}
