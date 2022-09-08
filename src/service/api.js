@@ -176,19 +176,21 @@ export const unmarkFavorite = async (userId, session_id, midia, midiaId) => {
       },
     )
     .catch(error => {
-      console.warn('Erro na avaliação');
+      console.warn(error, 'Erro na avaliação');
     });
 };
 
 export const createListFilms = async (session_id, name, description) => {
-  return api.post(
-    `https://api.themoviedb.org/3/list?api_key=${api_key}&session_id=${session_id}`,
-    {
-      name: name,
-      description: description,
-      language: 'pt-BR',
-    },
-  );
+  return api
+    .post(
+      `https://api.themoviedb.org/3/list?api_key=${api_key}&session_id=${session_id}`,
+      {
+        name: name,
+        description: description,
+        language: 'pt-BR',
+      },
+    )
+    .catch(error => console.warn(error, 'Erro na api'));
 };
 
 export const addMovieList = async (session_id, media_id, list_id) => {
@@ -199,7 +201,7 @@ export const addMovieList = async (session_id, media_id, list_id) => {
         media_id: media_id,
       },
     )
-    .catch(console.warn('Erro na api'));
+    .catch(error => console.warn(error, 'Erro na api'));
 };
 
 export const removeMovieList = async (session_id, media_id, list_id) => {
@@ -210,7 +212,7 @@ export const removeMovieList = async (session_id, media_id, list_id) => {
         media_id: media_id,
       },
     )
-    .catch(console.warn('Erro na api'));
+    .catch(error => console.warn(error, 'Erro na api'));
 };
 
 export const deleteListFilm = async (session_id, media_id, list_id) => {
@@ -227,7 +229,7 @@ export const getFilmsDetailsList = async list_id => {
     .get(
       `https://api.themoviedb.org/3/list/${list_id}?api_key=${api.key}&language=pt-BR`,
     )
-    .catch(console.warn('Erro na api'));
+    .catch(error => console.warn(error, 'Erro na api'));
 };
 export default api;
 
@@ -236,5 +238,5 @@ export const getUserList = async (account_id, session_id) => {
     .get(
       `https://api.themoviedb.org/3/account/${account_id}/lists?api_key=${api_key}&language=pt-BR&session_id=${session_id}&page=1`,
     )
-    .catch(console.warn('Erro na api'));
+    .catch(error => console.warn(error, 'Erro na api'));
 };

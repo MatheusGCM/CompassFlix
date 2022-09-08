@@ -20,6 +20,7 @@ import {
   markFavorite,
   unmarkFavorite,
   createListFilms,
+  addMovieList,
 } from '../../service/api';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Check from 'react-native-vector-icons/FontAwesome5';
@@ -46,7 +47,6 @@ const MoviePage = ({route, navigation}) => {
   const [rated, setRated] = useState();
   const [rating, setRating] = useState(0);
   const [value, setValue] = useState('');
-  const [descriptions, setDescriptions] = useState('');
   const [modalVisibleSucess, setModalVisibleSucess] = useState(false);
 
   useEffect(() => {
@@ -119,12 +119,12 @@ const MoviePage = ({route, navigation}) => {
     bottomSheetRef.current?.close();
   }
 
-  const postcreateListFilms = async () => {
-    const response = await createListFilms(id, value, descriptions);
-    if (response.status == 201) {
+  const getResponseAddMovie = async () => {
+    const response = await addMovieList(id, route.params.id, value);
+    if (response.status === 201) {
       setModalVisibleSucess(true);
     }
-    console.log('response', response);
+    console.log('response', response.data);
   };
 
   const modalSalveFilme = () => {
@@ -146,13 +146,11 @@ const MoviePage = ({route, navigation}) => {
             <RadioButton.Group
               value={value}
               onValueChange={newValue => {
-                setValue(newValue), setDescriptions(newValue);
+                setValue(newValue);
               }}>
               <View style={styles.radioBottomRow}>
-                <RadioButton
-                  color="#000"
-                  value="Filmes que mudaram a minha vida"
-                />
+                {/* lista esta mockado  */}
+                <RadioButton color="#000" value="8216445" />
                 <Text style={styles.textRadioBottom}>
                   Filmes que mudaram a minha vida
                 </Text>
@@ -177,7 +175,7 @@ const MoviePage = ({route, navigation}) => {
               </View>
               <View>
                 <TouchableOpacity
-                  onPress={postcreateListFilms}
+                  onPress={getResponseAddMovie}
                   style={styles.btnSave}>
                   <Text style={styles.textSave}>Salvar</Text>
                 </TouchableOpacity>
