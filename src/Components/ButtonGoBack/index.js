@@ -4,11 +4,13 @@ import ArrowBack from 'react-native-vector-icons/Ionicons';
 
 import styles from './style';
 
-const ButtonGoBack = ({navigation}) => {
+const ButtonGoBack = ({navigation, SeriePage}) => {
   return (
     <TouchableOpacity
       activeOpacity={0.5}
-      onPress={() => navigation.goBack()}
+      onPress={() => {
+        SeriePage ? navigation.navigate('HomeSerie') : navigation.goBack();
+      }}
       style={styles.buttonBack}>
       <ArrowBack
         testID="arrow"

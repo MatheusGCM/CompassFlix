@@ -233,5 +233,5 @@ export const getUserList = async (account_id, session_id) => {
 export const deleteList = async (list_id, session_id) => {
   return api
     .delete(`list/${list_id}?api_key=${api_key}&session_id=${session_id}`)
-    .catch(error => console.warn(error));
+    .catch(error => console.log(error));
 };

@@ -102,7 +102,7 @@ const SeriePage = ({route, navigation}) => {
           uri: `http://image.tmdb.org/t/p/original/${seriesDetails.backdrop_path}`,
         }}>
         <View style={styles.btnsContainer}>
-          <ButtonGoBack navigation={navigation} />
+          <ButtonGoBack navigation={navigation} SeriePage={true} />
           <ButtonFavorite onPress={favorite} favorite={fav} />
         </View>
       </ImageBackground>
