@@ -113,15 +113,20 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   buttonListFilms: {
-    width: 140,
-    height: 35,
+    width: 100,
+    height: 20,
     backgroundColor: '#6C7BFC',
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 17,
-    borderRadius: 7,
-    borderWidth: 2,
+    borderRadius: 5,
+    borderWidth: 1,
     borderColor: '#2456B6',
+  },
+  txtButtonListFilms: {
+    fontSize: 10,
+    color: '#fff',
+    lineHeight: 12,
   },
 });
 

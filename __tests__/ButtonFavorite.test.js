@@ -4,7 +4,7 @@ import ButtonFavorite from '../src/Components/ButtonFavorite';
 
 describe('ButtonFavorite', () => {
   const favoriteMock = jest.fn();
-  describe('favoritado NÃO selecionado', () => {
+  describe('favorito NÃO selecionado', () => {
     it('mostre o star icon sem preenchimento', () => {
       const {getByTestId} = render(<ButtonFavorite favorite={false} />);
       expect(getByTestId('starNoSelected')).toBeTruthy();
@@ -17,7 +17,7 @@ describe('ButtonFavorite', () => {
       expect(favoriteMock).toBeCalled();
     });
   });
-  describe('favoritado selecionado', () => {
+  describe('favorito selecionado', () => {
     it('mostre o star icon preenchido', () => {
       const {getByTestId} = render(<ButtonFavorite favorite={true} />);
       expect(getByTestId('starSelected')).toBeTruthy();

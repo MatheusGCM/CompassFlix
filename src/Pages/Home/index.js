@@ -6,7 +6,7 @@ import {Context} from '../../context';
 import Loading from '../../Components/Loading';
 import Load from '../../Components/Load';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Avatar from '../../Components/Avatar';
+import ButtonAvatar from '../../Components/ButtonAvatar';
 import Greeting from '../../Components/Greeting';
 import Midia from '../../Components/Midia';
 
@@ -51,7 +51,7 @@ const Home = ({route, navigation}) => {
   return user && dataMovies ? (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Avatar user={user} navigation={navigation} />
+        <ButtonAvatar user={user} navigation={navigation} />
         <Greeting screen={route.name} user={user} />
       </View>
 

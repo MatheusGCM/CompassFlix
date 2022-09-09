@@ -109,7 +109,7 @@ export default function ListFilmPage({route, navigation}) {
             style={{
               color: '#fff',
               fontFamily: 'OpenSans-Regular',
-              fontSize: 9,
+              fontSize: 10,
               lineHeight: 12,
               textAlign: 'justify',
             }}>

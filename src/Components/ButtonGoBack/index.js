@@ -10,7 +10,12 @@ const ButtonGoBack = ({navigation}) => {
       activeOpacity={0.5}
       onPress={() => navigation.goBack()}
       style={styles.buttonBack}>
-      <ArrowBack color="#000000" name="ios-arrow-back" size={25} />
+      <ArrowBack
+        testID="arrow"
+        color="#000000"
+        name="ios-arrow-back"
+        size={25}
+      />
     </TouchableOpacity>
   );
 };

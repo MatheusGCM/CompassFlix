@@ -95,7 +95,7 @@ const Profile = ({navigation}) => {
         <TouchableOpacity
           style={styles.buttonListFilms}
           onPress={() => navigation.navigate('ListPage')}>
-          <Text>Ver lista de filmes</Text>
+          <Text style={styles.txtButtonListFilms}>Ver lista de filmes</Text>
         </TouchableOpacity>
         <View style={styles.containerRated}>
           {ratedMovie?.total_results || ratedSeries?.total_results >= 0 ? (
