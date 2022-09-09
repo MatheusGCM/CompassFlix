@@ -141,8 +141,6 @@ const styles = StyleSheet.create({
     flex: 1,
     marginEnd: 20,
     marginBottom: 15,
-    // borderColor: 'red',
-    // borderWidth: 2,
   },
   taglineMovie: {
     color: '#fff',
@@ -301,6 +299,13 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: '#fff',
     padding: 10,
+  },
+  emptyTexList: {
+    color: '#000',
+    margin: '10%',
+    fontFamily: 'OpenSans-Regular',
+    fontSize: 13,
+    borderRadius: 6,
   },
 });
 

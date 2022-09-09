@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState, useRef} from 'react';
+import React, {useContext, useEffect, useState, useRef, isValidElement} from 'react';
 import BottomSheet from '@gorhom/bottom-sheet';
 import {RadioButton} from 'react-native-paper';
 import {
@@ -161,6 +161,14 @@ const MoviePage = ({route, navigation}) => {
                   data={userList.results}
                   keyExtractor={item => String(item.id)}
                   style={{height: 125}}
+                  ListEmptyComponent={
+                      <TouchableOpacity
+                     onPress={() => navigation.navigate('ListPage')}>
+                      <Text style={styles.emptyTexList}>
+                        Para adicionar um filme você precisar criar uma lista primeiro. Clique aqui para criar uma lista! 
+                      </Text>
+                      </TouchableOpacity>
+                  }
                   renderItem={({item}) => (
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
                       <RadioButton color="#000" value={item.id} />
@@ -172,7 +180,8 @@ const MoviePage = ({route, navigation}) => {
               <View>
                 <TouchableOpacity
                   onPress={getResponseAddMovie}
-                  style={styles.btnSave}>
+                  disabled={value ? true : false}
+                  style={[styles.btnSave, {backgroundColor: value ? '#000' : '#C4C4C4'}]}>
                   <Text style={styles.textSave}>Salvar</Text>
                 </TouchableOpacity>
               </View>
