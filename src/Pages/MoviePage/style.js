@@ -231,7 +231,6 @@ const styles = StyleSheet.create({
   btnSave: {
     alignSelf: 'center',
     alignItems: 'center',
-    margin: 20,
     padding: 10,
     width: '25%',
     borderRadius: 5,

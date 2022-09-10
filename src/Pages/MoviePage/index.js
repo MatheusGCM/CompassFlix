@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState, useRef, isValidElement} from 'react';
+import React, {useContext, useEffect, useState, useRef} from 'react';
 import BottomSheet from '@gorhom/bottom-sheet';
 import {RadioButton} from 'react-native-paper';
 import {
@@ -19,14 +19,11 @@ import {
   getAccountStates,
   markFavorite,
   unmarkFavorite,
-  createListFilms,
   addMovieList,
-  getMoviesDetailsList,
   getUserList,
 } from '../../service/api';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Check from 'react-native-vector-icons/FontAwesome5';
-import ArrowLeft from 'react-native-vector-icons/Feather';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Cast from '../../Components/Cast';
@@ -100,7 +97,7 @@ const MoviePage = ({route, navigation}) => {
       setUserList(response.data);
     };
     getResponseListMovies();
-  }, [id, route.params.id, udapte]);
+  }, [id, route.params.id, udapte, user.id, value]);
 
   const Directing = movieCredits.crew?.find(
     element => element.job === 'Director',
@@ -133,8 +130,8 @@ const MoviePage = ({route, navigation}) => {
     if (response.status === 201) {
       setModalVisibleSucess(true);
     }
-    console.log('response', response.data);
   };
+
   const modalSalveFilme = () => {
     return (
       <BottomSheet
@@ -162,15 +159,24 @@ const MoviePage = ({route, navigation}) => {
                   keyExtractor={item => String(item.id)}
                   style={{height: 125}}
                   ListEmptyComponent={
-                      <TouchableOpacity
-                     onPress={() => navigation.navigate('ListPage')}>
+                    <TouchableOpacity
+                      onPress={() =>
+                        navigation.navigate('profileScreen', {
+                          screen: 'ListPage',
+                        })
+                      }>
                       <Text style={styles.emptyTexList}>
-                        Para adicionar um filme você precisar criar uma lista primeiro. Clique aqui para criar uma lista! 
+                        Para adicionar um filme você precisar criar uma lista
+                        primeiro. Clique aqui para criar uma lista!
                       </Text>
-                      </TouchableOpacity>
+                    </TouchableOpacity>
                   }
                   renderItem={({item}) => (
-                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                      }}>
                       <RadioButton color="#000" value={item.id} />
                       <Text style={styles.textRadioBottom}>{item.name}</Text>
                     </View>
@@ -180,8 +186,14 @@ const MoviePage = ({route, navigation}) => {
               <View>
                 <TouchableOpacity
                   onPress={getResponseAddMovie}
-                  disabled={value ? true : false}
-                  style={[styles.btnSave, {backgroundColor: value ? '#000' : '#C4C4C4'}]}>
+                  disabled={userList.results?.length === 0}
+                  style={[
+                    styles.btnSave,
+                    {
+                      backgroundColor:
+                        userList.results?.length === 0 ? '#C4C4C4' : '#000',
+                    },
+                  ]}>
                   <Text style={styles.textSave}>Salvar</Text>
                 </TouchableOpacity>
               </View>
