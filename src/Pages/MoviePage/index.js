@@ -223,7 +223,10 @@ const MoviePage = ({route, navigation}) => {
 
             <Text style={styles.textSucess}>Lista atualizada com sucesso!</Text>
             <TouchableOpacity
-              onPress={() => setModalVisibleSucess(false)}
+              onPress={() => {
+                setModalVisibleSucess(false);
+                setUpdate(!udapte);
+              }}
               style={styles.btnOk}>
               <Text style={styles.textOk}>Ok</Text>
             </TouchableOpacity>

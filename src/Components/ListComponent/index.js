@@ -1,6 +1,13 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {useContext, useEffect, useState} from 'react';
-import {Dimensions, FlatList, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Dimensions,
+  FlatList,
+  Image,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import IconTrash from 'react-native-vector-icons/EvilIcons';
 import {Context} from '../../context';
 import {createListMovies, deleteList} from '../../service/api';
@@ -8,6 +15,7 @@ import ModalExit from '../ModalExit';
 import PlusIcon from 'react-native-vector-icons/Entypo';
 import style from './style';
 import ModalAddList from '../ModalAddList';
+import ListEmpty from '../ListEmpty';
 
 export default function ListComponent(data) {
   const {id, udapte, setUpdate} = useContext(Context);
@@ -40,16 +48,14 @@ export default function ListComponent(data) {
         data={data.data}
         keyExtractor={item => String(item.id)}
         ListEmptyComponent={
-          <View>
-            <Text style={{color: 'white', textAlign: 'center'}}>
-              Sem lista de filmes! Para adicionar uma nova lista clique no botão
-              mais
-            </Text>
-          </View>
+          <ListEmpty
+            txt={'Sem listas no momento, clique no botão mais para adicionar.'}
+          />
         }
         renderItem={({item}) => (
           <View style={style.flatListStyle}>
             <TouchableOpacity
+              activeOpacity={0.7}
               onPress={() =>
                 navigation.navigate('ListFilmPage', {list_id: item.id})
               }
@@ -62,6 +68,7 @@ export default function ListComponent(data) {
               </View>
             </TouchableOpacity>
             <TouchableOpacity
+              activeOpacity={0.7}
               onPress={() => {
                 setModalExit(!modalExit);
                 setDeleteId(item.id);
@@ -73,6 +80,7 @@ export default function ListComponent(data) {
         )}
       />
       <TouchableOpacity
+        activeOpacity={0.7}
         onPress={() => setModalAddList(!modalAddList)}
         style={style.buttonPlus}>
         <PlusIcon name="plus" size={28} color="black" />

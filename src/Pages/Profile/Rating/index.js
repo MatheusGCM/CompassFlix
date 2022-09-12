@@ -6,6 +6,7 @@ import {getRatedMovie, getRatedSeries} from '../../../service/api';
 import Load from '../../../Components/Load';
 import Midia from '../../../Components/Midia';
 import ButtonGoBack from '../../../Components/ButtonGoBack';
+import ListEmpty from '../../../Components/ListEmpty';
 
 const Rating = ({navigation, route}) => {
   const {id, user, udapte} = useContext(Context);
@@ -45,6 +46,15 @@ const Rating = ({navigation, route}) => {
               </Text>
             </View>
           </>
+        )}
+        ListEmptyComponent={() => (
+          <ListEmpty
+            txt={
+              route.params?.focused
+                ? 'Sem filmes avaliados...'
+                : 'Sem séries avaliadas...'
+            }
+          />
         )}
         contentContainerStyle={{marginHorizontal: 5, marginTop: 15}}
         data={rated}

@@ -1,8 +1,10 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {
   ActivityIndicator,
+  Animated,
   FlatList,
   Image,
+  Pressable,
   Text,
   TouchableOpacity,
   View,
@@ -13,6 +15,9 @@ import {getMoviesDetailsList, removeMovieList} from '../../service/api';
 import ModalExit from '../../Components/ModalExit';
 import {Context} from '../../context';
 import ButtonGoBack from '../../Components/ButtonGoBack';
+import styles from './style';
+import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
+import ListEmpty from '../../Components/ListEmpty';
 
 export default function ListFilmPage({route, navigation}) {
   const {id, udapte, setUpdate} = useContext(Context);
@@ -20,6 +25,7 @@ export default function ListFilmPage({route, navigation}) {
   const [moviesDetailsList, setMoviesDetailsList] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [filmSelected, setFilmSelected] = useState();
+  const [translateX] = useState(new Animated.Value(0));
 
   useEffect(() => {
     const responseDetailsList = async () => {
@@ -27,130 +33,89 @@ export default function ListFilmPage({route, navigation}) {
       setMoviesDetailsList(response.data);
     };
     responseDetailsList();
-    moviesDetailsList.items?.length === 0 && setState(false);
-  }, [route.params.list_id, udapte, moviesDetailsList.items]);
+    if (moviesDetailsList.items?.length === 0) {
+      Animated.timing(translateX, {
+        toValue: 0,
+        duration: 500,
+        useNativeDriver: true,
+      }).start();
+      setState(false);
+    }
+  }, [route.params.list_id, udapte, moviesDetailsList.items, translateX]);
+
   const removeFilm = async () => {
     await removeMovieList(route.params.list_id, id, filmSelected);
     setUpdate(!udapte);
     setModalVisible(!modalVisible);
   };
+
+  const visualize = () => {
+    setTimeout(() => {
+      setState(false);
+    }, 20);
+    Animated.timing(translateX, {
+      toValue: 0,
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const edit = () => {
+    setTimeout(() => {
+      setState(true);
+    }, 20);
+    Animated.timing(translateX, {
+      toValue: 37,
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
+  };
+
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: 'black',
-      }}>
-      <View
-        style={{
-          flexDirection: 'row',
-          width: '90%',
-          justifyContent: 'space-between',
-          alignSelf: 'center',
-          marginTop: 17,
-          marginBottom: 32,
-        }}>
+    <View style={styles.container}>
+      <View style={styles.containerHeader}>
         <ButtonGoBack navigation={navigation} />
-        <View
-          style={{
-            flexDirection: 'row',
-            width: 76,
-            height: 25,
-            backgroundColor: '#fff',
-            borderRadius: 20,
-            borderColor: '#E9A6A6',
-            borderWidth: 1,
-            alignItems: 'center',
-          }}>
+        <View style={styles.containerHeaderEdit}>
+          <Animated.View
+            style={[
+              styles.animatedView,
+              {transform: [{translateX: translateX}]},
+            ]}
+          />
           <TouchableOpacity
             activeOpacity={1}
-            onPress={() => setState(false)}
-            style={{
-              backgroundColor: state ? '#fff' : '#E9A6A6',
-              width: '50%',
-              height: '100%',
-              borderRadius: 20,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
+            onPress={visualize}
+            style={styles.btnEye}>
             <Eye name="eye" size={16} color={state ? '#000' : '#fff'} />
           </TouchableOpacity>
           <TouchableOpacity
             disabled={!moviesDetailsList.items?.length}
             activeOpacity={1}
-            onPress={() => setState(true)}
-            style={{
-              backgroundColor: state ? '#E9A6A6' : '#fff',
-              width: '50%',
-              height: '100%',
-              borderRadius: 20,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
+            onPress={edit}
+            style={styles.btnPencil}>
             <Pencil name="pencil" size={21} color={state ? '#fff' : '#000'} />
           </TouchableOpacity>
         </View>
       </View>
 
-      <View style={{alignItems: 'center'}}>
-        <View style={{width: '65%', marginBottom: 25}}>
-          <Text
-            style={{
-              color: '#E9A6A6',
-              fontFamily: 'OpenSans-Bold',
-              fontSize: 20,
-              lineHeight: 27,
-              textAlign: 'center',
-            }}>
-            {moviesDetailsList.name}
-          </Text>
+      <View style={styles.alignCenter}>
+        <View style={styles.containerListName}>
+          <Text style={styles.txtListName}>{moviesDetailsList.name}</Text>
         </View>
-        <View style={{width: '95%'}}>
-          <Text
-            style={{
-              color: '#fff',
-              fontFamily: 'OpenSans-Regular',
-              fontSize: 10,
-              lineHeight: 12,
-              textAlign: 'justify',
-            }}>
+        <View style={styles.containerListDescription}>
+          <Text style={styles.txtListDescription}>
             {moviesDetailsList.description}
           </Text>
         </View>
-        <View style={{width: '95%'}}>
+        <View style={styles.containerFlatlist}>
           {moviesDetailsList.items ? (
             <FlatList
-              contentContainerStyle={{
-                height: '90%',
-                paddingTop: 30,
-              }}
+              contentContainerStyle={styles.contentContainerStyle}
               data={moviesDetailsList.items}
               keyExtractor={item => String(item.id)}
               numColumns={4}
               ListEmptyComponent={() => (
-                <TouchableOpacity
-                  activeOpacity={0.7}
-                  onPress={() => navigation.navigate('movieScreen')}
-                  style={{
-                    height: '70%',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  <Image
-                    style={{width: 40, height: 40}}
-                    source={require('../../assets/movie.png')}
-                  />
-                  <Text
-                    style={{
-                      marginTop: 5,
-                      width: '50%',
-                      color: 'rgba(255,255,255,0.4)',
-                      fontSize: 14,
-                      fontFamily: 'OpenSans-Regular',
-                      textAlign: 'center',
-                    }}>
-                    Sem filmes na lista, clique para adicionar.
-                  </Text>
-                </TouchableOpacity>
+                <ListEmpty txt={'Sem filmes na lista...'} />
               )}
               renderItem={({item, index}) => (
                 <View>
@@ -168,6 +133,7 @@ export default function ListFilmPage({route, navigation}) {
                         height: 100,
                         borderRadius: 10,
                         marginBottom: 18,
+                        opacity: state ? 0.5 : 1,
                       }}
                       source={{
                         uri: `http://image.tmdb.org/t/p/w154/${item.poster_path}`,
