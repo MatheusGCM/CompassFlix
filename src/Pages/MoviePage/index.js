@@ -10,6 +10,7 @@ import {
   ScrollView,
   FlatList,
   Modal,
+  Animated,
 } from 'react-native';
 import styles from './style';
 import {
@@ -21,9 +22,9 @@ import {
   unmarkFavorite,
   addMovieList,
   getUserList,
+  getMoviesDetailsList,
 } from '../../service/api';
 import Icon from 'react-native-vector-icons/AntDesign';
-import Check from 'react-native-vector-icons/FontAwesome5';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Cast from '../../Components/Cast';
@@ -46,9 +47,11 @@ const MoviePage = ({route, navigation}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [rated, setRated] = useState();
   const [rating, setRating] = useState(0);
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState(0);
   const [modalVisibleSucess, setModalVisibleSucess] = useState(false);
   const [userList, setUserList] = useState({});
+  const [selected, setSelected] = useState(false);
+  const [tratColor] = useState(new Animated.Value(0));
 
   useEffect(() => {
     const getResponseMovieDetails = async () => {
@@ -97,7 +100,7 @@ const MoviePage = ({route, navigation}) => {
       setUserList(response.data);
     };
     getResponseListMovies();
-  }, [id, route.params.id, udapte, user.id, value]);
+  }, [id, route.params.id, udapte, user.id]);
 
   const Directing = movieCredits.crew?.find(
     element => element.job === 'Director',
@@ -111,7 +114,6 @@ const MoviePage = ({route, navigation}) => {
       await markFavorite(user.id, id, 'movie', route.params.id);
     }
   };
-
   const rateMovie = async () => {
     await rate('movie', route.params.id, id, rating);
     setUpdate(!udapte);
@@ -123,12 +125,44 @@ const MoviePage = ({route, navigation}) => {
 
   function handleClose() {
     bottomSheetRef.current?.close();
+    Animated.timing(tratColor, {
+      toValue: 0,
+      duration: 500,
+      useNativeDriver: true,
+    }).start(() => {
+      setValue(0);
+      setSelected(false);
+    });
   }
 
   const getResponseAddMovie = async () => {
-    const response = await addMovieList(id, route.params.id, value);
-    if (response.status === 201) {
-      setModalVisibleSucess(true);
+    if (value > 0) {
+      const responseDetailsList = await getMoviesDetailsList(value);
+      if (
+        responseDetailsList.data.items.find(item => item.id === route.params.id)
+      ) {
+        Animated.timing(tratColor, {
+          toValue: 1,
+          duration: 500,
+          useNativeDriver: true,
+        }).start();
+      } else {
+        const response = await addMovieList(id, route.params.id, value);
+        if (response.status === 201) {
+          setModalVisibleSucess(true);
+          Animated.timing(tratColor, {
+            toValue: 0,
+            duration: 500,
+            useNativeDriver: true,
+          }).start();
+        }
+      }
+    } else {
+      Animated.timing(tratColor, {
+        toValue: 1,
+        duration: 500,
+        useNativeDriver: true,
+      }).start();
     }
   };
 
@@ -152,6 +186,13 @@ const MoviePage = ({route, navigation}) => {
               value={value}
               onValueChange={newValue => {
                 setValue(newValue);
+                Animated.timing(tratColor, {
+                  toValue: 0,
+                  duration: 500,
+                  useNativeDriver: true,
+                }).start(() => {
+                  setSelected(true);
+                });
               }}>
               <View style={styles.radioBottomRow}>
                 <FlatList
@@ -184,7 +225,24 @@ const MoviePage = ({route, navigation}) => {
                 />
               </View>
               <View>
+                <View
+                  style={{
+                    alignItems: 'center',
+                    height: 22,
+                  }}>
+                  <Animated.Text
+                    style={{
+                      color: '#EC2626',
+                      opacity: tratColor,
+                      fontFamily: 'OpenSans-MediumItalic',
+                    }}>
+                    {selected
+                      ? 'Filme já exite na lista!'
+                      : 'Selecione uma lista!'}
+                  </Animated.Text>
+                </View>
                 <TouchableOpacity
+                  activeOpacity={0.7}
                   onPress={getResponseAddMovie}
                   disabled={userList.results?.length === 0}
                   style={[
@@ -212,19 +270,13 @@ const MoviePage = ({route, navigation}) => {
         visible={modalVisibleSucess}>
         <View style={styles.modalbackground}>
           <View style={styles.containerSucess}>
-            <View>
-              <Check
-                style={styles.iconCheck}
-                name="check"
-                size={20}
-                color="#000"
-              />
-            </View>
-
+            <Image source={require('../../assets/check.png')} />
             <Text style={styles.textSucess}>Lista atualizada com sucesso!</Text>
             <TouchableOpacity
+              activeOpacity={0.9}
               onPress={() => {
                 setModalVisibleSucess(false);
+                // handleClose();
                 setUpdate(!udapte);
               }}
               style={styles.btnOk}>

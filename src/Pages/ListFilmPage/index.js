@@ -4,7 +4,6 @@ import {
   Animated,
   FlatList,
   Image,
-  Pressable,
   Text,
   TouchableOpacity,
   View,
@@ -16,7 +15,6 @@ import ModalExit from '../../Components/ModalExit';
 import {Context} from '../../context';
 import ButtonGoBack from '../../Components/ButtonGoBack';
 import styles from './style';
-import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import ListEmpty from '../../Components/ListEmpty';
 
 export default function ListFilmPage({route, navigation}) {
