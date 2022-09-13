@@ -93,6 +93,7 @@ const Profile = ({navigation}) => {
 
         <Text style={styles.userName}>{user.name}</Text>
         <TouchableOpacity
+          activeOpacity={0.7}
           style={styles.buttonListFilms}
           onPress={() => navigation.navigate('ListPage')}>
           <Text style={styles.txtButtonListFilms}>Ver lista de filmes</Text>

@@ -74,6 +74,34 @@ const styles = StyleSheet.create({
     height: '90%',
     paddingTop: 30,
   },
+  poster_path: {
+    width: 80,
+    height: 100,
+    borderRadius: 10,
+    marginBottom: 18,
+  },
+  btnRemoveMovie: {
+    position: 'absolute',
+    top: -5,
+  },
+  containerRemoveMovie: {
+    width: 18,
+    height: 18,
+    backgroundColor: '#fff',
+    borderRadius: 9,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  iconRemove: {
+    width: 7,
+    height: 1,
+    backgroundColor: '#EC2626',
+  },
+  containerLoading: {
+    height: '80%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
 
 export default styles;

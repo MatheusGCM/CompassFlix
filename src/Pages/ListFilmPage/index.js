@@ -24,6 +24,8 @@ export default function ListFilmPage({route, navigation}) {
   const [modalVisible, setModalVisible] = useState(false);
   const [filmSelected, setFilmSelected] = useState();
   const [translateX] = useState(new Animated.Value(0));
+  const [opacityRemoveMovie] = useState(new Animated.Value(0));
+  const [opacityPostPath] = useState(new Animated.Value(1));
 
   useEffect(() => {
     const responseDetailsList = async () => {
@@ -56,6 +58,18 @@ export default function ListFilmPage({route, navigation}) {
       duration: 500,
       useNativeDriver: true,
     }).start();
+    Animated.parallel([
+      Animated.timing(opacityRemoveMovie, {
+        toValue: 0,
+        duration: 1000,
+        useNativeDriver: true,
+      }),
+      Animated.timing(opacityPostPath, {
+        toValue: 1,
+        duration: 1000,
+        useNativeDriver: true,
+      }),
+    ]).start();
   };
 
   const edit = () => {
@@ -67,6 +81,18 @@ export default function ListFilmPage({route, navigation}) {
       duration: 500,
       useNativeDriver: true,
     }).start();
+    Animated.parallel([
+      Animated.timing(opacityRemoveMovie, {
+        toValue: 1,
+        duration: 1000,
+        useNativeDriver: true,
+      }),
+      Animated.timing(opacityPostPath, {
+        toValue: 0.5,
+        duration: 1000,
+        useNativeDriver: true,
+      }),
+    ]).start();
   };
 
   return (
@@ -124,57 +150,44 @@ export default function ListFilmPage({route, navigation}) {
                         params: {id: item.id},
                       })
                     }>
-                    <Image
-                      style={{
-                        marginEnd: (index + 1) % 4 == 0 ? 0 : 13,
-                        width: 80,
-                        height: 100,
-                        borderRadius: 10,
-                        marginBottom: 18,
-                        opacity: state ? 0.5 : 1,
-                      }}
+                    <Animated.Image
+                      style={[
+                        styles.poster_path,
+                        {
+                          marginEnd: (index + 1) % 4 == 0 ? 0 : 13,
+                          opacity: opacityPostPath,
+                        },
+                      ]}
                       source={{
                         uri: `http://image.tmdb.org/t/p/w154/${item.poster_path}`,
                       }}
                     />
                   </TouchableOpacity>
-                  {state && (
-                    <TouchableOpacity
-                      activeOpacity={0.7}
-                      onPress={() => {
-                        setModalVisible(!modalVisible);
-                        setFilmSelected(item.id);
-                      }}
-                      style={{
-                        width: 18,
-                        height: 18,
-                        backgroundColor: '#fff',
-                        borderRadius: 9,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        position: 'absolute',
-                        right: (index + 1) % 4 == 0 ? -5 : 5,
-                        top: -5,
-                      }}>
-                      <View
-                        style={{
-                          width: 7,
-                          height: 1,
-                          backgroundColor: '#EC2626',
-                        }}
-                      />
-                    </TouchableOpacity>
-                  )}
+
+                  <TouchableOpacity
+                    disabled={!state}
+                    activeOpacity={0.7}
+                    onPress={() => {
+                      setModalVisible(!modalVisible);
+                      setFilmSelected(item.id);
+                    }}
+                    style={[
+                      styles.btnRemoveMovie,
+                      {right: (index + 1) % 4 == 0 ? -5 : 5},
+                    ]}>
+                    <Animated.View
+                      style={[
+                        styles.containerRemoveMovie,
+                        {opacity: opacityRemoveMovie},
+                      ]}>
+                      <View style={styles.iconRemove} />
+                    </Animated.View>
+                  </TouchableOpacity>
                 </View>
               )}
             />
           ) : (
-            <View
-              style={{
-                height: '80%',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
+            <View style={styles.containerLoading}>
               <ActivityIndicator size={50} color="#EC2626" />
             </View>
           )}

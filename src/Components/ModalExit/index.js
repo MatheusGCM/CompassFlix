@@ -11,7 +11,11 @@ import styles from './styles';
 
 const ModalExit = ({modalExit, onPress, logout, type}) => {
   return (
-    <Modal transparent={true} visible={modalExit} onRequestClose={onPress}>
+    <Modal
+      animationType="slide"
+      transparent={true}
+      visible={modalExit}
+      onRequestClose={onPress}>
       <TouchableWithoutFeedback onPress={onPress} touchSoundDisabled>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
