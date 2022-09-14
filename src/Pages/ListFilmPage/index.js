@@ -26,6 +26,8 @@ export default function ListFilmPage({route, navigation}) {
   const [translateX] = useState(new Animated.Value(0));
   const [opacityRemoveMovie] = useState(new Animated.Value(0));
   const [opacityPostPath] = useState(new Animated.Value(1));
+  const [colorEye] = useState(new Animated.Value(0));
+  const [colorPencil] = useState(new Animated.Value(0));
 
   useEffect(() => {
     const responseDetailsList = async () => {
@@ -53,11 +55,23 @@ export default function ListFilmPage({route, navigation}) {
     setTimeout(() => {
       setState(false);
     }, 20);
-    Animated.timing(translateX, {
-      toValue: 0,
-      duration: 500,
-      useNativeDriver: true,
-    }).start();
+    Animated.parallel([
+      Animated.timing(translateX, {
+        toValue: 0,
+        duration: 500,
+        useNativeDriver: true,
+      }),
+      Animated.timing(colorEye, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: false,
+      }),
+      Animated.timing(colorPencil, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: false,
+      }),
+    ]).start();
     Animated.parallel([
       Animated.timing(opacityRemoveMovie, {
         toValue: 0,
@@ -76,11 +90,23 @@ export default function ListFilmPage({route, navigation}) {
     setTimeout(() => {
       setState(true);
     }, 20);
-    Animated.timing(translateX, {
-      toValue: 37,
-      duration: 500,
-      useNativeDriver: true,
-    }).start();
+    Animated.parallel([
+      Animated.timing(translateX, {
+        toValue: 37,
+        duration: 500,
+        useNativeDriver: true,
+      }),
+      Animated.timing(colorEye, {
+        toValue: 100,
+        duration: 300,
+        useNativeDriver: false,
+      }),
+      Animated.timing(colorPencil, {
+        toValue: 100,
+        duration: 300,
+        useNativeDriver: false,
+      }),
+    ]).start();
     Animated.parallel([
       Animated.timing(opacityRemoveMovie, {
         toValue: 1,
@@ -110,14 +136,30 @@ export default function ListFilmPage({route, navigation}) {
             activeOpacity={1}
             onPress={visualize}
             style={styles.btnEye}>
-            <Eye name="eye" size={16} color={state ? '#000' : '#fff'} />
+            <Animated.Text
+              style={{
+                color: colorEye.interpolate({
+                  inputRange: [0, 100],
+                  outputRange: ['white', 'black'],
+                }),
+              }}>
+              <Eye name="eye" size={16} />
+            </Animated.Text>
           </TouchableOpacity>
           <TouchableOpacity
             disabled={!moviesDetailsList.items?.length}
             activeOpacity={1}
             onPress={edit}
             style={styles.btnPencil}>
-            <Pencil name="pencil" size={21} color={state ? '#fff' : '#000'} />
+            <Animated.Text
+              style={{
+                color: colorPencil.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: ['black', 'white'],
+                }),
+              }}>
+              <Pencil name="pencil" size={21} />
+            </Animated.Text>
           </TouchableOpacity>
         </View>
       </View>

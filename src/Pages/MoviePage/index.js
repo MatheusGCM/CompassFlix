@@ -237,7 +237,7 @@ const MoviePage = ({route, navigation}) => {
                       fontFamily: 'OpenSans-MediumItalic',
                     }}>
                     {selected
-                      ? 'Filme já exite na lista!'
+                      ? 'Filme já existe na lista!'
                       : 'Selecione uma lista!'}
                   </Animated.Text>
                 </View>

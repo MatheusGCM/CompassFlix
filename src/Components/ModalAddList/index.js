@@ -35,6 +35,7 @@ export default function ModalAddList({
                 value={valueName}
                 onChangeText={v => setValueName(v)}
                 placeholder="Nome da lista"
+                placeholderTextColor={'#8E8E8E80'}
                 style={styles.BoxInputName}
               />
             </View>
@@ -44,6 +45,7 @@ export default function ModalAddList({
                 multiline={true}
                 onChangeText={v => setValueDescription(v)}
                 placeholder="Descrição"
+                placeholderTextColor={'#8E8E8E80'}
                 style={styles.BoxInputInsideDescription}
               />
             </View>
