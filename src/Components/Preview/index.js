@@ -143,9 +143,9 @@ const Preview = ({dataFavorite, dataRated, focused, navigation}) => {
                 />
                 <View style={styles.flexRow}>
                   <Image source={require('../../assets/starRated.png')} />
-                  <Text style={styles.txtRating}>{`${item.rating?.toFixed(
-                    1,
-                  )}/10`}</Text>
+                  <Text style={styles.txtRating}>{`${
+                    item.rating === 10 ? item.rating : item.rating?.toFixed(1)
+                  }/10`}</Text>
                 </View>
               </TouchableOpacity>
             )}

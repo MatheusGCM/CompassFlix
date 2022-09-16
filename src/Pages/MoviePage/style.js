@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   flex2_5: {
-    flex: 2.5,
+    flex: 3,
   },
   btnsContainer: {
     width: '90%',
@@ -139,6 +139,7 @@ const styles = StyleSheet.create({
   },
   contentOverview: {
     flex: 1,
+    marginTop: 10,
     marginEnd: 20,
     marginBottom: 15,
   },

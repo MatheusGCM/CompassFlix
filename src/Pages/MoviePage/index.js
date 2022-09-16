@@ -109,8 +109,10 @@ const MoviePage = ({route, navigation}) => {
   const favorite = async () => {
     setUpdate(!udapte);
     if (fav) {
+      setFav(false);
       await unmarkFavorite(user.id, id, 'movie', route.params.id);
     } else {
+      setFav(true);
       await markFavorite(user.id, id, 'movie', route.params.id);
     }
   };
@@ -317,7 +319,8 @@ const MoviePage = ({route, navigation}) => {
                 setModalVisible(true);
               }}>
               <Text style={styles.rated.text}>
-                Sua nota: {rated.value.toFixed(1)}/10
+                Sua nota:{' '}
+                {rated.value === 10 ? rated.value : rated.value.toFixed(1)}/10
               </Text>
 
               <View style={styles.icon}>
@@ -398,25 +401,25 @@ const MoviePage = ({route, navigation}) => {
         </View>
         <ScrollView style={styles.contentOverview}>
           <Text style={styles.taglineMovie}>
-            {movieDetails.tagline ? movieDetails.tagline : 'Sinopse:'}
+            {movieDetails.tagline
+              ? movieDetails.tagline.toUpperCase()
+              : 'Sinopse:'}
           </Text>
           <Text style={styles.overviewMovie}>
             {movieDetails.overview ? movieDetails.overview : 'Sem descrição...'}
           </Text>
         </ScrollView>
         <View style={styles.flex2_5}>
+          <>
+            <View style={styles.boxElenco}>
+              <Text style={styles.txtBoxElenco}>Elenco</Text>
+            </View>
+            <View style={styles.line} />
+          </>
           <FlatList
             data={movieCredits.cast}
             keyExtractor={item => String(item.id)}
             renderItem={({item, i}) => <Cast key={i} {...item} />}
-            ListHeaderComponent={() => (
-              <>
-                <View style={styles.boxElenco}>
-                  <Text style={styles.txtBoxElenco}>Elenco</Text>
-                </View>
-                <View style={styles.line} />
-              </>
-            )}
           />
         </View>
       </View>

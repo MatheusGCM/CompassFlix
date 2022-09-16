@@ -83,8 +83,10 @@ const SeriePage = ({route, navigation}) => {
   const favorite = async () => {
     setUpdate(!udapte);
     if (fav) {
+      setFav(false);
       await unmarkFavorite(user.id, id, 'tv', route.params.id);
     } else {
+      setFav(true);
       await markFavorite(user.id, id, 'tv', route.params.id);
     }
   };
@@ -123,7 +125,8 @@ const SeriePage = ({route, navigation}) => {
                 setModalVisible(true);
               }}>
               <Text style={styles.rated.text}>
-                Sua nota: {rated.value.toFixed(1)}/10
+                Sua nota:{' '}
+                {rated.value === 10 ? rated.value : rated.value.toFixed(1)}/10
               </Text>
 
               <View style={styles.icon}>
