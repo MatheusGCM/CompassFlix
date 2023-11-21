@@ -1,0 +1,22 @@
+{
+  "exclude": [
+    "node_modules",
+    "babel.config.js",
+    "metro.config.js",
+    "jest.config.js"
+  ],
+  "extends": "@tsconfig/react-native/tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@pages/*": ["src/pages/*"],
+      "@components": ["src/components"],
+      "@services": ["src/services"],
+      "@context/*": ["src/context/*"],
+      "@assets/*": ["src/assets/*"],
+      "@routes": ["src/routes"],
+      "~utils": ["src/utils"],
+      "@types": ["src/types"]
+    }
+  }
+}
